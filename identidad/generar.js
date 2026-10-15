@@ -195,10 +195,9 @@ for (const d of [OUT_LOGOS, OUT_MESAS, OUT_PATRONES, OUT_WEB]) fs.mkdirSync(d, {
 for (const [n, s] of Object.entries(files)) fs.writeFileSync(path.join(OUT_LOGOS, n), s);
 for (const [n, s] of Object.entries(mesas)) fs.writeFileSync(path.join(OUT_MESAS, n), s);
 for (const [n, s] of Object.entries(patrones)) fs.writeFileSync(path.join(OUT_PATRONES, n), s);
-// La web usa el isotipo, los símbolos de mesa, el logo en negativo y el calado de fondo (muy suave)
+// La web usa el isotipo, los símbolos de mesa y el logo en negativo (su fondo es plano, sin calado)
 for (const n of ["isotipo.svg", "logo-horizontal-negativo.svg"]) fs.writeFileSync(path.join(OUT_WEB, n), files[n]);
 for (const [n, s] of Object.entries(mesas)) fs.writeFileSync(path.join(OUT_WEB, n), s);
-fs.writeFileSync(path.join(OUT_WEB, "calado.svg"), calado(C.arena, 0.07));
 
 // Comprobación: cada mesa ocupa un cuarto del tangram
 const sum = [0, 0, 0, 0];

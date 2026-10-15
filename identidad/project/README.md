@@ -70,12 +70,14 @@ La paleta es el paisaje de las islas. Los cuatro colores de mesa se llaman como 
 - Separa las secciones con cambios de fondo (`fondo` / `fondo-2`), no con sombras.
 - Márgenes: `esp-2` en móvil, `esp-4` en escritorio; `esp-11` arriba y abajo de cada sección.
 
-## Calado canario
+## Fondos y calado canario
 
-El fondo de las superficies en tema Noche lleva un patrón inspirado en el **calado**, el bordado geométrico tradicional de las islas: una retícula cuadrada, hilos a 45° (el mismo ángulo que los cortes del tangram), un rombo central y la «araña» en el centro de cada cuadro.
+**Los fondos son planos**: `fondo` en su color, sin texturas, para que el tangram y los colores de mesa sean lo único que destaque. Así va la web.
+
+El patrón inspirado en el **calado**, el bordado geométrico tradicional de las islas (retícula cuadrada, hilos a 45° como los cortes del tangram, un rombo central y la «araña»), queda como recurso opcional, no como fondo por defecto.
 - Archivos: `calado-arena.svg` (hilos claros, para fondos `marca-noche`) y `calado-noche.svg` (hilos oscuros, para fondos claros), en el grupo Patrones. Es un módulo de 48 × 48 px que se repite.
-- Úsalo muy suave: entre el 6 % y el 10 % de opacidad, como textura y no como dibujo. En la web va al 7 %.
-- Solo en fondos grandes (portada, escena del tangram, cabeceras de presentación). Nunca detrás de texto corrido ni dentro de las piezas.
+- Úsalo solo en piezas puntuales que pidan un guiño artesanal (un photocall, una lona, una bolsa o una acreditación), y siempre muy suave: entre el 6 % y el 10 % de opacidad.
+- Nunca en la web, detrás de texto corrido ni dentro de las piezas.
 
 ## Movimiento
 

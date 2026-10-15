@@ -61,9 +61,6 @@ img { display: block; max-width: 100%; }
 .stage {
   position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden;
   background-color: var(--noche);
-  /* calado canario: el bordado geométrico tradicional, con hilos a 45° como el tangram */
-  background-image: url("img/calado.svg");
-  background-size: 48px 48px;
 }
 
 .hero { position: absolute; left: 0; top: 0; color: var(--arena); will-change: transform, opacity; }
