@@ -51,6 +51,7 @@ En `piezas/` están el cartel A3, el flyer A5 (frente y dorso) y el roll-up de 8
 
 - Cartel y flyer: 3 mm de sangrado por cada lado. Roll-up: 5 mm, y los últimos 15 cm quedan sin contenido porque los tapa la base.
 - Los textos van convertidos a contornos: la imprenta no necesita las fuentes.
+- En `piezas/referencias-ia/` están las imágenes de referencia (tangram, mesas, archipiélago, paleta y cartel) para adjuntar a las IA generadoras de imagen, junto con la hoja de estilo para IA.
 - Para regenerarlas tras un cambio de identidad o de textos: `cd identidad && npm install && npm run piezas` (necesita Edge o Chrome instalado para crear los PDF).
 
 ## Regenerar los logotipos
