@@ -94,7 +94,10 @@
       hero.style.top = (TOPBAR + (H - TOPBAR - hh) / 2) + "px";
       S = Math.round(Math.min(H * 0.56, W * 0.34));
       tx = Math.round(W * 0.72 - S / 2);
-      ty = Math.round(TOPBAR + (H - TOPBAR - S) / 2 - H * 0.04);
+      // La base del tangram queda a la altura de la línea del lema («Juntos somos FP»)
+      var lr = document.querySelector(".lema").getBoundingClientRect(), sr = stage.getBoundingClientRect();
+      var lemaY = lr.top - sr.top + lr.height / 2;
+      ty = Math.round(Math.max(TOPBAR + 8, lemaY - S));
     } else {
       var top = TOPBAR + 28;
       hero.style.left = "16px";
