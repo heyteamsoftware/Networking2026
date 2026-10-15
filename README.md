@@ -45,6 +45,14 @@ La sección «Empresas participantes» se rellena desde `Networking/empresas.jso
 
 Solo `nombre` es obligatorio. Los logos van en `Networking/img/empresas/`. `mesas` pinta un triangulito del color de cada mesa en la que participa. Basta con subir `empresas.json` (y los logos) al servidor: no hay que tocar el HTML.
 
+## Piezas impresas
+
+En `piezas/` están el cartel A3, el flyer A5 (frente y dorso) y el roll-up de 85 × 200 cm, en PDF para imprenta, con vista previa en PNG y el SVG de trabajo. Todas llevan el QR a la web y los logos del CIFP Tony Gallardo y del Gobierno de Canarias.
+
+- Cartel y flyer: 3 mm de sangrado por cada lado. Roll-up: 5 mm, y los últimos 15 cm quedan sin contenido porque los tapa la base.
+- Los textos van convertidos a contornos: la imprenta no necesita las fuentes.
+- Para regenerarlas tras un cambio de identidad o de textos: `cd identidad && npm install && npm run piezas` (necesita Edge o Chrome instalado para crear los PDF).
+
 ## Regenerar los logotipos
 
 Si cambian los colores o la geometría, se edita `identidad/generar.js` y se ejecuta:

@@ -1,6 +1,13 @@
 {
   "name": "networking2026-identidad",
   "private": true,
-  "scripts": { "generar": "node generar.js" },
-  "dependencies": { "opentype.js": "1.3.4" }
+  "scripts": {
+    "generar": "node generar.js",
+    "piezas": "node piezas.js"
+  },
+  "dependencies": {
+    "opentype.js": "1.3.4",
+    "qrcode": "1.5.4",
+    "sharp": "0.33.5"
+  }
 }

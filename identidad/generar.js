@@ -214,4 +214,4 @@ const pares = process.argv.slice(2);
 for (let i = 0; i + 1 < pares.length; i += 2) console.log(pares[i], "sobre", pares[i + 1], "→", ratio(pares[i], pares[i + 1]));
 
 // Exporta la geometría para la web
-module.exports = { PIEZAS, ISLAS, GRACIOSA, inset, JUNTA, C };
+module.exports = { PIEZAS, ISLAS, GRACIOSA, ESCALA_ISLAS, MESA_COLOR, inset, centroide, pts, fmt, JUNTA, C, BEBAS, OUTFIT, OUTFIT_SB, medir, linea };
