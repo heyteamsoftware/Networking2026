@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="40 40 1240 560" role="img" aria-label="Networking 2026 — siete piezas, siete islas">
 <title>Networking 2026 — siete piezas, siete islas</title>
-  <polygon points="12.07,5 387.93,5 200,192.93" fill="#ee7b30" data-isla="Tenerife" transform="translate(473 367) rotate(-45) scale(0.5) translate(-200 -66.67)"/>
-  <polygon points="5,12.07 192.93,200 5,387.93" fill="#d6435a" data-isla="Fuerteventura" transform="translate(1102 331) rotate(45) scale(0.5) translate(-66.67 -200)"/>
+  <polygon points="12.07,5 387.93,5 200,192.93" fill="#c8452b" data-isla="Tenerife" transform="translate(473 367) rotate(-45) scale(0.5) translate(-200 -66.67)"/>
+  <polygon points="5,12.07 192.93,200 5,387.93" fill="#2e7d4f" data-isla="Fuerteventura" transform="translate(1102 331) rotate(45) scale(0.5) translate(-66.67 -200)"/>
   <polygon points="395,12.07 395,187.93 307.07,100" fill="#2370c4" data-isla="La Gomera" transform="translate(319 412) rotate(15) scale(0.5) translate(-366.67 -100)"/>
   <polygon points="207.07,200 300,107.07 392.93,200 300,292.93" fill="#2370c4" data-isla="Gran Canaria" transform="translate(717 453) rotate(0) scale(0.5) translate(-300 -200)"/>
   <polygon points="200,207.07 287.93,295 112.07,295" fill="#2370c4" data-isla="El Hierro" transform="translate(131 517) rotate(-20) scale(0.5) translate(-200 -266.67)"/>

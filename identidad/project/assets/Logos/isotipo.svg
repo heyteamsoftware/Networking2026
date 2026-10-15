@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Networking 2026 — isotipo">
 <title>Networking 2026 — isotipo</title>
-  <polygon points="12.07,5 387.93,5 200,192.93" fill="#ee7b30" data-pieza="ideas"/>
-  <polygon points="5,12.07 192.93,200 5,387.93" fill="#d6435a" data-pieza="proyectos"/>
+  <polygon points="12.07,5 387.93,5 200,192.93" fill="#c8452b" data-pieza="ideas"/>
+  <polygon points="5,12.07 192.93,200 5,387.93" fill="#2e7d4f" data-pieza="proyectos"/>
   <polygon points="395,12.07 395,187.93 307.07,100" fill="#2370c4" data-pieza="territorio"/>
   <polygon points="207.07,200 300,107.07 392.93,200 300,292.93" fill="#2370c4" data-pieza="conexiones"/>
   <polygon points="200,207.07 287.93,295 112.07,295" fill="#2370c4" data-pieza="personas"/>

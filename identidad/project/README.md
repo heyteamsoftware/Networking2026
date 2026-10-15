@@ -1,4 +1,4 @@
-Networking 2026 es un encuentro entre empresas y profesorado en el CIFP Tony Gallardo, el 20 de noviembre de 2026, con el lema **Juntos somos FP**. La identidad es un tangram: siete piezas que juntas forman un cuadrado, que son también las siete islas de Canarias y que se agrupan en las cuatro mesas de trabajo. Montar el cuadrado, abrirlo en el archipiélago y agruparlo en mesas es la idea de todo el sistema.
+Networking 2026 es un encuentro entre empresas y profesorado en el CIFP Tony Gallardo, el 20 de noviembre de 2026, con el lema **Juntos somos FP**. La identidad es un tangram: siete piezas que juntas forman un cuadrado, que son también las siete islas de Canarias y que se agrupan en las cuatro mesas de trabajo. Montar el cuadrado, desmontarlo en mesas y abrirlo en el archipiélago es la idea de todo el sistema.
 
 ## El concepto: un tangram de cuatro mesas
 
@@ -15,13 +15,13 @@ El tangram tiene siete piezas y Canarias siete islas mayores, y el escudo del Go
 
 | Pieza | Forma | Isla | Valor | Mesa | Color |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Triángulo grande (arriba) | Tenerife | Ideas | Mesa 1 · El aula como laboratorio de ideas | `mesa-1` naranja Timanfaya |
-| 2 | Triángulo grande (izquierda) | Fuerteventura | Proyectos | Mesa 2 · Proyectos en acción | `mesa-2` rojo Teide |
+| 1 | Triángulo grande (arriba) | Tenerife | Ideas | Mesa 1 · El aula como laboratorio de ideas | `mesa-1` rojo Timanfaya |
+| 2 | Triángulo grande (izquierda) | Fuerteventura | Proyectos | Mesa 2 · Proyectos en acción | `mesa-2` verde laurisilva |
 | 3 | Triángulo pequeño (derecha) | La Gomera | Territorio | Mesa 3 · Radio Atlante conecta | `mesa-3` azul Atlántico |
 | 4 | Cuadrado | Gran Canaria | Conexiones | Mesa 3 · Radio Atlante conecta | `mesa-3` azul Atlántico |
 | 5 | Triángulo pequeño (centro) | El Hierro | Personas | Mesa 3 · Radio Atlante conecta | `mesa-3` azul Atlántico |
-| 6 | Paralelogramo | Lanzarote | Futuro | Mesa 4 · TG Lab | `mesa-4` amarillo Maspalomas |
-| 7 | Triángulo mediano | La Palma | Empresa | Mesa 4 · TG Lab | `mesa-4` amarillo Maspalomas |
+| 6 | Paralelogramo | Lanzarote | Futuro | Mesa 4 · TG Lab | `mesa-4` amarillo canario |
+| 7 | Triángulo mediano | La Palma | Empresa | Mesa 4 · TG Lab | `mesa-4` amarillo canario |
 
 El **archipiélago** (`isotipo-archipielago.svg`) es la composición con las siete piezas en el lugar de su isla, de El Hierro a Lanzarote, calculado a partir de la longitud y latitud reales. Las piezas van al 50 % del tamaño del cuadrado y cada una con su giro.
 - **La Graciosa**, octava isla habitada desde 2018, va siempre como un punto gris junto al extremo norte de Lanzarote. No es una pieza: no lleva color de mesa ni valor.
@@ -42,16 +42,16 @@ Geometría: el tangram se dibuja sobre una retícula de 4 × 4 unidades. Todos l
 Reglas:
 - Área de respeto: deja libre alrededor del logotipo al menos una unidad del tangram, es decir, un cuarto del lado del isotipo.
 - Tamaño mínimo: isotipo de 24 px (8 mm impreso); logo horizontal de 180 px de ancho (45 mm).
-- En positivo el «2026» va en `mesa-2`; en negativo, en `mesa-4`.
+- En positivo el «2026» va en `mesa-1`; en negativo, en `mesa-4`.
 - No cierres las juntas, no cambies el color de una pieza a otro que no sea el de su mesa, no gires piezas sueltas en la versión montada, no añadas sombras, contornos ni degradados, y no recompongas el texto con otra fuente: los textos del logotipo ya están convertidos a contornos.
 
 ## Color
 
-Los cuatro colores de mesa se llaman como el paisaje canario del que salen: **naranja Timanfaya** (`mesa-1`), **rojo Teide** (`mesa-2`), **azul Atlántico** (`mesa-3`) y **amarillo Maspalomas** (`mesa-4`), que es además el amarillo de la bandera de Canarias. Llámalos así en textos, presentaciones y encargos de imprenta.
+La paleta es el paisaje de las islas. Los cuatro colores de mesa se llaman como el lugar del que salen: **rojo Timanfaya** (`mesa-1`), el de la lava de Lanzarote; **verde laurisilva** (`mesa-2`), el del bosque de Garajonay; **azul Atlántico** (`mesa-3`), el del mar que une las islas; y **amarillo canario** (`mesa-4`), el de la bandera de Canarias. Los fondos completan el paisaje: **arena** de las dunas de Maspalomas y **azul noche** del cielo de La Palma. Llámalos así en textos, presentaciones y encargos de imprenta.
 - Usa `fondo` y `tinta` para casi todo. Los cuatro colores de mesa son la marca: guárdalos para las piezas, los bloques de color y lo que pertenece a una mesa concreta.
 - Una sección de mesa usa solo su color: el símbolo y los bloques en `mesa-N`, sus antetítulos y chips en `mesa-N-texto`. No mezcles dos mesas en el mismo bloque, salvo en el tangram completo y en el archipiélago.
-- Texto sobre los colores de mesa: `marca-noche` sobre `mesa-1` y `mesa-4`; blanco sobre `mesa-3`; sobre `mesa-2`, blanco solo a partir de 19 px en negrita.
-- `mesa-1` y `mesa-4` no sirven como color de texto sobre `fondo` claro (2,4:1 y 1,3:1). Para texto usa siempre la variante `mesa-N-texto`. El amarillo sobre fondos claros apenas se separa del fondo: ahí úsalo en bloques grandes o acompañado de otras piezas, no en formas sueltas pequeñas.
+- Texto sobre los colores de mesa: blanco sobre `mesa-1`, `mesa-2` y `mesa-3`; `marca-noche` sobre `mesa-4`.
+- Ningún color de mesa sirve como texto pequeño sobre `fondo` claro (rojo 4,2:1, verde 4,4:1, amarillo 1,3:1). Para texto usa siempre la variante `mesa-N-texto`. El amarillo sobre fondos claros apenas se separa del fondo: ahí úsalo en bloques grandes o acompañado de otras piezas, no en formas sueltas pequeñas.
 - El azul de la bandera no se usa: sobre `marca-noche` se queda en 2,7:1 y se perdería; `mesa-3` da 3,2:1.
 - El tema Noche (`fondo` = azul noche) es para la portada, la escena del tangram y el pie; el tema Arena, para leer.
 - El foco de teclado es un anillo sólido de 3 px en `foco`, separado 3 px del elemento.
@@ -81,8 +81,8 @@ El fondo de las superficies en tema Noche lleva un patrón inspirado en el **cal
 
 La animación cuenta el concepto en tres tiempos:
 1. **Montaje** al cargar: las siete piezas llegan desde fuera girando y encajan en el cuadrado, con unos 80 ms de diferencia entre pieza y pieza (1,2 s en total, curva de salida suave).
-2. **Archipiélago** al empezar el scroll: cada pieza viaja a su isla, gira y se reduce. Aparece el título «Siete piezas, siete islas» y el nombre de cada isla con su valor.
-3. **Mesas** al seguir: las piezas se agrupan por color en las cuatro mesas, que se colocan una junto a otra con su nombre debajo. Al pulsar una mesa se va a su sección.
+2. **Mesas** al empezar el scroll: el cuadrado se desmonta en las cuatro mesas, que se colocan una junto a otra con su nombre debajo bajo el título «Elige tu mesa». Al pulsar una mesa se va a su sección.
+3. **Archipiélago** al seguir: las mesas se deshacen y cada pieza viaja a su isla, gira y se reduce. Aparece el título «Siete piezas, siete islas» y el nombre de cada isla con su valor. Es el final de la escena: del evento al programa, y del programa al territorio.
 
 Respeta `prefers-reduced-motion`: sin montaje y con los pasos sustituidos por estados fijos.
 

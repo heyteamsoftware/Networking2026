@@ -1,6 +1,6 @@
 /* Networking 2026 — CIFP Tony Gallardo
-   El tangram se monta al cargar y, con el scroll, se abre en el archipiélago (siete piezas, siete islas)
-   y después se agrupa en las cuatro mesas. */
+   El tangram se monta al cargar y, con el scroll, se desmonta en las cuatro mesas
+   y después en el archipiélago (siete piezas, siete islas). */
 (function () {
   "use strict";
 
@@ -172,18 +172,20 @@
     if (!L) return;
     var p = progress();
     var H0 = ease(clamp(p / 0.1));                 // el texto de portada se va
-    var I = ease(clamp((p - 0.04) / 0.28));        // las piezas viajan a sus islas
-    var J = ease(clamp((p - 0.5) / 0.3));          // y de las islas a las mesas
-    var TI = clamp((p - 0.26) / 0.08) * (1 - clamp((p - 0.47) / 0.06)); // nombres de las islas
-    var T = clamp((p - 0.78) / 0.12);              // nombres de las mesas
+    var J = ease(clamp((p - 0.04) / 0.28));        // el cuadrado se desmonta en las cuatro mesas
+    var I = ease(clamp((p - 0.56) / 0.28));        // y las mesas se deshacen en las siete islas
+    var T = clamp((p - 0.26) / 0.08) * (1 - clamp((p - 0.5) / 0.06)); // nombres de las mesas
+    var TI = clamp((p - 0.8) / 0.08);              // nombres de las islas
 
-    // Las mesas (grupos) solo se mueven en el último tramo
+    // Las mesas (grupos) van a su sitio; al pasar a islas vuelven a su posición original,
+    // que es desde donde se calculan las islas
+    var g = J * (1 - I);
     L.M.forEach(function (m, i) {
-      var x = lerp(m.start.x, m.end.x, J), y = lerp(m.start.y, m.end.y, J), sc = lerp(1, L.endScale, J);
+      var x = lerp(m.start.x, m.end.x, g), y = lerp(m.start.y, m.end.y, g), sc = lerp(1, L.endScale, g);
       grupos[i].style.transform = "translate(" + x + "px," + y + "px) scale(" + sc + ") translate(" + (-m.bcx) + "px," + (-m.bcy) + "px)";
     });
-    // Cada pieza, dentro de su mesa, va a su isla y vuelve
-    var k = I * (1 - J);
+    // Cada pieza, dentro de su mesa, viaja a su isla
+    var k = I;
     polys.forEach(function (el, n) {
       if (k <= 0) { el.style.transform = ""; return; }
       var d = ISLAS[n], a = L.A[n];
@@ -203,7 +205,7 @@
     title.style.opacity = T;
     title.style.transform = "translateY(" + ((1 - T) * -12) + "px)";
     hint.style.opacity = clamp(1 - p * 8);
-    tangram.classList.toggle("abierto", p > 0.86);
+    tangram.classList.toggle("abierto", p > 0.3);
   }
 
   var ticking = false;
@@ -218,9 +220,9 @@
   grupos.forEach(function (g) {
     g.addEventListener("click", function () {
       var behavior = reduceMotion ? "auto" : "smooth";
-      if (progress() < 0.86) {
+      if (progress() < 0.3) {
         var run = wrap.offsetHeight - stage.clientHeight;
-        window.scrollTo({ top: wrap.offsetTop + run * 0.94, behavior: behavior });
+        window.scrollTo({ top: wrap.offsetTop + run * 0.42, behavior: behavior });
       } else {
         document.getElementById(g.getAttribute("data-target")).scrollIntoView({ behavior: behavior });
       }

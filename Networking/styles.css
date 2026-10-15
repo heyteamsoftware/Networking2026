@@ -12,12 +12,12 @@
   --noche-2: #1c2b4d;
   --arena: #f5efe4;
 
-  --mesa-1: #ee7b30;
-  --mesa-2: #d6435a;
+  --mesa-1: #c8452b;
+  --mesa-2: #2e7d4f;
   --mesa-3: #2370c4;
   --mesa-4: #ffcc00;
-  --mesa-1-texto: #b04a10;
-  --mesa-2-texto: #b52b43;
+  --mesa-1-texto: #a8361f;
+  --mesa-2-texto: #22663f;
   --mesa-3-texto: #1e64b4;
   --mesa-4-texto: #875800;
 
@@ -114,8 +114,8 @@ img { display: block; max-width: 100%; }
   opacity: 0; pointer-events: none;
 }
 .plabel span { display: block; font-family: var(--texto); font-size: .7rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; margin-bottom: 4px; }
-.plabel[data-mesa="1"] span { color: #f59a5c; }
-.plabel[data-mesa="2"] span { color: #f27d90; }
+.plabel[data-mesa="1"] span { color: #ff8a6b; }
+.plabel[data-mesa="2"] span { color: #6cc58f; }
 .plabel[data-mesa="3"] span { color: #7fb2f0; }
 .plabel[data-mesa="4"] span { color: var(--mesa-4); }
 @media (min-width: 900px) { .plabel { font-size: 1.65rem; } }

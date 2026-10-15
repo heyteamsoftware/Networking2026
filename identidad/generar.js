@@ -14,10 +14,10 @@ const OUT_WEB = path.join(ROOT, "..", "Networking", "img");
 const C = {
   noche: "#14213d",
   arena: "#f5efe4",
-  naranja: "#ee7b30",   // Mesa 1 · naranja Timanfaya
-  volcan: "#d6435a",    // Mesa 2 · rojo Teide
+  naranja: "#c8452b",   // Mesa 1 · rojo Timanfaya (la lava de Lanzarote)
+  volcan: "#2e7d4f",    // Mesa 2 · verde laurisilva (el bosque de Garajonay)
   atlantico: "#2370c4", // Mesa 3 · azul Atlántico
-  sol: "#ffcc00",       // Mesa 4 · amarillo Maspalomas (el amarillo de la bandera de Canarias)
+  sol: "#ffcc00",       // Mesa 4 · amarillo canario (el amarillo de la bandera de Canarias)
 };
 const MESA_COLOR = [C.naranja, C.volcan, C.atlantico, C.sol];
 
@@ -156,9 +156,9 @@ ${linea(BEBAS, [{ t: "NETWORKING ", fill: tinta }, { t: "2026", fill: acento }],
 ${linea(OUTFIT_SB, [{ t: "JUNTOS SOMOS FP", fill: tinta }], 380, 536, 30, { tracking: 6, anchor: "middle" })}
 ${linea(OUTFIT, [{ t: "CIFP TONY GALLARDO · 20 NOV 2026", fill: sub }], 380, 584, 23, { tracking: 3, anchor: "middle" })}`, "Networking 2026 — Juntos somos FP");
 }
-files["logo-horizontal.svg"] = horizontal(C.noche, C.volcan, "#555c72");
+files["logo-horizontal.svg"] = horizontal(C.noche, C.naranja, "#555c72");
 files["logo-horizontal-negativo.svg"] = horizontal(C.arena, C.sol, "#b4b8c8");
-files["logo-vertical.svg"] = vertical(C.noche, C.volcan, "#555c72");
+files["logo-vertical.svg"] = vertical(C.noche, C.naranja, "#555c72");
 files["logo-vertical-negativo.svg"] = vertical(C.arena, C.sol, "#b4b8c8");
 
 // ---------- Símbolo de cada mesa ----------
