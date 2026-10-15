@@ -1,8 +1,13 @@
-Networking 2026 es un encuentro entre empresas y profesorado en el CIFP Tony Gallardo, el 20 de noviembre de 2026, con el lema **Juntos somos mejores**. La identidad es un tangram: siete piezas que juntas forman un cuadrado y que se separan en las cuatro mesas de trabajo. Montar y desmontar el cuadrado es la idea de todo el sistema.
+Networking 2026 es un encuentro entre empresas y profesorado en el CIFP Tony Gallardo, el 20 de noviembre de 2026, con el lema **Juntos somos FP**. La identidad es un tangram: siete piezas que juntas forman un cuadrado y que se separan en las cuatro mesas de trabajo. Montar y desmontar el cuadrado es la idea de todo el sistema.
 
 ## El concepto: un tangram de cuatro mesas
 
 El cuadrado completo es el evento. Cada pieza lleva uno de los siete valores del cartel original, y las piezas se agrupan por color en las cuatro mesas. **Cada mesa ocupa exactamente un cuarto del cuadrado** (4 de las 16 unidades de área): ninguna mesa pesa más que otra.
+
+El lema, **Juntos somos FP**, dice lo mismo con palabras: la Formación Profesional no la hace solo el aula. Centros, profesorado, alumnado y empresas son piezas distintas del mismo tangram, y la figura solo aparece cuando encajan. Úsalo así:
+- Debajo de «NETWORKING 2026» en el logotipo, en `etiqueta` (Outfit 600, mayúsculas, espaciado amplio). No lo pongas en Bebas ni más grande que el nombre del evento.
+- En texto corrido se escribe «Juntos somos FP», con «FP» siempre en mayúsculas y sin punto final.
+- Acompaña al tangram montado, nunca al despiezado: el despiece habla de las mesas; el lema, de lo que forman juntas.
 
 | Pieza | Forma | Valor | Mesa | Color |
 | --- | --- | --- | --- | --- |
@@ -67,6 +72,7 @@ Respeta `prefers-reduced-motion`: sin montaje, y el despiece sustituido por las 
 - Trata de tú a una persona y de **ustedes** a un grupo, como se habla en Canarias: «¿Ya eligieron mesa?», nunca «¿Ya habéis elegido mesa?».
 - Los nombres de mesa se escriben tal cual en el programa: «El aula como laboratorio de ideas», «Proyectos en acción: mesas técnicas de trabajo», «Radio Atlante conecta con experiencias de impacto», «TG Lab: Innovación, Emprendimiento, Orientación y Calidad».
 - La fecha se escribe «20 de noviembre de 2026» en texto y «20 NOV 2026» en piezas gráficas.
+- El lema es «Juntos somos FP». En piezas gráficas va en mayúsculas: «JUNTOS SOMOS FP».
 - Sin emojis.
 
 ## Iconografía
