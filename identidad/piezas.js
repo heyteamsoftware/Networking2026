@@ -16,8 +16,8 @@ const URL_TXT = "myappsserver.duckdns.org/Networking";
 const C = G.C;
 const SUAVE = "#b4b8c8";
 const TINTA_SUAVE = "#555c72";
-const MESA_TEXTO_OSCURO = ["#ff8a6b", "#6cc58f", "#7fb2f0", "#ffcc00"]; // sobre noche
-const MESA_TEXTO_CLARO = ["#a8361f", "#22663f", "#1e64b4", "#875800"];   // sobre arena
+const MESA_TEXTO_OSCURO = ["#ff8a6b", "#f3a35a", "#7fb2f0", "#ffcc00"]; // sobre noche
+const MESA_TEXTO_CLARO = ["#a8361f", "#9c4f12", "#1e64b4", "#875800"];   // sobre arena
 
 const MESAS = [
   { n: 1, corto: "El aula como laboratorio de ideas", detalle: "5 mesas redondas",

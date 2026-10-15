@@ -16,7 +16,7 @@ Canarias tiene ocho islas habitadas. Las siete del tangram son las siete islas m
 | Pieza | Forma | Isla | Valor | Mesa | Color |
 | --- | --- | --- | --- | --- | --- |
 | 1 | Triángulo grande (arriba) | Tenerife | Ideas | Mesa 1 · El aula como laboratorio de ideas | `mesa-1` rojo Timanfaya |
-| 2 | Triángulo grande (izquierda) | Fuerteventura | Proyectos | Mesa 2 · Proyectos en acción | `mesa-2` verde laurisilva |
+| 2 | Triángulo grande (izquierda) | Fuerteventura | Proyectos | Mesa 2 · Proyectos en acción | `mesa-2` naranja atardecer |
 | 3 | Triángulo pequeño (derecha) | La Gomera | Territorio | Mesa 3 · Radio Atlante conecta | `mesa-3` azul Atlántico |
 | 4 | Cuadrado | Gran Canaria | Conexiones | Mesa 3 · Radio Atlante conecta | `mesa-3` azul Atlántico |
 | 5 | Triángulo pequeño (centro) | El Hierro | Personas | Mesa 3 · Radio Atlante conecta | `mesa-3` azul Atlántico |
@@ -34,7 +34,7 @@ Geometría: el tangram se dibuja sobre una retícula de 4 × 4 unidades. Todos l
 
 En las piezas grandes (la portada de la web, carteles, flyers y roll-ups) cada pieza lleva escrita su palabra clave: IDEAS, PROYECTOS, TERRITORIO, CONEXIONES, PERSONAS, FUTURO y EMPRESA.
 - Bebas Neue, en mayúsculas y centrada en la pieza; TERRITORIO va en vertical, a lo largo del cateto del triángulo pequeño.
-- Blanco sobre rojo, verde y azul; `marca-noche` sobre amarillo.
+- Blanco sobre rojo y azul; `marca-noche` sobre naranja y amarillo.
 - Posición y tamaño de cada palabra en `identidad/generar.js` (`PALABRAS`), en unidades de la retícula. No las cambies a mano.
 - En el isotipo, los símbolos de mesa y cualquier tangram de menos de 120 px no se ponen palabras: no se leerían. Tampoco en el archipiélago, donde mandan los nombres de las islas.
 
@@ -55,11 +55,11 @@ Reglas:
 
 ## Color
 
-La paleta es el paisaje de las islas. Los cuatro colores de mesa se llaman como el lugar del que salen: **rojo Timanfaya** (`mesa-1`), el de la lava de Lanzarote; **verde laurisilva** (`mesa-2`), el del bosque de Garajonay; **azul Atlántico** (`mesa-3`), el del mar que une las islas; y **amarillo canario** (`mesa-4`), el de la bandera de Canarias. Los fondos completan el paisaje: **arena** de las dunas de Maspalomas y **azul noche** del cielo de La Palma. Llámalos así en textos, presentaciones y encargos de imprenta.
+La paleta es el paisaje de las islas. Los cuatro colores de mesa se llaman como el lugar del que salen: **rojo Timanfaya** (`mesa-1`), el de la lava de Lanzarote; **naranja atardecer** (`mesa-2`), la luz del sol poniéndose sobre el Atlántico, como en la foto de la portada; **azul Atlántico** (`mesa-3`), el del mar que une las islas; y **amarillo canario** (`mesa-4`), el de la bandera de Canarias. Los fondos completan el paisaje: **arena** de las dunas de Maspalomas y **azul noche** del cielo de La Palma. Llámalos así en textos, presentaciones y encargos de imprenta.
 - Usa `fondo` y `tinta` para casi todo. Los cuatro colores de mesa son la marca: guárdalos para las piezas, los bloques de color y lo que pertenece a una mesa concreta.
 - Una sección de mesa usa solo su color: el símbolo y los bloques en `mesa-N`, sus antetítulos y chips en `mesa-N-texto`. No mezcles dos mesas en el mismo bloque, salvo en el tangram completo y en el archipiélago.
-- Texto sobre los colores de mesa: blanco sobre `mesa-1`, `mesa-2` y `mesa-3`; `marca-noche` sobre `mesa-4`.
-- Ningún color de mesa sirve como texto pequeño sobre `fondo` claro (rojo 4,2:1, verde 4,4:1, amarillo 1,3:1). Para texto usa siempre la variante `mesa-N-texto`. El amarillo sobre fondos claros apenas se separa del fondo: ahí úsalo en bloques grandes o acompañado de otras piezas, no en formas sueltas pequeñas.
+- Texto sobre los colores de mesa: blanco sobre `mesa-1` y `mesa-3`; `marca-noche` sobre `mesa-2` y `mesa-4`.
+- Ningún color de mesa sirve como texto pequeño sobre `fondo` claro (rojo 4,2:1, naranja 2,3:1, amarillo 1,3:1). Para texto usa siempre la variante `mesa-N-texto`. El amarillo sobre fondos claros apenas se separa del fondo: ahí úsalo en bloques grandes o acompañado de otras piezas, no en formas sueltas pequeñas.
 - El azul de la bandera no se usa: sobre `marca-noche` se queda en 2,7:1 y se perdería; `mesa-3` da 3,2:1.
 - El tema Noche (`fondo` = azul noche) es para la portada, la escena del tangram y el pie; el tema Arena, para leer.
 - El foco de teclado es un anillo sólido de 3 px en `foco`, separado 3 px del elemento.

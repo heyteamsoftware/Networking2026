@@ -33,37 +33,37 @@
       "files": {
         "logo-horizontal.svg": {
           "name": "logo-horizontal.svg",
-          "blob": "22cb396b73a929460b71ba111d701d67",
+          "blob": "21f212d4cb28a855f496c5230a857b1f",
           "size": 27697,
           "type": "image/svg+xml"
         },
         "logo-horizontal-negativo.svg": {
           "name": "logo-horizontal-negativo.svg",
-          "blob": "20cbd7ea22a75c3116b30afef9f490ac",
+          "blob": "ff1ab0c7567f2c32038ae872ee3fb9d6",
           "size": 27697,
           "type": "image/svg+xml"
         },
         "logo-vertical.svg": {
           "name": "logo-vertical.svg",
-          "blob": "01f26a15a751ac9c9507b1467b613241",
+          "blob": "1b061a4393e1bc305c1d2a6c8a761bcc",
           "size": 27875,
           "type": "image/svg+xml"
         },
         "logo-vertical-negativo.svg": {
           "name": "logo-vertical-negativo.svg",
-          "blob": "9a3113baacd6d06362bf25ecaf92c722",
+          "blob": "42300f2dfc66b91173a6ba7f32f9aff0",
           "size": 27875,
           "type": "image/svg+xml"
         },
         "isotipo.svg": {
           "name": "isotipo.svg",
-          "blob": "7e34d8f0046a953d6da8032919548774",
+          "blob": "c28b8d176c3214e3c8c8cac5279fd718",
           "size": 877,
           "type": "image/svg+xml"
         },
         "isotipo-despiezado.svg": {
           "name": "isotipo-despiezado.svg",
-          "blob": "aecb8a9285e4855c08dff9a6f04fa515",
+          "blob": "9a697b9f3be73821ab904e16a2a42f38",
           "size": 909,
           "type": "image/svg+xml"
         },
@@ -81,7 +81,7 @@
         },
         "isotipo-archipielago.svg": {
           "name": "isotipo-archipielago.svg",
-          "blob": "c859c9d6e979e05847d0fb8ba6927368",
+          "blob": "fc316e1d641abcdd54a0b9e2178c5529",
           "size": 1736,
           "type": "image/svg+xml"
         }
@@ -105,7 +105,7 @@
         },
         "mesa-2.svg": {
           "name": "mesa-2.svg",
-          "blob": "cfd49aa5e1822ef8c5173c6e171c535b",
+          "blob": "dd24146957cfed904de22188ca4ea776",
           "size": 259,
           "type": "image/svg+xml"
         },
@@ -175,8 +175,8 @@
   },
   "lastChange": {
     "by": "Fernando",
-    "at": "2026-10-15T15:47:24Z",
+    "at": "2026-10-15T19:30:34Z",
     "via": "Claude Code",
-    "note": "Ocho piezas, ocho islas (La Graciosa, la pieza que falta), palabras en las piezas y nueva foto de portada."
+    "note": "Combinación Atardecer canario: la Mesa 2 pasa a naranja atardecer."
   }
 }

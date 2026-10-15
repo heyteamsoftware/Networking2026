@@ -15,7 +15,7 @@ const C = {
   noche: "#14213d",
   arena: "#f5efe4",
   naranja: "#c8452b",   // Mesa 1 · rojo Timanfaya (la lava de Lanzarote)
-  volcan: "#2e7d4f",    // Mesa 2 · verde laurisilva (el bosque de Garajonay)
+  volcan: "#e8862a",    // Mesa 2 · naranja atardecer (la luz del atardecer sobre el Atlántico)
   atlantico: "#2370c4", // Mesa 3 · azul Atlántico
   sol: "#ffcc00",       // Mesa 4 · amarillo canario (el amarillo de la bandera de Canarias)
 };
@@ -57,7 +57,7 @@ function graciosaSVG(color, grosor = 3) {
 // Palabra clave de cada pieza: posición y tamaño en la retícula 400×400 (como en la web)
 const PALABRAS = {
   ideas:      { x: 200, y: 72,  size: 46 },
-  proyectos:  { x: 82,  y: 200, size: 34 },
+  proyectos:  { x: 82,  y: 200, size: 34, oscura: true },
   territorio: { x: 370, y: 100, size: 22, rot: -90 },
   conexiones: { x: 300, y: 200, size: 24 },
   personas:   { x: 200, y: 276, size: 22 },
