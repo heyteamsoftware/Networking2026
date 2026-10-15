@@ -192,8 +192,6 @@ img { display: block; max-width: 100%; }
 .footer img { width: 72px; height: 72px; border-radius: 50%; background: #fff; }
 .footer p { margin: 0; }
 .f-title { font-family: var(--display); font-size: 1.5rem; color: #fff; letter-spacing: .03em; }
-.f-link { margin-left: auto; color: var(--gold); text-decoration: none; font-weight: 600; }
-.f-link:hover { text-decoration: underline; }
 
 /* ---------- Animaciones de entrada ---------- */
 .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
