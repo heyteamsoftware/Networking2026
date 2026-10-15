@@ -73,6 +73,13 @@ Respeta `prefers-reduced-motion`: sin montaje, y el despiece sustituido por las 
 
 No hay una familia de iconos. Los únicos símbolos de la marca son las cuatro mesas (`mesa-1.svg` a `mesa-4.svg`), recortadas del propio tangram. Úsalos para señalizar las mesas en la web, en los carteles de sala y en las acreditaciones. Si hiciera falta un icono funcional (flecha, menú), usa un trazo simple de 2 px en `tinta`.
 
+## El centro organizador
+
+El CIFP Tony Gallardo organiza el evento, así que su logo aparece siempre en la portada de cada soporte (web, cartel, presentación, acreditación), con la palabra «Organiza» en `etiqueta` y el nombre «CIFP Tony Gallardo» al lado.
+- Ponlo sobre un círculo blanco, ya que el logo es redondo, y nunca dentro del tangram ni pegado a él.
+- En la web va encima del nombre del evento: 96 px en escritorio y 56 px en móvil.
+- Respeta el logo tal cual: no lo recolorees ni lo recortes.
+
 ## Logos de terceros
 
-El cartel original incluía los logotipos del Gobierno de Canarias y de FP Dual Canarias y el logo del CIFP Tony Gallardo. No forman parte de este sistema: colócalos según sus propios manuales, en una franja aparte, separados del logotipo de Networking 2026 por al menos dos unidades del tangram.
+El cartel original incluía también los logotipos del Gobierno de Canarias y de FP Dual Canarias. No forman parte de este sistema: colócalos según sus propios manuales, en una franja aparte, separados del logotipo de Networking 2026 por al menos dos unidades del tangram.

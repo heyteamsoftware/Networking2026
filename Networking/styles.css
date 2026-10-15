@@ -68,6 +68,15 @@ img { display: block; max-width: 100%; }
 }
 
 .hero { position: absolute; left: 0; top: 0; color: var(--arena); will-change: transform, opacity; }
+.organiza { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+.organiza img { width: 96px; height: 96px; border-radius: 50%; background: #fff; flex: none; box-shadow: 0 0 0 4px rgba(245,239,228,.12); }
+.organiza p { margin: 0; font-size: 1.15rem; font-weight: 600; line-height: 1.2; }
+.organiza span { display: block; font-size: .7rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: #b4b8c8; margin-bottom: 3px; }
+@media (max-width: 899px) {
+  .organiza { margin-bottom: 18px; gap: 12px; }
+  .organiza img { width: 56px; height: 56px; }
+  .organiza p { font-size: 1rem; }
+}
 .hero h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(3.6rem, 9vw, 8.5rem); line-height: .9; letter-spacing: .01em; text-wrap: balance; }
 .hero h1 span { color: var(--mesa-4); }
 .lema { margin: 14px 0 0; font-size: clamp(1.05rem, 2vw, 1.35rem); font-weight: 600; letter-spacing: .2em; text-transform: uppercase; }
