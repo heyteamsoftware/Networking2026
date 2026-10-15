@@ -1,0 +1,41 @@
+{
+  "v": 3,
+  "layout": "files",
+  "createdOnFiles": { "v": 1, "at": "2026-10-15T14:11:37Z" },
+  "title": "Networking 2026",
+  "namespace": "Networking2026",
+  "libraries": [],
+  "sections": {},
+  "groups": ["Logos", "Mesas"],
+  "assetGroups": {
+    "Logos": {
+      "name": "Logos",
+      "tile": "l",
+      "order": ["logo-horizontal.svg", "logo-horizontal-negativo.svg", "logo-vertical.svg", "logo-vertical-negativo.svg", "isotipo.svg", "isotipo-despiezado.svg", "isotipo-noche.svg", "isotipo-arena.svg"],
+      "files": {
+        "logo-horizontal.svg": { "name": "logo-horizontal.svg", "blob": "14a3dac41f0747135f270990ba3df157", "size": 24400, "type": "image/svg+xml" },
+        "logo-horizontal-negativo.svg": { "name": "logo-horizontal-negativo.svg", "blob": "2dbd0553ff028e2b21932fdfd2431a65", "size": 24400, "type": "image/svg+xml" },
+        "logo-vertical.svg": { "name": "logo-vertical.svg", "blob": "8e0c3bf8ee0bcd0f99d7a29110e17ee8", "size": 24593, "type": "image/svg+xml" },
+        "logo-vertical-negativo.svg": { "name": "logo-vertical-negativo.svg", "blob": "f58cd487639c2e18c41797a055767fd7", "size": 24593, "type": "image/svg+xml" },
+        "isotipo.svg": { "name": "isotipo.svg", "blob": "7f728e49bf7a65f580ec0cb6ab7943f9", "size": 877, "type": "image/svg+xml" },
+        "isotipo-despiezado.svg": { "name": "isotipo-despiezado.svg", "blob": "ee209489f178187bf29cf5399351740a", "size": 909, "type": "image/svg+xml" },
+        "isotipo-noche.svg": { "name": "isotipo-noche.svg", "blob": "dc51a1bf1d3f4cecc84cb8cc4f23331d", "size": 917, "type": "image/svg+xml" },
+        "isotipo-arena.svg": { "name": "isotipo-arena.svg", "blob": "6cffa3b07283df41d14a22ebf2fb1792", "size": 917, "type": "image/svg+xml" }
+      }
+    },
+    "Mesas": {
+      "name": "Mesas",
+      "tile": "m",
+      "order": ["mesa-1.svg", "mesa-2.svg", "mesa-3.svg", "mesa-4.svg"],
+      "files": {
+        "mesa-1.svg": { "name": "mesa-1.svg", "blob": "41acbffb6a7962a454e4b8ef7b0a5bc4", "size": 255, "type": "image/svg+xml" },
+        "mesa-2.svg": { "name": "mesa-2.svg", "blob": "af53aea409405a7d13500e6e8028ff66", "size": 259, "type": "image/svg+xml" },
+        "mesa-3.svg": { "name": "mesa-3.svg", "blob": "fc19462d0b99255cac332f2a4bd78b6e", "size": 481, "type": "image/svg+xml" },
+        "mesa-4.svg": { "name": "mesa-4.svg", "blob": "c1042c6df8996615e6bee6945f798ef4", "size": 370, "type": "image/svg+xml" }
+      }
+    }
+  },
+  "blobs": {},
+  "docs": { "readme": "project/README.md", "sections": [] },
+  "lastChange": { "by": "Fernando", "at": "2026-10-15T14:11:37Z", "via": "Claude Code", "note": "Primera versión de la identidad: tangram de cuatro mesas." }
+}

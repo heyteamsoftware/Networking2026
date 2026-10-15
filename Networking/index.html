@@ -4,60 +4,78 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Networking 2026 — CIFP Tony Gallardo</title>
-  <meta name="description" content="Networking 2026 · Del aula a la realidad. Un espacio de encuentro, diálogo y crecimiento entre empresas y profesorado. 20 de noviembre en el CIFP Tony Gallardo.">
+  <meta name="description" content="Networking 2026 · Del aula a la realidad. Un espacio de encuentro, diálogo y crecimiento entre empresas y profesorado. 20 de noviembre de 2026 en el CIFP Tony Gallardo.">
   <meta property="og:title" content="Networking 2026 — Del aula a la realidad">
-  <meta property="og:description" content="Un espacio de encuentro, diálogo y crecimiento entre empresas y profesorado. 20 de noviembre · CIFP Tony Gallardo.">
-  <meta property="og:image" content="img/cartel.webp">
-  <link rel="icon" href="img/logo-tony-gallardo.webp" type="image/webp">
-  <link rel="preload" href="img/cartel.webp" as="image">
+  <meta property="og:description" content="Un espacio de encuentro, diálogo y crecimiento entre empresas y profesorado. 20 de noviembre de 2026 · CIFP Tony Gallardo.">
+  <meta name="theme-color" content="#14213d">
+  <link rel="icon" href="img/isotipo.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
   <header class="topbar" id="topbar">
-    <a class="brand" href="#inicio" aria-label="Inicio">
-      <img src="img/logo-tony-gallardo.webp" alt="" width="36" height="36">
+    <a class="brand" href="#inicio" aria-label="Networking 2026, inicio">
+      <img src="img/isotipo.svg" alt="" width="30" height="30">
       <span>Networking <b>2026</b></span>
     </a>
     <nav class="topnav" aria-label="Mesas">
-      <a href="#mesa-1">Mesa 1</a>
-      <a href="#mesa-2">Mesa 2</a>
-      <a href="#mesa-3">Mesa 3</a>
-      <a href="#mesa-4">Mesa 4</a>
+      <a href="#mesa-1" style="--c:var(--mesa-1)">Mesa 1</a>
+      <a href="#mesa-2" style="--c:var(--mesa-2)">Mesa 2</a>
+      <a href="#mesa-3" style="--c:var(--mesa-3)">Mesa 3</a>
+      <a href="#mesa-4" style="--c:var(--mesa-4)">Mesa 4</a>
     </nav>
-    <span class="topdate">20 · NOV · 2026</span>
+    <span class="topdate">20 NOV 2026</span>
   </header>
 
-  <!-- ESCENA: el cartel se despieza en las 4 mesas -->
-  <section class="stage-wrap" id="inicio" aria-label="Cartel Networking 2026">
+  <!-- ESCENA: el tangram se monta y se despieza en las cuatro mesas -->
+  <section class="stage-wrap" id="inicio" aria-label="Networking 2026">
     <div class="stage" id="stage">
-      <canvas class="net" id="net" aria-hidden="true"></canvas>
 
-      <div class="stage-title" id="stageTitle">
-        <p class="eyebrow">20 de noviembre · CIFP Tony Gallardo</p>
-        <h1>Elige tu mesa</h1>
+      <div class="hero" id="hero">
+        <p class="eyebrow">CIFP Tony Gallardo · 20 de noviembre de 2026</p>
+        <h1>Networking <span>2026</span></h1>
+        <p class="lema">Del aula a la realidad</p>
       </div>
 
-      <div class="pieces" id="pieces">
-        <div class="poster-glow" id="glow" aria-hidden="true"></div>
-        <button class="piece" data-q="0" data-target="mesa-1" aria-label="Mesa 1: El aula como laboratorio de ideas"></button>
-        <button class="piece" data-q="1" data-target="mesa-2" aria-label="Mesa 2: Proyectos en acción, mesas técnicas de trabajo"></button>
-        <button class="piece" data-q="2" data-target="mesa-3" aria-label="Mesa 3: Radio Atlante conecta con experiencias de impacto"></button>
-        <button class="piece" data-q="3" data-target="mesa-4" aria-label="Mesa 4: TG Lab"></button>
+      <div class="stage-title" id="stageTitle">
+        <p class="eyebrow">Cuatro mesas · un mismo cuadrado</p>
+        <h2>Elige tu mesa</h2>
+      </div>
+
+      <div class="tangram" id="tangram">
+        <button class="grupo" data-mesa="1" data-target="mesa-1" aria-label="Mesa 1: El aula como laboratorio de ideas">
+          <svg viewBox="0 0 400 400" aria-hidden="true"><polygon class="m1" style="--i:0;--dx:-180px;--dy:-220px" points="12.07,5 387.93,5 200,192.93"/></svg>
+        </button>
+        <button class="grupo" data-mesa="2" data-target="mesa-2" aria-label="Mesa 2: Proyectos en acción">
+          <svg viewBox="0 0 400 400" aria-hidden="true"><polygon class="m2" style="--i:1;--dx:-260px;--dy:40px" points="5,12.07 192.93,200 5,387.93"/></svg>
+        </button>
+        <button class="grupo" data-mesa="3" data-target="mesa-3" aria-label="Mesa 3: Radio Atlante conecta">
+          <svg viewBox="0 0 400 400" aria-hidden="true">
+            <polygon class="m3" style="--i:2;--dx:240px;--dy:-200px" points="395,12.07 395,187.93 307.07,100"/>
+            <polygon class="m3" style="--i:3;--dx:280px;--dy:20px" points="207.07,200 300,107.07 392.93,200 300,292.93"/>
+            <polygon class="m3" style="--i:4;--dx:-120px;--dy:260px" points="200,207.07 287.93,295 112.07,295"/>
+          </svg>
+        </button>
+        <button class="grupo" data-mesa="4" data-target="mesa-4" aria-label="Mesa 4: TG Lab">
+          <svg viewBox="0 0 400 400" aria-hidden="true">
+            <polygon class="m4" style="--i:5;--dx:-220px;--dy:240px" points="12.07,395 102.07,305 287.93,305 197.93,395"/>
+            <polygon class="m4" style="--i:6;--dx:220px;--dy:220px" points="395,212.07 395,395 212.07,395"/>
+          </svg>
+        </button>
       </div>
 
       <div class="labels" aria-hidden="true">
-        <div class="plabel" data-q="0"><span>Mesa 1</span>El aula como laboratorio de ideas</div>
-        <div class="plabel" data-q="1"><span>Mesa 2</span>Proyectos en acción</div>
-        <div class="plabel" data-q="2"><span>Mesa 3</span>Radio Atlante conecta</div>
-        <div class="plabel" data-q="3"><span>Mesa 4</span>TG Lab</div>
+        <div class="plabel" data-mesa="1"><span>Mesa 1</span>El aula como laboratorio de ideas</div>
+        <div class="plabel" data-mesa="2"><span>Mesa 2</span>Proyectos en acción</div>
+        <div class="plabel" data-mesa="3"><span>Mesa 3</span>Radio Atlante conecta</div>
+        <div class="plabel" data-mesa="4"><span>Mesa 4</span>TG Lab</div>
       </div>
 
       <div class="scroll-hint" id="scrollHint">
-        <span>Desliza para abrir el cartel</span>
+        <span>Desliza para abrir el tangram</span>
         <i aria-hidden="true"></i>
       </div>
     </div>
@@ -67,15 +85,16 @@
   <section class="about" id="evento">
     <div class="ticker" aria-hidden="true">
       <div class="ticker-track">
-        <span>Conexiones</span><span>Personas</span><span>Ideas</span><span>Proyectos</span><span>Empresa</span><span>Futuro</span><span>Territorio</span>
-        <span>Conexiones</span><span>Personas</span><span>Ideas</span><span>Proyectos</span><span>Empresa</span><span>Futuro</span><span>Territorio</span>
+        <span style="--c:var(--mesa-1)">Ideas</span><span style="--c:var(--mesa-2)">Proyectos</span><span style="--c:var(--mesa-3)">Territorio</span><span style="--c:var(--mesa-3)">Conexiones</span><span style="--c:var(--mesa-3)">Personas</span><span style="--c:var(--mesa-4)">Futuro</span><span style="--c:var(--mesa-4)">Empresa</span>
+        <span style="--c:var(--mesa-1)">Ideas</span><span style="--c:var(--mesa-2)">Proyectos</span><span style="--c:var(--mesa-3)">Territorio</span><span style="--c:var(--mesa-3)">Conexiones</span><span style="--c:var(--mesa-3)">Personas</span><span style="--c:var(--mesa-4)">Futuro</span><span style="--c:var(--mesa-4)">Empresa</span>
       </div>
     </div>
 
     <div class="wrap about-grid">
       <div class="about-text reveal">
-        <p class="eyebrow dark">Networking 2026 · Del aula a la realidad</p>
-        <h2 class="statement">Un espacio de <em>encuentro</em>, <em>diálogo</em> y <em>crecimiento</em> entre empresas y profesorado.</h2>
+        <p class="etiqueta">Networking 2026 · Del aula a la realidad</p>
+        <h2 class="statement">Un espacio de encuentro, diálogo y crecimiento entre empresas y profesorado.</h2>
+        <p class="entradilla">Siete piezas, cuatro mesas, un mismo cuadrado. Cada mesa pesa lo mismo: un cuarto del tangram.</p>
       </div>
 
       <aside class="date-card reveal">
@@ -84,7 +103,7 @@
           <span class="m">Noviembre<br>2026</span>
         </div>
         <p class="place">CIFP Tony Gallardo</p>
-        <div class="countdown" id="countdown" aria-live="polite">
+        <div class="countdown" aria-live="polite">
           <div><b id="cdD">--</b><span>días</span></div>
           <div><b id="cdH">--</b><span>horas</span></div>
           <div><b id="cdM">--</b><span>min</span></div>
@@ -94,85 +113,81 @@
   </section>
 
   <!-- MESA 1 -->
-  <section class="mesa" id="mesa-1" style="--accent:#e2803a; --accent-soft:#fdeee2">
+  <section class="mesa" id="mesa-1" style="--accent:var(--mesa-1); --accent-texto:var(--mesa-1-texto)">
     <div class="wrap mesa-grid">
       <div class="mesa-visual reveal">
-        <div class="piece-img" data-q="0"></div>
-        <span class="mesa-num">01</span>
+        <img src="img/mesa-1.svg" alt="" class="simbolo s-ancho">
       </div>
       <div class="mesa-body">
-        <p class="kicker reveal">Mesa 1 · 5 mesas redondas</p>
+        <p class="etiqueta reveal">Mesa 1 · 5 mesas redondas</p>
         <h2 class="reveal">El aula como laboratorio de ideas</h2>
         <ol class="sub-list">
-          <li class="reveal"><span class="tag">Mesa redonda 1</span><h3>Las necesidades del alumnado, del entorno y el currículo como base del diseño</h3></li>
-          <li class="reveal"><span class="tag">Mesa redonda 2</span><h3>Las profesiones de una Escuela Azul como eje transversal de un proyecto para la ciudadanía</h3></li>
-          <li class="reveal"><span class="tag">Mesa redonda 3</span><h3>Profesiones que reivindican una identidad</h3></li>
-          <li class="reveal"><span class="tag">Mesa 4</span><h3>Internacionalización e innovación al servicio del alumnado</h3></li>
-          <li class="reveal"><span class="tag">Mesa 5</span><h3>Alumnado competente y emprendimiento como oportunidad</h3></li>
+          <li class="reveal"><span class="etiqueta">Mesa redonda 1</span><h3>Las necesidades del alumnado, del entorno y el currículo como base del diseño</h3></li>
+          <li class="reveal"><span class="etiqueta">Mesa redonda 2</span><h3>Las profesiones de una Escuela Azul como eje transversal de un proyecto para la ciudadanía</h3></li>
+          <li class="reveal"><span class="etiqueta">Mesa redonda 3</span><h3>Profesiones que reivindican una identidad</h3></li>
+          <li class="reveal"><span class="etiqueta">Mesa 4</span><h3>Internacionalización e innovación al servicio del alumnado</h3></li>
+          <li class="reveal"><span class="etiqueta">Mesa 5</span><h3>Alumnado competente y emprendimiento como oportunidad</h3></li>
         </ol>
       </div>
     </div>
   </section>
 
   <!-- MESA 2 -->
-  <section class="mesa alt" id="mesa-2" style="--accent:#c4553f; --accent-soft:#fbe7e2">
+  <section class="mesa alt" id="mesa-2" style="--accent:var(--mesa-2); --accent-texto:var(--mesa-2-texto)">
     <div class="wrap mesa-grid">
       <div class="mesa-visual reveal">
-        <div class="piece-img" data-q="1"></div>
-        <span class="mesa-num">02</span>
+        <img src="img/mesa-2.svg" alt="" class="simbolo s-alto">
       </div>
       <div class="mesa-body">
-        <p class="kicker reveal">Mesa 2 · 8 mesas técnicas</p>
+        <p class="etiqueta reveal">Mesa 2 · 8 mesas técnicas</p>
         <h2 class="reveal">Proyectos en acción: mesas técnicas de trabajo</h2>
         <ol class="sub-grid">
-          <li class="reveal"><span class="tag">Mesa 1 · Isleta Azul</span><h3>Seguridad y Medioambiente</h3></li>
-          <li class="reveal"><span class="tag">Mesa 2 · Isleta Azul</span><h3>Tecnología y Digitalización</h3></li>
-          <li class="reveal"><span class="tag">Mesa 3 · Isleta Azul</span><h3>Brújula Social Azul I</h3></li>
-          <li class="reveal"><span class="tag">Mesa 4 · Isleta Azul</span><h3>Brújula Social Azul II</h3></li>
-          <li class="reveal"><span class="tag">Mesa 5 · Identidad I</span><h3>Madera</h3></li>
-          <li class="reveal"><span class="tag">Mesa 6 · Identidad II</span><h3>Juegos y Deportes</h3></li>
-          <li class="reveal"><span class="tag">Mesa 7</span><h3>Internacionalización</h3></li>
-          <li class="reveal"><span class="tag">Mesa 8</span><h3>Redes</h3></li>
+          <li class="reveal"><span class="etiqueta">Mesa 1 · Isleta Azul</span><h3>Seguridad y Medioambiente</h3></li>
+          <li class="reveal"><span class="etiqueta">Mesa 2 · Isleta Azul</span><h3>Tecnología y Digitalización</h3></li>
+          <li class="reveal"><span class="etiqueta">Mesa 3 · Isleta Azul</span><h3>Brújula Social Azul I</h3></li>
+          <li class="reveal"><span class="etiqueta">Mesa 4 · Isleta Azul</span><h3>Brújula Social Azul II</h3></li>
+          <li class="reveal"><span class="etiqueta">Mesa 5 · Identidad I</span><h3>Madera</h3></li>
+          <li class="reveal"><span class="etiqueta">Mesa 6 · Identidad II</span><h3>Juegos y Deportes</h3></li>
+          <li class="reveal"><span class="etiqueta">Mesa 7</span><h3>Internacionalización</h3></li>
+          <li class="reveal"><span class="etiqueta">Mesa 8</span><h3>Redes</h3></li>
         </ol>
       </div>
     </div>
   </section>
 
   <!-- MESA 3 -->
-  <section class="mesa" id="mesa-3" style="--accent:#8f3a55; --accent-soft:#f6e4ea">
+  <section class="mesa" id="mesa-3" style="--accent:var(--mesa-3); --accent-texto:var(--mesa-3-texto)">
     <div class="wrap mesa-grid">
       <div class="mesa-visual reveal">
-        <div class="piece-img" data-q="2"></div>
-        <span class="mesa-num">03</span>
+        <img src="img/mesa-3.svg" alt="" class="simbolo s-cuadro">
       </div>
       <div class="mesa-body">
-        <p class="kicker reveal">Mesa 3 · 4 experiencias</p>
+        <p class="etiqueta reveal">Mesa 3 · 4 experiencias</p>
         <h2 class="reveal">Radio Atlante conecta con experiencias de impacto</h2>
         <ol class="sub-list">
-          <li class="reveal"><span class="tag">CIFP Las Indias</span><h3>Embajadores Erasmus</h3></li>
-          <li class="reveal"><span class="tag">CIFP Felo Monzón</span><h3>Internacionalización e Innovación</h3></li>
-          <li class="reveal"><span class="tag">PLOCAN</span><h3>Escuelas Azules</h3></li>
-          <li class="reveal"><span class="tag">Experiencia</span><h3>Identidad a través del deporte y los juegos tradicionales</h3></li>
+          <li class="reveal"><span class="etiqueta">CIFP Las Indias</span><h3>Embajadores Erasmus</h3></li>
+          <li class="reveal"><span class="etiqueta">CIFP Felo Monzón</span><h3>Internacionalización e Innovación</h3></li>
+          <li class="reveal"><span class="etiqueta">PLOCAN</span><h3>Escuelas Azules</h3></li>
+          <li class="reveal"><span class="etiqueta">Experiencia</span><h3>Identidad a través del deporte y los juegos tradicionales</h3></li>
         </ol>
       </div>
     </div>
   </section>
 
   <!-- MESA 4 -->
-  <section class="mesa alt" id="mesa-4" style="--accent:#3b2f6e; --accent-soft:#e9e6f5">
+  <section class="mesa alt" id="mesa-4" style="--accent:var(--mesa-4); --accent-texto:var(--mesa-4-texto)">
     <div class="wrap mesa-grid">
       <div class="mesa-visual reveal">
-        <div class="piece-img" data-q="3"></div>
-        <span class="mesa-num">04</span>
+        <img src="img/mesa-4.svg" alt="" class="simbolo s-ancho">
       </div>
       <div class="mesa-body">
-        <p class="kicker reveal">Mesa 4 · 4 ejes</p>
+        <p class="etiqueta reveal">Mesa 4 · 4 ejes</p>
         <h2 class="reveal">TG Lab: Innovación, Emprendimiento, Orientación y Calidad</h2>
         <ul class="pillars">
-          <li class="reveal"><b>Innovación</b></li>
-          <li class="reveal"><b>Emprendimiento</b></li>
-          <li class="reveal"><b>Orientación</b></li>
-          <li class="reveal"><b>Calidad</b></li>
+          <li class="reveal">Innovación</li>
+          <li class="reveal">Emprendimiento</li>
+          <li class="reveal">Orientación</li>
+          <li class="reveal">Calidad</li>
         </ul>
         <p class="soon reveal">Contenido de la mesa en preparación.</p>
       </div>
@@ -181,11 +196,8 @@
 
   <footer class="footer">
     <div class="wrap footer-grid">
-      <img src="img/logo-tony-gallardo.webp" alt="CIFP Tony Gallardo" width="72" height="72">
-      <div>
-        <p class="f-title">Networking 2026 · Del aula a la realidad</p>
-        <p>20 de noviembre de 2026 · CIFP Tony Gallardo</p>
-      </div>
+      <img class="f-logo" src="img/logo-horizontal-negativo.svg" alt="Networking 2026 · Del aula a la realidad · CIFP Tony Gallardo · 20 NOV 2026" width="345" height="90">
+      <img class="f-cifp" src="img/logo-tony-gallardo.webp" alt="CIFP Tony Gallardo" width="64" height="64">
     </div>
   </footer>
 

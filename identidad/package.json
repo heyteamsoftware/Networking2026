@@ -1,0 +1,6 @@
+{
+  "name": "networking2026-identidad",
+  "private": true,
+  "scripts": { "generar": "node generar.js" },
+  "dependencies": { "opentype.js": "1.3.4" }
+}

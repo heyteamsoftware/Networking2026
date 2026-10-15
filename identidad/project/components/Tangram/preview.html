@@ -1,0 +1,48 @@
+<!-- @dsCard group="Marca" height=360 subtitle="Montaje al cargar y despiece en las cuatro mesas" -->
+<div class="demo">
+  <svg class="tg" id="tg" viewBox="-50 -50 500 500" role="img" aria-label="Tangram de Networking 2026">
+    <g data-mesa="1"><polygon class="m1" style="--i:0" points="12.07,5 387.93,5 200,192.93"/></g>
+    <g data-mesa="2"><polygon class="m2" style="--i:1" points="5,12.07 192.93,200 5,387.93"/></g>
+    <g data-mesa="3">
+      <polygon class="m3" style="--i:2" points="395,12.07 395,187.93 307.07,100"/>
+      <polygon class="m3" style="--i:3" points="207.07,200 300,107.07 392.93,200 300,292.93"/>
+      <polygon class="m3" style="--i:4" points="200,207.07 287.93,295 112.07,295"/>
+    </g>
+    <g data-mesa="4">
+      <polygon class="m4" style="--i:5" points="12.07,395 102.07,305 287.93,305 197.93,395"/>
+      <polygon class="m4" style="--i:6" points="395,212.07 395,395 212.07,395"/>
+    </g>
+  </svg>
+  <div class="ctrl">
+    <button type="button" id="b-montar">Montar de nuevo</button>
+    <button type="button" id="b-despiece" aria-pressed="false">Despiezar en mesas</button>
+  </div>
+</div>
+<style>
+  html, body { margin: 0; background: var(--fondo); }
+  .demo { display: flex; align-items: center; gap: 32px; padding: 24px; flex-wrap: wrap; font-family: var(--font-texto); }
+  .tg { width: 280px; height: 280px; overflow: visible; }
+  .m1 { fill: var(--mesa-1); } .m2 { fill: var(--mesa-2); } .m3 { fill: var(--mesa-3); } .m4 { fill: var(--mesa-4); }
+  .tg g { transition: transform .7s cubic-bezier(.65, 0, .35, 1); }
+  .tg.abierto g[data-mesa="1"] { transform: translate(0, -42px); }
+  .tg.abierto g[data-mesa="2"] { transform: translate(-42px, 0); }
+  .tg.abierto g[data-mesa="3"] { transform: translate(38px, -14px); }
+  .tg.abierto g[data-mesa="4"] { transform: translate(0, 42px); }
+  .tg.montando polygon { animation: entra 1.2s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--i) * 80ms); transform-box: fill-box; transform-origin: center; }
+  .tg.montando polygon:nth-child(odd) { --dx: -160px; } .tg.montando polygon:nth-child(even) { --dx: 160px; }
+  @keyframes entra { from { opacity: 0; transform: translate(var(--dx, -160px), -120px) rotate(-90deg); } }
+  .ctrl { display: flex; flex-direction: column; gap: 8px; }
+  button { font: 600 13px/1 var(--font-texto); letter-spacing: .08em; text-transform: uppercase; padding: 12px 18px; border-radius: 999px; border: 1.5px solid var(--tinta); background: transparent; color: var(--tinta); cursor: pointer; }
+  button[aria-pressed="true"] { background: var(--tinta); color: var(--fondo); }
+  button:focus-visible { outline: 3px solid var(--foco); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) { .tg g { transition: none; } .tg.montando polygon { animation: none; } }
+</style>
+<script>
+  (function () {
+    var tg = document.getElementById("tg"), bd = document.getElementById("b-despiece");
+    function montar() { tg.classList.remove("abierto", "montando"); bd.setAttribute("aria-pressed", "false"); void tg.getBBox(); tg.classList.add("montando"); }
+    document.getElementById("b-montar").addEventListener("click", montar);
+    bd.addEventListener("click", function () { var on = tg.classList.toggle("abierto"); bd.setAttribute("aria-pressed", String(on)); });
+    montar();
+  })();
+</script>
