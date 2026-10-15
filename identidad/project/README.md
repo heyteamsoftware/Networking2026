@@ -106,14 +106,14 @@ No hay una familia de iconos. Los únicos símbolos de la marca son las cuatro m
 
 El CIFP Tony Gallardo organiza el evento, así que su logo aparece siempre en la portada de cada soporte (web, cartel, presentación, acreditación), con la palabra «Organiza» en `etiqueta` y el nombre «CIFP Tony Gallardo» al lado.
 - Ponlo sobre un círculo blanco, ya que el logo es redondo, y nunca dentro del tangram ni pegado a él.
-- En la web va encima del nombre del evento: 96 px en escritorio y 56 px en móvil.
+- En la web, la portada es la foto del horizonte desde la azotea del centro, con Tenerife y el Teide al fondo y el logo del CIFP a la derecha. Un velo `marca-noche` a la izquierda (arriba en móvil) deja leer «Organiza · CIFP Tony Gallardo», el nombre y el lema; al hacer scroll la foto se funde con el azul noche y empieza el montaje del tangram. La foto es la única imagen fotográfica de la web.
 - Respeta el logo tal cual: no lo recolorees ni lo recortes.
 
 ## Franja de instituciones
 
-Al final de cada soporte, antes del pie, va una franja blanca con los logos institucionales: `cifp-tony-gallardo.webp` y `gobierno-canarias.png` (grupo Instituciones).
+Al final de cada soporte, antes del pie, va una franja blanca con los logos institucionales: `cifp-tony-gallardo.png` y `gobierno-canarias.png` (grupo Instituciones).
 - Fondo blanco siempre: el logo del Gobierno de Canarias lleva texto negro y no funciona sobre `marca-noche`.
-- Mismo peso visual: el CIFP a 104 px de alto y el Gobierno de Canarias a 160 px de ancho, centrados y separados por un filete vertical en `linea`. En móvil, uno debajo del otro, sin filete.
+- Mismo peso visual: el CIFP a 104 px de alto y el de la Consejería a 250 px de ancho, centrados y separados por un filete vertical en `linea`. En móvil, uno debajo del otro, sin filete.
 - Usa el archivo recortado del grupo Instituciones; no estires ni recolorees los logos y no los mezcles con el tangram.
 - Si se suma otra institución (por ejemplo FP Dual Canarias), entra en esta misma franja, a la misma altura y según su propio manual.
 

@@ -20,6 +20,11 @@
   var hint = document.getElementById("scrollHint");
   var islasBox = document.getElementById("islas");
   var polys = Array.prototype.slice.call(document.querySelectorAll(".grupo polygon"));
+  var foto = document.getElementById("portadaFoto");
+  // Desde dónde llega cada pieza en el montaje (--dx, --dy del HTML, en unidades de la retícula)
+  var MONTAJE = polys.map(function (el) {
+    return [parseFloat(el.style.getPropertyValue("--dx")) || 0, parseFloat(el.style.getPropertyValue("--dy")) || 0];
+  });
 
   // Caja de cada mesa dentro del tangram (retícula 400×400): x, y, ancho, alto
   var BBOX = [[0, 0, 400, 200], [0, 0, 200, 400], [100, 0, 300, 300], [0, 200, 400, 200]];
@@ -77,20 +82,17 @@
     hero.style.maxWidth = wide ? Math.min(W * 0.5, 640) + "px" : (W - 32) + "px";
     var hh = hero.offsetHeight, hw = hero.offsetWidth;
     if (wide) {
-      S = Math.round(Math.min(H * 0.62, W * 0.36));
-      tx = Math.round(W * 0.72 - S / 2);
-      ty = Math.round(TOPBAR + (H - TOPBAR - S) / 2);
       hero.style.left = Math.max(32, W * 0.07) + "px";
       hero.style.top = (TOPBAR + (H - TOPBAR - hh) / 2) + "px";
+      S = Math.round(Math.min(H * 0.6, W * 0.4));
     } else {
-      var top = TOPBAR + 28;
-      S = Math.round(Math.min(W - 64, H - top - hh - 110));
-      S = Math.max(S, 140);
       hero.style.left = "16px";
-      hero.style.top = top + "px";
-      tx = Math.round((W - S) / 2);
-      ty = Math.round(top + hh + Math.max(24, (H - top - hh - 70 - S) / 2));
+      hero.style.top = (TOPBAR + 28) + "px";
+      S = Math.round(Math.min(W - 64, H * 0.55));
     }
+    // El tangram se monta en el centro de la escena cuando la foto de portada se funde
+    tx = Math.round((W - S) / 2);
+    ty = Math.round(TOPBAR + (H - TOPBAR - S) / 2);
     var u = S / 400;
     grupos.forEach(function (g) { g.style.width = S + "px"; g.style.height = S + "px"; });
 
@@ -171,11 +173,11 @@
   function render() {
     if (!L) return;
     var p = progress();
-    var H0 = ease(clamp(p / 0.1));                 // el texto de portada se va
-    var J = ease(clamp((p - 0.04) / 0.28));        // el cuadrado se desmonta en las cuatro mesas
-    var I = ease(clamp((p - 0.56) / 0.28));        // y las mesas se deshacen en las siete islas
-    var T = clamp((p - 0.26) / 0.08) * (1 - clamp((p - 0.5) / 0.06)); // nombres de las mesas
-    var TI = clamp((p - 0.8) / 0.08);              // nombres de las islas
+    var H0 = ease(clamp(p / 0.1));                 // la foto de portada y el título se funden
+    var J = ease(clamp((p - 0.2) / 0.24));         // el cuadrado se desmonta en las cuatro mesas
+    var I = ease(clamp((p - 0.6) / 0.26));         // y las mesas se deshacen en las siete islas
+    var T = clamp((p - 0.38) / 0.07) * (1 - clamp((p - 0.56) / 0.05)); // nombres de las mesas
+    var TI = clamp((p - 0.84) / 0.07);             // nombres de las islas
 
     // Las mesas (grupos) van a su sitio; al pasar a islas vuelven a su posición original,
     // que es desde donde se calculan las islas
@@ -184,14 +186,25 @@
       var x = lerp(m.start.x, m.end.x, g), y = lerp(m.start.y, m.end.y, g), sc = lerp(1, L.endScale, g);
       grupos[i].style.transform = "translate(" + x + "px," + y + "px) scale(" + sc + ") translate(" + (-m.bcx) + "px," + (-m.bcy) + "px)";
     });
-    // Cada pieza, dentro de su mesa, viaja a su isla
+    // Cada pieza: primero llega girando y encaja en el cuadrado (montaje, escalonado),
+    // y al final, dentro de su mesa, viaja a su isla
     var k = I;
     polys.forEach(function (el, n) {
-      if (k <= 0) { el.style.transform = ""; return; }
-      var d = ISLAS[n], a = L.A[n];
-      el.style.transform = "translate(" + lerp(d.c[0], a.x, k) + "px," + lerp(d.c[1], a.y, k) + "px) rotate(" + (a.r * k) + "deg) scale(" + lerp(1, a.s, k) + ") translate(" + (-d.c[0]) + "px," + (-d.c[1]) + "px)";
+      var d = ISLAS[n];
+      if (k > 0) {
+        var a = L.A[n];
+        el.style.opacity = 1;
+        el.style.transform = "translate(" + lerp(d.c[0], a.x, k) + "px," + lerp(d.c[1], a.y, k) + "px) rotate(" + (a.r * k) + "deg) scale(" + lerp(1, a.s, k) + ") translate(" + (-d.c[0]) + "px," + (-d.c[1]) + "px)";
+        return;
+      }
+      var mo = reduceMotion ? clamp((p - 0.03) / 0.1) : ease(clamp((p - 0.03 - n * 0.012) / 0.09));
+      el.style.opacity = mo;
+      if (mo >= 1 || reduceMotion) { el.style.transform = ""; return; }
+      var f = 1 - mo;
+      el.style.transform = "translate(" + (d.c[0] + MONTAJE[n][0] * f) + "px," + (d.c[1] + MONTAJE[n][1] * f) + "px) rotate(" + (-135 * f) + "deg) scale(" + lerp(1, 0.6, f) + ") translate(" + (-d.c[0]) + "px," + (-d.c[1]) + "px)";
     });
 
+    foto.style.opacity = 1 - H0;
     hero.style.opacity = 1 - H0;
     hero.style.transform = "translateY(" + (-40 * H0) + "px)";
     islasBox.style.opacity = TI;
@@ -205,7 +218,7 @@
     title.style.opacity = T;
     title.style.transform = "translateY(" + ((1 - T) * -12) + "px)";
     hint.style.opacity = clamp(1 - p * 8);
-    tangram.classList.toggle("abierto", p > 0.3);
+    tangram.classList.toggle("abierto", p > 0.4);
   }
 
   var ticking = false;
@@ -220,24 +233,16 @@
   grupos.forEach(function (g) {
     g.addEventListener("click", function () {
       var behavior = reduceMotion ? "auto" : "smooth";
-      if (progress() < 0.3) {
+      if (progress() < 0.4) {
         var run = wrap.offsetHeight - stage.clientHeight;
-        window.scrollTo({ top: wrap.offsetTop + run * 0.42, behavior: behavior });
+        window.scrollTo({ top: wrap.offsetTop + run * 0.5, behavior: behavior });
       } else {
         document.getElementById(g.getAttribute("data-target")).scrollIntoView({ behavior: behavior });
       }
     });
   });
 
-  function start() {
-    layout();
-    render();
-    if (!reduceMotion && progress() < 0.03) {
-      tangram.classList.add("montando");
-      // al terminar el montaje, las piezas quedan libres para el viaje al archipiélago
-      setTimeout(function () { tangram.classList.remove("montando"); }, 2000);
-    }
-  }
+  function start() { layout(); render(); }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(start); else start();
   layout(); render();
 

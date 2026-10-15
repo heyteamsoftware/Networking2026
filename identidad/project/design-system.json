@@ -127,20 +127,20 @@
       "name": "Instituciones",
       "tile": "m",
       "order": [
-        "cifp-tony-gallardo.webp",
+        "cifp-tony-gallardo.png",
         "gobierno-canarias.png"
       ],
       "files": {
-        "cifp-tony-gallardo.webp": {
-          "name": "cifp-tony-gallardo.webp",
-          "blob": "d1bdad04d3452b321c0c5a2f5acf9aea",
-          "size": 113890,
-          "type": "image/webp"
-        },
         "gobierno-canarias.png": {
           "name": "gobierno-canarias.png",
-          "blob": "059c36e188c5511d0a0ea81a1ebed27e",
-          "size": 27584,
+          "blob": "760a7b408798e8fdfafe21d75745d08c",
+          "size": 15320,
+          "type": "image/png"
+        },
+        "cifp-tony-gallardo.png": {
+          "name": "cifp-tony-gallardo.png",
+          "blob": "51b43c80ce294eb75b78686cb630ae4b",
+          "size": 2360708,
           "type": "image/png"
         }
       }
@@ -175,8 +175,8 @@
   },
   "lastChange": {
     "by": "Fernando",
-    "at": "2026-10-15T14:50:36Z",
+    "at": "2026-10-15T15:31:52Z",
     "via": "Claude Code",
-    "note": "Paleta canaria (rojo Timanfaya, verde laurisilva, azul Atlántico, amarillo canario) y orden cuadrado, mesas, islas."
+    "note": "Nuevos logos del CIFP Tony Gallardo y de la Consejería; foto del horizonte en la portada web."
   }
 }

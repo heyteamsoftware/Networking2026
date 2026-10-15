@@ -122,7 +122,7 @@ function qr(texto, x, y, lado, { color = C.noche, fondo = "#ffffff", margen = 0.
 // ---------- Logos institucionales ----------
 let LOGO_CIFP, LOGO_GOB, GOB_RATIO;
 async function cargarLogos() {
-  const cifp = await sharp(path.join(__dirname, "project", "assets", "Instituciones", "cifp-tony-gallardo.webp")).resize(900).png().toBuffer();
+  const cifp = await sharp(path.join(__dirname, "project", "assets", "Instituciones", "cifp-tony-gallardo.png")).resize(900).png().toBuffer();
   LOGO_CIFP = "data:image/png;base64," + cifp.toString("base64");
   const gobPath = path.join(__dirname, "project", "assets", "Instituciones", "gobierno-canarias.png");
   const meta = await sharp(gobPath).metadata();
@@ -131,10 +131,10 @@ async function cargarLogos() {
 }
 const img = (src, x, y, w, h) => `<image href="${src}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet"/>`;
 // Logo del CIFP en su círculo blanco
-const cifpCirculo = (cx, cy, d) => `<circle cx="${cx}" cy="${cy}" r="${d / 2}" fill="#ffffff"/>` + img(LOGO_CIFP, cx - d * 0.47, cy - d * 0.47, d * 0.94, d * 0.94);
+const cifpCirculo = (cx, cy, d) => `<circle cx="${cx}" cy="${cy}" r="${d / 2 - 0.2}" fill="#ffffff"/>` + img(LOGO_CIFP, cx - d / 2, cy - d / 2, d, d);
 // Franja blanca con los dos logos, centrada; devuelve el svg
 function franjaLogos(x, y, ancho, alto, bleedAbajo = 0) {
-  const h = alto * 0.62, gh = h * 0.95, gob = gh * GOB_RATIO, gap = alto * 0.45;
+  const h = alto * 0.62, gh = h * 1.2, gob = gh * GOB_RATIO, gap = alto * 0.45;
   const total = h + gap + gob, x0 = x + (ancho - total) / 2, cy = y + alto / 2;
   return `<rect x="${x - 10}" y="${y}" width="${ancho + 20}" height="${alto + bleedAbajo}" fill="#ffffff"/>` +
     img(LOGO_CIFP, x0, cy - h / 2, h, h) +

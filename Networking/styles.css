@@ -57,20 +57,34 @@ img { display: block; max-width: 100%; }
 @media (min-width: 900px) { .topnav { display: flex; } .topdate { margin-left: 12px; } .topbar { padding: 0 32px; } }
 
 /* ---------- Escena del tangram ---------- */
-.stage-wrap { position: relative; height: 520vh; background: var(--noche); }
+.stage-wrap { position: relative; height: 600vh; background: var(--noche); }
 .stage {
   position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden;
   background-color: var(--noche);
 }
 
+/* Portada: foto del horizonte desde la azotea del centro (con su logo a la derecha).
+   Un velo azul noche a la izquierda (arriba en móvil) deja leer el título; al hacer scroll se funde con el fondo. */
+.portada-foto {
+  position: absolute; inset: 0; will-change: opacity;
+  background:
+    linear-gradient(90deg, rgba(20,33,61,.92) 0%, rgba(20,33,61,.78) 32%, rgba(20,33,61,.15) 58%, rgba(20,33,61,0) 70%),
+    url("img/portada-horizonte.webp") 70% 55% / cover no-repeat;
+}
+@media (max-width: 899px), (max-aspect-ratio: 23/20) {
+  .portada-foto {
+    background:
+      linear-gradient(180deg, rgba(20,33,61,.94) 0%, rgba(20,33,61,.82) 38%, rgba(20,33,61,.1) 62%, rgba(20,33,61,0) 72%),
+      url("img/portada-horizonte.webp") 80% 50% / cover no-repeat;
+  }
+}
+
 .hero { position: absolute; left: 0; top: 0; color: var(--arena); will-change: transform, opacity; }
-.organiza { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
-.organiza img { width: 96px; height: 96px; border-radius: 50%; background: #fff; flex: none; box-shadow: 0 0 0 4px rgba(245,239,228,.12); }
+.organiza { margin-bottom: 28px; }
 .organiza p { margin: 0; font-size: 1.15rem; font-weight: 600; line-height: 1.2; }
-.organiza span { display: block; font-size: .7rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: #b4b8c8; margin-bottom: 3px; }
+.organiza span { display: block; font-size: .7rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: #c9ccd8; margin-bottom: 3px; }
 @media (max-width: 899px) {
-  .organiza { margin-bottom: 18px; gap: 12px; }
-  .organiza img { width: 56px; height: 56px; }
+  .organiza { margin-bottom: 18px; }
   .organiza p { font-size: 1rem; }
 }
 .hero h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(3.6rem, 9vw, 8.5rem); line-height: .9; letter-spacing: .01em; text-wrap: balance; }
@@ -100,9 +114,6 @@ img { display: block; max-width: 100%; }
 .tangram.abierto .grupo:hover polygon { filter: brightness(1.1) saturate(1.1); }
 .m1 { fill: var(--mesa-1); } .m2 { fill: var(--mesa-2); } .m3 { fill: var(--mesa-3); } .m4 { fill: var(--mesa-4); }
 
-/* Montaje: las siete piezas entran girando y encajan */
-.tangram.montando polygon { animation: entra 1.2s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--i) * 80ms + 150ms); transform-box: fill-box; transform-origin: center; }
-@keyframes entra { from { opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(-135deg) scale(.6); } }
 
 .plabel {
   position: absolute; left: 0; top: 0;
@@ -223,9 +234,9 @@ img { display: block; max-width: 100%; }
 .instituciones { background: #fff; padding: 36px 0; border-top: 1px solid var(--linea); }
 .inst-grid { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 28px 48px; }
 .inst-cifp { width: 104px; height: 104px; }
-.inst-gob { width: 160px; height: auto; }
+.inst-gob { width: 250px; height: auto; }
 .inst-sep { width: 1px; height: 64px; background: var(--linea); }
-@media (max-width: 480px) { .inst-sep { display: none; } .inst-cifp { width: 88px; height: 88px; } .inst-gob { width: 140px; } }
+@media (max-width: 480px) { .inst-sep { display: none; } .inst-cifp { width: 88px; height: 88px; } .inst-gob { width: 220px; } }
 
 /* ---------- Aparición de contenidos ---------- */
 .js .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
@@ -235,5 +246,4 @@ img { display: block; max-width: 100%; }
   html { scroll-behavior: auto; }
   .js .reveal { opacity: 1; transform: none; transition: none; }
   .ticker-track, .scroll-hint i { animation: none; }
-  .tangram.montando polygon { animation: none; }
 }
