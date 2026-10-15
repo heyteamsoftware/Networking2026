@@ -8,6 +8,7 @@ El isotipo vivo: las siete piezas del tangram que se montan al cargar y se despi
 
 **Estados:**
 - *Montado*: las cuatro mesas en su sitio. Es el estado en reposo y el que se usa sin animación.
+- *Archipiélago*: cada pieza viaja al lugar de su isla, al 50 % y con su giro (posiciones en `identidad/generar.js`), con La Graciosa como punto gris junto a Lanzarote.
 - *Despiezado*: cada mesa se desplaza hacia fuera (Mesa 1 arriba, Mesa 2 a la izquierda, Mesa 3 a la derecha, Mesa 4 abajo) unos 42 de las 400 unidades.
 - *Montaje*: cada pieza entra desde fuera, girada, con 80 ms de retraso respecto a la anterior.
 

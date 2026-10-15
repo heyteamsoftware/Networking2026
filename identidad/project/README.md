@@ -1,4 +1,4 @@
-Networking 2026 es un encuentro entre empresas y profesorado en el CIFP Tony Gallardo, el 20 de noviembre de 2026, con el lema **Juntos somos FP**. La identidad es un tangram: siete piezas que juntas forman un cuadrado y que se separan en las cuatro mesas de trabajo. Montar y desmontar el cuadrado es la idea de todo el sistema.
+Networking 2026 es un encuentro entre empresas y profesorado en el CIFP Tony Gallardo, el 20 de noviembre de 2026, con el lema **Juntos somos FP**. La identidad es un tangram: siete piezas que juntas forman un cuadrado, que son también las siete islas de Canarias y que se agrupan en las cuatro mesas de trabajo. Montar el cuadrado, abrirlo en el archipiélago y agruparlo en mesas es la idea de todo el sistema.
 
 ## El concepto: un tangram de cuatro mesas
 
@@ -7,19 +7,28 @@ El cuadrado completo es el evento. Cada pieza lleva uno de los siete valores del
 El lema, **Juntos somos FP**, dice lo mismo con palabras: la Formación Profesional no la hace solo el aula. Centros, profesorado, alumnado y empresas son piezas distintas del mismo tangram, y la figura solo aparece cuando encajan. Úsalo así:
 - Debajo de «NETWORKING 2026» en el logotipo, en `etiqueta` (Outfit 600, mayúsculas, espaciado amplio). No lo pongas en Bebas ni más grande que el nombre del evento.
 - En texto corrido se escribe «Juntos somos FP», con «FP» siempre en mayúsculas y sin punto final.
-- Acompaña al tangram montado, nunca al despiezado: el despiece habla de las mesas; el lema, de lo que forman juntas.
+- Acompaña al tangram montado o al archipiélago, nunca a las mesas separadas: las mesas hablan del programa; el lema, de lo que forman juntas.
 
-| Pieza | Forma | Valor | Mesa | Color |
-| --- | --- | --- | --- | --- |
-| 1 | Triángulo grande (arriba) | Ideas | Mesa 1 · El aula como laboratorio de ideas | `mesa-1` naranja atardecer |
-| 2 | Triángulo grande (izquierda) | Proyectos | Mesa 2 · Proyectos en acción | `mesa-2` rojo volcán |
-| 3 | Triángulo pequeño (derecha) | Territorio | Mesa 3 · Radio Atlante conecta | `mesa-3` azul atlántico |
-| 4 | Cuadrado | Conexiones | Mesa 3 · Radio Atlante conecta | `mesa-3` azul atlántico |
-| 5 | Triángulo pequeño (centro) | Personas | Mesa 3 · Radio Atlante conecta | `mesa-3` azul atlántico |
-| 6 | Paralelogramo | Futuro | Mesa 4 · TG Lab | `mesa-4` amarillo sol |
-| 7 | Triángulo mediano | Empresa | Mesa 4 · TG Lab | `mesa-4` amarillo sol |
+## Siete piezas, siete islas
 
-Geometría: el tangram se dibuja sobre una retícula de 4 × 4 unidades. Todos los cortes van a 0°, 45° o 90°. Entre pieza y pieza hay siempre una **junta** del 2,5 % del lado (`junta`), que deja ver el fondo. El archivo `identidad/generar.js` del repositorio genera todos los SVG a partir de esas coordenadas: cambia la geometría o los colores ahí, nunca a mano en un SVG.
+El tangram tiene siete piezas y Canarias siete islas mayores, y el escudo del Gobierno de Canarias son siete triángulos: es el mismo lenguaje. Cada pieza es también una isla, con un tamaño parecido al real (las dos más grandes son los triángulos grandes, las dos más pequeñas los triángulos pequeños). **Separadas son islas; juntas forman la figura.**
+
+| Pieza | Forma | Isla | Valor | Mesa | Color |
+| --- | --- | --- | --- | --- | --- |
+| 1 | Triángulo grande (arriba) | Tenerife | Ideas | Mesa 1 · El aula como laboratorio de ideas | `mesa-1` naranja Timanfaya |
+| 2 | Triángulo grande (izquierda) | Fuerteventura | Proyectos | Mesa 2 · Proyectos en acción | `mesa-2` rojo Teide |
+| 3 | Triángulo pequeño (derecha) | La Gomera | Territorio | Mesa 3 · Radio Atlante conecta | `mesa-3` azul Atlántico |
+| 4 | Cuadrado | Gran Canaria | Conexiones | Mesa 3 · Radio Atlante conecta | `mesa-3` azul Atlántico |
+| 5 | Triángulo pequeño (centro) | El Hierro | Personas | Mesa 3 · Radio Atlante conecta | `mesa-3` azul Atlántico |
+| 6 | Paralelogramo | Lanzarote | Futuro | Mesa 4 · TG Lab | `mesa-4` amarillo Maspalomas |
+| 7 | Triángulo mediano | La Palma | Empresa | Mesa 4 · TG Lab | `mesa-4` amarillo Maspalomas |
+
+El **archipiélago** (`isotipo-archipielago.svg`) es la composición con las siete piezas en el lugar de su isla, de El Hierro a Lanzarote, calculado a partir de la longitud y latitud reales. Las piezas van al 50 % del tamaño del cuadrado y cada una con su giro.
+- **La Graciosa**, octava isla habitada desde 2018, va siempre como un punto gris junto al extremo norte de Lanzarote. No es una pieza: no lleva color de mesa ni valor.
+- Úsalo para hablar del territorio: cartel, redes, presentaciones y como paso intermedio de la animación. No sustituye al isotipo como firma.
+- Cuando se rotulen las islas, el nombre va en `cuerpo` 600 y el valor debajo en `nota`, en `tinta-suave`.
+
+Geometría: el tangram se dibuja sobre una retícula de 4 × 4 unidades. Todos los cortes van a 0°, 45° o 90°. Entre pieza y pieza hay siempre una **junta** del 2,5 % del lado (`junta`), que deja ver el fondo. El archivo `identidad/generar.js` del repositorio genera todos los SVG a partir de esas coordenadas y de las posiciones de las islas: cambia la geometría, las islas o los colores ahí, nunca a mano en un SVG.
 
 ## Logotipo
 
@@ -27,6 +36,7 @@ Geometría: el tangram se dibuja sobre una retícula de 4 × 4 unidades. Todos l
 - **Logo vertical** (`logo-vertical.svg` y `logo-vertical-negativo.svg`): carteles, roll-ups, portadas y redes sociales con formato cuadrado o vertical.
 - **Isotipo** (`isotipo.svg`): el tangram solo. Avatar de redes, favicon, sellos y cuando el nombre ya aparece cerca.
 - **Isotipo despiezado** (`isotipo-despiezado.svg`): las cuatro mesas separadas. Úsalo para hablar del programa o de las mesas, nunca como firma del evento.
+- **Archipiélago** (`isotipo-archipielago.svg`): las siete piezas como las islas. Para hablar del territorio.
 - **Isotipo a una tinta** (`isotipo-noche.svg`, `isotipo-arena.svg`): impresión a un color, grabado, sellos y fondos donde los cuatro colores no funcionan.
 
 Reglas:
@@ -37,10 +47,12 @@ Reglas:
 
 ## Color
 
+Los cuatro colores de mesa se llaman como el paisaje canario del que salen: **naranja Timanfaya** (`mesa-1`), **rojo Teide** (`mesa-2`), **azul Atlántico** (`mesa-3`) y **amarillo Maspalomas** (`mesa-4`), que es además el amarillo de la bandera de Canarias. Llámalos así en textos, presentaciones y encargos de imprenta.
 - Usa `fondo` y `tinta` para casi todo. Los cuatro colores de mesa son la marca: guárdalos para las piezas, los bloques de color y lo que pertenece a una mesa concreta.
-- Una sección de mesa usa solo su color: el símbolo y los bloques en `mesa-N`, sus antetítulos y chips en `mesa-N-texto`. No mezcles dos mesas en el mismo bloque, salvo en el tangram completo.
+- Una sección de mesa usa solo su color: el símbolo y los bloques en `mesa-N`, sus antetítulos y chips en `mesa-N-texto`. No mezcles dos mesas en el mismo bloque, salvo en el tangram completo y en el archipiélago.
 - Texto sobre los colores de mesa: `marca-noche` sobre `mesa-1` y `mesa-4`; blanco sobre `mesa-3`; sobre `mesa-2`, blanco solo a partir de 19 px en negrita.
-- `mesa-1` y `mesa-4` no sirven como color de texto sobre `fondo` claro (2,4:1 y 1,7:1). Para texto usa siempre la variante `mesa-N-texto`.
+- `mesa-1` y `mesa-4` no sirven como color de texto sobre `fondo` claro (2,4:1 y 1,3:1). Para texto usa siempre la variante `mesa-N-texto`. El amarillo sobre fondos claros apenas se separa del fondo: ahí úsalo en bloques grandes o acompañado de otras piezas, no en formas sueltas pequeñas.
+- El azul de la bandera no se usa: sobre `marca-noche` se queda en 2,7:1 y se perdería; `mesa-3` da 3,2:1.
 - El tema Noche (`fondo` = azul noche) es para la portada, la escena del tangram y el pie; el tema Arena, para leer.
 - El foco de teclado es un anillo sólido de 3 px en `foco`, separado 3 px del elemento.
 
@@ -58,19 +70,28 @@ Reglas:
 - Separa las secciones con cambios de fondo (`fondo` / `fondo-2`), no con sombras.
 - Márgenes: `esp-2` en móvil, `esp-4` en escritorio; `esp-11` arriba y abajo de cada sección.
 
+## Calado canario
+
+El fondo de las superficies en tema Noche lleva un patrón inspirado en el **calado**, el bordado geométrico tradicional de las islas: una retícula cuadrada, hilos a 45° (el mismo ángulo que los cortes del tangram), un rombo central y la «araña» en el centro de cada cuadro.
+- Archivos: `calado-arena.svg` (hilos claros, para fondos `marca-noche`) y `calado-noche.svg` (hilos oscuros, para fondos claros), en el grupo Patrones. Es un módulo de 48 × 48 px que se repite.
+- Úsalo muy suave: entre el 6 % y el 10 % de opacidad, como textura y no como dibujo. En la web va al 7 %.
+- Solo en fondos grandes (portada, escena del tangram, cabeceras de presentación). Nunca detrás de texto corrido ni dentro de las piezas.
+
 ## Movimiento
 
-La animación cuenta el concepto en dos tiempos:
+La animación cuenta el concepto en tres tiempos:
 1. **Montaje** al cargar: las siete piezas llegan desde fuera girando y encajan en el cuadrado, con unos 80 ms de diferencia entre pieza y pieza (1,2 s en total, curva de salida suave).
-2. **Despiece** al hacer scroll: el cuadrado se abre en las cuatro mesas, que se colocan una junto a otra con su nombre debajo. Al pulsar una mesa se va a su sección.
+2. **Archipiélago** al empezar el scroll: cada pieza viaja a su isla, gira y se reduce. Aparece el título «Siete piezas, siete islas» y el nombre de cada isla con su valor.
+3. **Mesas** al seguir: las piezas se agrupan por color en las cuatro mesas, que se colocan una junto a otra con su nombre debajo. Al pulsar una mesa se va a su sección.
 
-Respeta `prefers-reduced-motion`: sin montaje, y el despiece sustituido por las cuatro mesas ya colocadas.
+Respeta `prefers-reduced-motion`: sin montaje y con los pasos sustituidos por estados fijos.
 
 ## Voz y tono
 
 - Frases cortas y en positivo. Habla de personas y de proyectos, no de «sinergias» ni de «ecosistemas».
 - Trata de tú a una persona y de **ustedes** a un grupo, como se habla en Canarias: «¿Ya eligieron mesa?», nunca «¿Ya habéis elegido mesa?».
 - Los nombres de mesa se escriben tal cual en el programa: «El aula como laboratorio de ideas», «Proyectos en acción: mesas técnicas de trabajo», «Radio Atlante conecta con experiencias de impacto», «TG Lab: Innovación, Emprendimiento, Orientación y Calidad».
+- Las islas se nombran con su nombre completo y artículo cuando lo llevan: La Palma, La Gomera, El Hierro, La Graciosa.
 - La fecha se escribe «20 de noviembre de 2026» en texto y «20 NOV 2026» en piezas gráficas.
 - El lema es «Juntos somos FP». En piezas gráficas va en mayúsculas: «JUNTOS SOMOS FP».
 - Sin emojis.

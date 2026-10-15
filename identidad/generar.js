@@ -10,13 +10,14 @@ const OUT_MESAS = path.join(ROOT, "project", "assets", "Mesas");
 const OUT_WEB = path.join(ROOT, "..", "Networking", "img");
 
 // ---------- Paleta ----------
+// Cada color se llama como el paisaje canario del que sale.
 const C = {
   noche: "#14213d",
   arena: "#f5efe4",
-  naranja: "#ee7b30",   // Mesa 1
-  volcan: "#d6435a",    // Mesa 2
-  atlantico: "#2370c4", // Mesa 3
-  sol: "#f2b134",       // Mesa 4
+  naranja: "#ee7b30",   // Mesa 1 · naranja Timanfaya
+  volcan: "#d6435a",    // Mesa 2 · rojo Teide
+  atlantico: "#2370c4", // Mesa 3 · azul Atlántico
+  sol: "#ffcc00",       // Mesa 4 · amarillo Maspalomas (el amarillo de la bandera de Canarias)
 };
 const MESA_COLOR = [C.naranja, C.volcan, C.atlantico, C.sol];
 
@@ -33,6 +34,22 @@ const PIEZAS = [
 ];
 // Desplazamiento de cada mesa en la versión despiezada
 const DESPIECE = [[0, -42], [-42, 0], [38, -14], [0, 42]];
+
+// ---------- Siete piezas, siete islas ----------
+// Cada pieza es también una isla, de tamaño parecido al real. Posición en un lienzo de 1300×640
+// a partir de la longitud y latitud reales (≈2,5 px por km); r = giro en grados; las piezas van al 50 %.
+const ISLAS = {
+  ideas:      { isla: "Tenerife",      km: 2034, x: 473,  y: 367, r: -45 },
+  proyectos:  { isla: "Fuerteventura", km: 1660, x: 1102, y: 331, r: 45 },
+  territorio: { isla: "La Gomera",     km: 370,  x: 319,  y: 412, r: 15 },
+  conexiones: { isla: "Gran Canaria",  km: 1560, x: 717,  y: 453, r: 0 },
+  personas:   { isla: "El Hierro",     km: 269,  x: 131,  y: 517, r: -20 },
+  futuro:     { isla: "Lanzarote",     km: 846,  x: 1196, y: 160, r: -40 },
+  empresa:    { isla: "La Palma",      km: 708,  x: 165,  y: 256, r: 45 },
+};
+const GRACIOSA = { x: 1260, y: 70, r: 8 }; // la octava isla, como un punto junto a Lanzarote
+const ESCALA_ISLAS = 0.5;
+function centroide(p) { return p.reduce((a, [x, y]) => [a[0] + x / p.length, a[1] + y / p.length], [0, 0]); }
 
 // ---------- Geometría ----------
 function area(p) {
@@ -116,6 +133,10 @@ const files = {};
 
 files["isotipo.svg"] = svg("0 0 400 400", `  ${piezas({ colores: MESA_COLOR })}`, "Networking 2026 — isotipo");
 files["isotipo-despiezado.svg"] = svg("-60 -60 520 520", `  ${piezas({ colores: MESA_COLOR, mover: DESPIECE })}`, "Networking 2026 — isotipo despiezado");
+files["isotipo-archipielago.svg"] = svg("40 40 1240 560", PIEZAS.map((p) => {
+  const i = ISLAS[p.id], [cx, cy] = centroide(p.pts);
+  return `  <polygon points="${pts(inset(p.pts, JUNTA))}" fill="${MESA_COLOR[p.mesa]}" data-isla="${i.isla}" transform="translate(${i.x} ${i.y}) rotate(${i.r}) scale(${ESCALA_ISLAS}) translate(${fmt(-cx)} ${fmt(-cy)})"/>`;
+}).join("\n") + `\n  <circle cx="${GRACIOSA.x}" cy="${GRACIOSA.y}" r="${GRACIOSA.r}" fill="#9aa0b4" data-isla="La Graciosa"/>`, "Networking 2026 — siete piezas, siete islas");
 files["isotipo-noche.svg"] = svg("0 0 400 400", `  ${piezas({ colores: C.noche })}`, "Networking 2026 — isotipo a una tinta (noche)");
 files["isotipo-arena.svg"] = svg("0 0 400 400", `  ${piezas({ colores: C.arena })}`, "Networking 2026 — isotipo a una tinta (arena)");
 
@@ -148,13 +169,36 @@ for (let m = 0; m < 4; m++) {
   mesas[`mesa-${m + 1}.svg`] = svg(`${x} ${y} ${w} ${h}`, `  ${piezas({ colores: MESA_COLOR, solo: m })}`, `Networking 2026 — Mesa ${m + 1}`);
 }
 
+// ---------- Calado canario ----------
+// Patrón inspirado en el calado, el bordado geométrico tradicional: retícula cuadrada, hilos a 45°
+// (el ángulo del tangram), un rombo central y la «araña» en el centro. Módulo de 48×48.
+function calado(color, opacidad) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<g fill="none" stroke="${color}" stroke-opacity="${opacidad}" stroke-width="1">
+  <path d="M0 .5H48M.5 0V48"/>
+  <path d="M0 0L15 15M48 0L33 15M0 48L15 33M48 48L33 33"/>
+  <path d="M24 13L35 24L24 35L13 24Z"/>
+  <circle cx="24" cy="24" r="4"/>
+</g>
+<circle cx="24" cy="24" r="1.4" fill="${color}" fill-opacity="${opacidad}"/>
+</svg>
+`;
+}
+const OUT_PATRONES = path.join(ROOT, "project", "assets", "Patrones");
+const patrones = {
+  "calado-arena.svg": calado(C.arena, 0.6),
+  "calado-noche.svg": calado(C.noche, 0.6),
+};
+
 // ---------- Escribir ----------
-for (const d of [OUT_LOGOS, OUT_MESAS, OUT_WEB]) fs.mkdirSync(d, { recursive: true });
+for (const d of [OUT_LOGOS, OUT_MESAS, OUT_PATRONES, OUT_WEB]) fs.mkdirSync(d, { recursive: true });
 for (const [n, s] of Object.entries(files)) fs.writeFileSync(path.join(OUT_LOGOS, n), s);
 for (const [n, s] of Object.entries(mesas)) fs.writeFileSync(path.join(OUT_MESAS, n), s);
-// La web usa el isotipo, los símbolos de mesa y el logo en negativo
+for (const [n, s] of Object.entries(patrones)) fs.writeFileSync(path.join(OUT_PATRONES, n), s);
+// La web usa el isotipo, los símbolos de mesa, el logo en negativo y el calado de fondo (muy suave)
 for (const n of ["isotipo.svg", "logo-horizontal-negativo.svg"]) fs.writeFileSync(path.join(OUT_WEB, n), files[n]);
 for (const [n, s] of Object.entries(mesas)) fs.writeFileSync(path.join(OUT_WEB, n), s);
+fs.writeFileSync(path.join(OUT_WEB, "calado.svg"), calado(C.arena, 0.07));
 
 // Comprobación: cada mesa ocupa un cuarto del tangram
 const sum = [0, 0, 0, 0];
@@ -171,4 +215,4 @@ const pares = process.argv.slice(2);
 for (let i = 0; i + 1 < pares.length; i += 2) console.log(pares[i], "sobre", pares[i + 1], "→", ratio(pares[i], pares[i + 1]));
 
 // Exporta la geometría para la web
-module.exports = { PIEZAS, inset, JUNTA, C };
+module.exports = { PIEZAS, ISLAS, GRACIOSA, inset, JUNTA, C };

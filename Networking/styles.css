@@ -15,7 +15,7 @@
   --mesa-1: #ee7b30;
   --mesa-2: #d6435a;
   --mesa-3: #2370c4;
-  --mesa-4: #f2b134;
+  --mesa-4: #ffcc00;
   --mesa-1-texto: #b04a10;
   --mesa-2-texto: #b52b43;
   --mesa-3-texto: #1e64b4;
@@ -57,14 +57,13 @@ img { display: block; max-width: 100%; }
 @media (min-width: 900px) { .topnav { display: flex; } .topdate { margin-left: 12px; } .topbar { padding: 0 32px; } }
 
 /* ---------- Escena del tangram ---------- */
-.stage-wrap { position: relative; height: 360vh; background: var(--noche); }
+.stage-wrap { position: relative; height: 520vh; background: var(--noche); }
 .stage {
   position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden;
   background-color: var(--noche);
-  /* retícula a 45°: el ángulo de corte del tangram */
-  background-image:
-    repeating-linear-gradient(45deg, rgba(245,239,228,.045) 0 1px, transparent 1px 64px),
-    repeating-linear-gradient(-45deg, rgba(245,239,228,.045) 0 1px, transparent 1px 64px);
+  /* calado canario: el bordado geométrico tradicional, con hilos a 45° como el tangram */
+  background-image: url("img/calado.svg");
+  background-size: 48px 48px;
 }
 
 .hero { position: absolute; left: 0; top: 0; color: var(--arena); will-change: transform, opacity; }
@@ -89,7 +88,16 @@ img { display: block; max-width: 100%; }
   cursor: pointer; pointer-events: none;
 }
 .grupo svg { display: block; width: 100%; height: 100%; overflow: visible; }
-.grupo polygon { pointer-events: visiblePainted; transition: filter .25s; }
+.grupo polygon { pointer-events: visiblePainted; transition: filter .25s; transform-box: view-box; transform-origin: 0 0; }
+
+/* Archipiélago: nombres de las islas */
+.islas { position: absolute; inset: 0; pointer-events: none; opacity: 0; }
+.ilabel { position: absolute; transform: translateX(-50%); text-align: center; white-space: nowrap; color: var(--arena); line-height: 1.2; }
+.ilabel b { display: block; font-weight: 600; font-size: 1rem; }
+.ilabel span { display: block; font-size: .8rem; color: #b4b8c8; }
+.islas.compacto .ilabel b { font-size: .68rem; }
+.islas.compacto .ilabel span { display: none; }
+.graciosa { position: absolute; border-radius: 50%; background: #9aa0b4; opacity: 0; pointer-events: none; }
 .grupo:focus-visible { outline: none; }
 .grupo:focus-visible polygon { stroke: var(--arena); stroke-width: 6; }
 .tangram.abierto .grupo:hover polygon { filter: brightness(1.1) saturate(1.1); }

@@ -12,6 +12,7 @@
   "groups": [
     "Logos",
     "Mesas",
+    "Patrones",
     "Instituciones"
   ],
   "assetGroups": {
@@ -25,43 +26,44 @@
         "logo-vertical-negativo.svg",
         "isotipo.svg",
         "isotipo-despiezado.svg",
+        "isotipo-archipielago.svg",
         "isotipo-noche.svg",
         "isotipo-arena.svg"
       ],
       "files": {
         "logo-horizontal.svg": {
           "name": "logo-horizontal.svg",
-          "blob": "b50546118ecf82dea15b319575c9cec3",
+          "blob": "013956963b4edf5731458826b336835c",
           "size": 27697,
           "type": "image/svg+xml"
         },
         "logo-horizontal-negativo.svg": {
           "name": "logo-horizontal-negativo.svg",
-          "blob": "3bfeb58a75d4f99be6a97b0e0deb97cc",
+          "blob": "81d3c7028b0372f6adeb3b5c25f17779",
           "size": 27697,
           "type": "image/svg+xml"
         },
         "logo-vertical.svg": {
           "name": "logo-vertical.svg",
-          "blob": "cc4492feced81dd1f748b6fed9da8f2f",
+          "blob": "8d7f5383d567fadbb413651f089a4345",
           "size": 27875,
           "type": "image/svg+xml"
         },
         "logo-vertical-negativo.svg": {
           "name": "logo-vertical-negativo.svg",
-          "blob": "539c17de87f91e391c5a57fe758f8603",
+          "blob": "37d5b8642bacc37482de9c06bb42ba58",
           "size": 27875,
           "type": "image/svg+xml"
         },
         "isotipo.svg": {
           "name": "isotipo.svg",
-          "blob": "7f728e49bf7a65f580ec0cb6ab7943f9",
+          "blob": "cde9289645f58d7f2dc83c37ffcdf17c",
           "size": 877,
           "type": "image/svg+xml"
         },
         "isotipo-despiezado.svg": {
           "name": "isotipo-despiezado.svg",
-          "blob": "ee209489f178187bf29cf5399351740a",
+          "blob": "290c716bb4b1a7d67f24278808fb5bd3",
           "size": 909,
           "type": "image/svg+xml"
         },
@@ -75,6 +77,12 @@
           "name": "isotipo-arena.svg",
           "blob": "6cffa3b07283df41d14a22ebf2fb1792",
           "size": 917,
+          "type": "image/svg+xml"
+        },
+        "isotipo-archipielago.svg": {
+          "name": "isotipo-archipielago.svg",
+          "blob": "2ef46b101ebce185a6034b72c0e66c8c",
+          "size": 1543,
           "type": "image/svg+xml"
         }
       }
@@ -109,7 +117,7 @@
         },
         "mesa-4.svg": {
           "name": "mesa-4.svg",
-          "blob": "c1042c6df8996615e6bee6945f798ef4",
+          "blob": "981889e922083abe8fe765dc3b19450e",
           "size": 370,
           "type": "image/svg+xml"
         }
@@ -136,6 +144,28 @@
           "type": "image/png"
         }
       }
+    },
+    "Patrones": {
+      "name": "Patrones",
+      "tile": "s",
+      "order": [
+        "calado-arena.svg",
+        "calado-noche.svg"
+      ],
+      "files": {
+        "calado-arena.svg": {
+          "name": "calado-arena.svg",
+          "blob": "c087680357f7de632d7630d4892232c3",
+          "size": 432,
+          "type": "image/svg+xml"
+        },
+        "calado-noche.svg": {
+          "name": "calado-noche.svg",
+          "blob": "b3bc299644ac800bd9dc25d53a173466",
+          "size": 432,
+          "type": "image/svg+xml"
+        }
+      }
     }
   },
   "blobs": {},
@@ -145,8 +175,8 @@
   },
   "lastChange": {
     "by": "Fernando",
-    "at": "2026-10-15T14:33:35Z",
+    "at": "2026-10-15T14:44:43Z",
     "via": "Claude Code",
-    "note": "Franja de instituciones y sección de empresas participantes."
+    "note": "Siete piezas, siete islas: archipiélago, amarillo de la bandera, colores con nombre de lugar y calado."
   }
 }

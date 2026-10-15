@@ -1,5 +1,6 @@
 /* Networking 2026 — CIFP Tony Gallardo
-   El tangram se monta al cargar y, con el scroll, se despieza en las cuatro mesas. */
+   El tangram se monta al cargar y, con el scroll, se abre en el archipiélago (siete piezas, siete islas)
+   y después se agrupa en las cuatro mesas. */
 (function () {
   "use strict";
 
@@ -15,13 +16,46 @@
   var grupos = Array.prototype.slice.call(document.querySelectorAll(".grupo"));
   var labels = Array.prototype.slice.call(document.querySelectorAll(".plabel"));
   var title = document.getElementById("stageTitle");
+  var titleArch = document.getElementById("stageTitleArch");
   var hint = document.getElementById("scrollHint");
+  var islasBox = document.getElementById("islas");
+  var polys = Array.prototype.slice.call(document.querySelectorAll(".grupo polygon"));
 
   // Caja de cada mesa dentro del tangram (retícula 400×400): x, y, ancho, alto
   var BBOX = [[0, 0, 400, 200], [0, 0, 200, 400], [100, 0, 300, 300], [0, 200, 400, 200]];
-  // Hacia dónde se separa cada mesa y cuánto gira
-  var DIR = [[0, -1], [-1, 0], [0.94, -0.35], [0, 1]];
-  var ROT = [-6, 5, 7, -5];
+
+  // Siete piezas, siete islas (mismo orden que los polígonos del HTML).
+  // c = centro de la pieza en la retícula; x, y, r = posición y giro en el mapa de 1300×640
+  // (identidad/generar.js); lx, ly = dónde va el nombre de la isla.
+  var ISLAS = [
+    { isla: "Tenerife",      valor: "Ideas",      c: [200, 66.7],    x: 473,  y: 367, r: -45, lx: 392,  ly: 290 },
+    { isla: "Fuerteventura", valor: "Proyectos",  c: [66.7, 200],    x: 1102, y: 331, r: 45,  lx: 1060, ly: 478 },
+    { isla: "La Gomera",     valor: "Territorio", c: [366.7, 100],   x: 319,  y: 412, r: 15,  lx: 300,  ly: 492 },
+    { isla: "Gran Canaria",  valor: "Conexiones", c: [300, 200],     x: 717,  y: 453, r: 0,   lx: 717,  ly: 548 },
+    { isla: "El Hierro",     valor: "Personas",   c: [200, 266.7],   x: 131,  y: 517, r: -20, lx: 140,  ly: 594 },
+    { isla: "Lanzarote",     valor: "Futuro",     c: [150, 350],     x: 1196, y: 160, r: -40, lx: 1060, ly: 132 },
+    { isla: "La Palma",      valor: "Empresa",    c: [333.3, 333.3], x: 165,  y: 256, r: 45,  lx: 165,  ly: 350 }
+  ];
+  var GRACIOSA = { x: 1260, y: 70 };
+  var ESCALA_ISLAS = 0.5;
+  // Zona del mapa que se encuadra (x, y, ancho, alto), con sitio para los nombres
+  var MAPA = [40, 40, 1240, 580];
+
+  // Nombres de las islas y el punto de La Graciosa
+  var ilabels = ISLAS.map(function (d) {
+    var e = document.createElement("div");
+    e.className = "ilabel";
+    e.innerHTML = "<b></b><span></span>";
+    e.firstChild.textContent = d.isla;
+    e.lastChild.textContent = d.valor;
+    islasBox.appendChild(e);
+    return e;
+  });
+  var graciosa = document.createElement("div");
+  graciosa.className = "graciosa";
+  graciosa.title = "La Graciosa";
+  islasBox.appendChild(graciosa);
+
   var L = null;
 
   function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
@@ -92,15 +126,32 @@
 
     var M = BBOX.map(function (b, k) {
       var bcx = (b[0] + b[2] / 2) * u, bcy = (b[1] + b[3] / 2) * u;
-      var start = { x: tx + bcx, y: ty + bcy };
-      var d = S * 0.13;
       return {
-        bcx: bcx, bcy: bcy, start: start,
-        exp: { x: start.x + DIR[k][0] * d, y: start.y + DIR[k][1] * d },
+        bcx: bcx, bcy: bcy,
+        start: { x: tx + bcx, y: ty + bcy },
         // apoyada en la base de su celda, justo encima del nombre
         end: { x: slots[k].x, y: slots[k].y + cs / 2 - (b[3] * u * endScale) / 2 - cs * 0.04 }
       };
     });
+
+    // --- Archipiélago: el mapa encuadrado bajo su título ---
+    var mTop = TOPBAR + (wide ? 120 : 100), mH = H - mTop - 16;
+    var km = Math.min((W - 32) / MAPA[2], mH / MAPA[3]);
+    var ox = (W - MAPA[2] * km) / 2 - MAPA[0] * km;
+    var oy = mTop + (mH - MAPA[3] * km) / 2 - MAPA[1] * km;
+    // Posición de cada pieza en coordenadas locales del tangram (unidades de la retícula)
+    var A = ISLAS.map(function (d) {
+      return { x: (ox + d.x * km - tx) / u, y: (oy + d.y * km - ty) / u, r: d.r, s: ESCALA_ISLAS * km / u };
+    });
+    islasBox.classList.toggle("compacto", km < 0.55);
+    ilabels.forEach(function (e, n) {
+      e.style.left = (ox + ISLAS[n].lx * km) + "px";
+      e.style.top = (oy + ISLAS[n].ly * km) + "px";
+    });
+    var gr = Math.max(5, 16 * km);
+    graciosa.style.width = graciosa.style.height = gr + "px";
+    graciosa.style.left = (ox + GRACIOSA.x * km - gr / 2) + "px";
+    graciosa.style.top = (oy + GRACIOSA.y * km - gr / 2) + "px";
 
     labels.forEach(function (lb, n) {
       var w = cs + gap - 4;
@@ -109,7 +160,7 @@
       lb.style.top = (slots[n].y + cs / 2 + 10) + "px";
     });
 
-    L = { M: M, endScale: endScale };
+    L = { M: M, A: A, endScale: endScale };
   }
 
   function progress() {
@@ -120,21 +171,31 @@
   function render() {
     if (!L) return;
     var p = progress();
-    var A = ease(clamp(p / 0.24));            // el cuadrado se abre
-    var B = ease(clamp((p - 0.24) / 0.5));    // las mesas van a su sitio
-    var T = clamp((p - 0.66) / 0.18);         // aparecen los nombres
+    var H0 = ease(clamp(p / 0.1));                 // el texto de portada se va
+    var I = ease(clamp((p - 0.04) / 0.28));        // las piezas viajan a sus islas
+    var J = ease(clamp((p - 0.5) / 0.3));          // y de las islas a las mesas
+    var TI = clamp((p - 0.26) / 0.08) * (1 - clamp((p - 0.47) / 0.06)); // nombres de las islas
+    var T = clamp((p - 0.78) / 0.12);              // nombres de las mesas
 
+    // Las mesas (grupos) solo se mueven en el último tramo
     L.M.forEach(function (m, i) {
-      var pos = B > 0
-        ? { x: lerp(m.exp.x, m.end.x, B), y: lerp(m.exp.y, m.end.y, B) }
-        : { x: lerp(m.start.x, m.exp.x, A), y: lerp(m.start.y, m.exp.y, A) };
-      var rot = ROT[i] * A * (1 - B);
-      var sc = lerp(1, L.endScale, B);
-      grupos[i].style.transform = "translate(" + pos.x + "px," + pos.y + "px) rotate(" + rot + "deg) scale(" + sc + ") translate(" + (-m.bcx) + "px," + (-m.bcy) + "px)";
+      var x = lerp(m.start.x, m.end.x, J), y = lerp(m.start.y, m.end.y, J), sc = lerp(1, L.endScale, J);
+      grupos[i].style.transform = "translate(" + x + "px," + y + "px) scale(" + sc + ") translate(" + (-m.bcx) + "px," + (-m.bcy) + "px)";
+    });
+    // Cada pieza, dentro de su mesa, va a su isla y vuelve
+    var k = I * (1 - J);
+    polys.forEach(function (el, n) {
+      if (k <= 0) { el.style.transform = ""; return; }
+      var d = ISLAS[n], a = L.A[n];
+      el.style.transform = "translate(" + lerp(d.c[0], a.x, k) + "px," + lerp(d.c[1], a.y, k) + "px) rotate(" + (a.r * k) + "deg) scale(" + lerp(1, a.s, k) + ") translate(" + (-d.c[0]) + "px," + (-d.c[1]) + "px)";
     });
 
-    hero.style.opacity = 1 - clamp(A * 1.4);
-    hero.style.transform = "translateY(" + (-40 * A) + "px)";
+    hero.style.opacity = 1 - H0;
+    hero.style.transform = "translateY(" + (-40 * H0) + "px)";
+    islasBox.style.opacity = TI;
+    graciosa.style.opacity = k;
+    titleArch.style.opacity = TI;
+    titleArch.style.transform = "translateY(" + ((1 - TI) * -12) + "px)";
     labels.forEach(function (lb) {
       lb.style.opacity = T;
       lb.style.transform = "translateY(" + ((1 - T) * 12) + "px)";
@@ -142,7 +203,7 @@
     title.style.opacity = T;
     title.style.transform = "translateY(" + ((1 - T) * -12) + "px)";
     hint.style.opacity = clamp(1 - p * 8);
-    tangram.classList.toggle("abierto", p > 0.8);
+    tangram.classList.toggle("abierto", p > 0.86);
   }
 
   var ticking = false;
@@ -157,9 +218,9 @@
   grupos.forEach(function (g) {
     g.addEventListener("click", function () {
       var behavior = reduceMotion ? "auto" : "smooth";
-      if (progress() < 0.8) {
+      if (progress() < 0.86) {
         var run = wrap.offsetHeight - stage.clientHeight;
-        window.scrollTo({ top: wrap.offsetTop + run * 0.9, behavior: behavior });
+        window.scrollTo({ top: wrap.offsetTop + run * 0.94, behavior: behavior });
       } else {
         document.getElementById(g.getAttribute("data-target")).scrollIntoView({ behavior: behavior });
       }
@@ -169,7 +230,11 @@
   function start() {
     layout();
     render();
-    if (!reduceMotion && progress() < 0.05) tangram.classList.add("montando");
+    if (!reduceMotion && progress() < 0.03) {
+      tangram.classList.add("montando");
+      // al terminar el montaje, las piezas quedan libres para el viaje al archipiélago
+      setTimeout(function () { tangram.classList.remove("montando"); }, 2000);
+    }
   }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(start); else start();
   layout(); render();
