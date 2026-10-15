@@ -1,4 +1,4 @@
-Networking 2026 es un encuentro entre empresas y profesorado en el CIFP Tony Gallardo, el 20 de noviembre de 2026, con el lema **Del aula a la realidad**. La identidad es un tangram: siete piezas que juntas forman un cuadrado y que se separan en las cuatro mesas de trabajo. Montar y desmontar el cuadrado es la idea de todo el sistema.
+Networking 2026 es un encuentro entre empresas y profesorado en el CIFP Tony Gallardo, el 20 de noviembre de 2026, con el lema **Juntos somos mejores**. La identidad es un tangram: siete piezas que juntas forman un cuadrado y que se separan en las cuatro mesas de trabajo. Montar y desmontar el cuadrado es la idea de todo el sistema.
 
 ## El concepto: un tangram de cuatro mesas
 

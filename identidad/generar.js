@@ -124,16 +124,16 @@ function horizontal(tinta, acento, sub) {
   ${piezas({ colores: MESA_COLOR })}
 </g>
 ${linea(BEBAS, [{ t: "NETWORKING ", fill: tinta }, { t: "2026", fill: acento }], 330, 150, 138)}
-${linea(OUTFIT_SB, [{ t: "DEL AULA A LA REALIDAD", fill: tinta }], 334, 208, 33, { tracking: 7 })}
-${linea(OUTFIT, [{ t: "CIFP TONY GALLARDO · 20 NOV 2026", fill: sub }], 334, 256, 25, { tracking: 3 })}`, "Networking 2026 — Del aula a la realidad");
+${linea(OUTFIT_SB, [{ t: "JUNTOS SOMOS MEJORES", fill: tinta }], 334, 208, 33, { tracking: 7 })}
+${linea(OUTFIT, [{ t: "CIFP TONY GALLARDO · 20 NOV 2026", fill: sub }], 334, 256, 25, { tracking: 3 })}`, "Networking 2026 — Juntos somos mejores");
 }
 function vertical(tinta, acento, sub) {
   return svg("0 0 760 680", `<g transform="translate(220 30) scale(0.8)">
   ${piezas({ colores: MESA_COLOR })}
 </g>
 ${linea(BEBAS, [{ t: "NETWORKING ", fill: tinta }, { t: "2026", fill: acento }], 380, 475, 112, { anchor: "middle" })}
-${linea(OUTFIT_SB, [{ t: "DEL AULA A LA REALIDAD", fill: tinta }], 380, 536, 30, { tracking: 6, anchor: "middle" })}
-${linea(OUTFIT, [{ t: "CIFP TONY GALLARDO · 20 NOV 2026", fill: sub }], 380, 584, 23, { tracking: 3, anchor: "middle" })}`, "Networking 2026 — Del aula a la realidad");
+${linea(OUTFIT_SB, [{ t: "JUNTOS SOMOS MEJORES", fill: tinta }], 380, 536, 30, { tracking: 6, anchor: "middle" })}
+${linea(OUTFIT, [{ t: "CIFP TONY GALLARDO · 20 NOV 2026", fill: sub }], 380, 584, 23, { tracking: 3, anchor: "middle" })}`, "Networking 2026 — Juntos somos mejores");
 }
 files["logo-horizontal.svg"] = horizontal(C.noche, C.volcan, "#555c72");
 files["logo-horizontal-negativo.svg"] = horizontal(C.arena, C.sol, "#b4b8c8");

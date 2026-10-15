@@ -1,6 +1,6 @@
 # Networking 2026 — CIFP Tony Gallardo
 
-Landing page e identidad visual del evento **Networking 2026 · Del aula a la realidad** (20 de noviembre de 2026).
+Landing page e identidad visual del evento **Networking 2026 · Juntos somos mejores** (20 de noviembre de 2026).
 Un espacio de encuentro, diálogo y crecimiento entre empresas y profesorado.
 
 Publicada en: https://myappsserver.duckdns.org/Networking/
