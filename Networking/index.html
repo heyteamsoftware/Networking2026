@@ -26,6 +26,7 @@
       <a href="#mesa-2" style="--c:var(--mesa-2)">Mesa 2</a>
       <a href="#mesa-3" style="--c:var(--mesa-3)">Mesa 3</a>
       <a href="#mesa-4" style="--c:var(--mesa-4)">Mesa 4</a>
+      <a href="#empresas" style="--c:var(--arena)">Empresas</a>
     </nav>
     <span class="topdate">20 NOV 2026</span>
   </header>
@@ -198,10 +199,43 @@
     </div>
   </section>
 
+  <!-- EMPRESAS PARTICIPANTES (la lista sale de empresas.json) -->
+  <section class="empresas" id="empresas">
+    <div class="wrap">
+      <p class="etiqueta reveal">Juntos somos FP</p>
+      <h2 class="reveal">Empresas participantes</h2>
+      <p class="entradilla reveal">Las empresas que se sientan con el profesorado en las mesas de Networking 2026.</p>
+      <ul class="emp-grid" id="empGrid" hidden></ul>
+      <div class="emp-vacio reveal" id="empVacio">
+        <svg class="emp-piezas" viewBox="0 0 400 400" aria-hidden="true">
+          <polygon class="m1" points="12.07,5 387.93,5 200,192.93"/>
+          <polygon class="m2" points="5,12.07 192.93,200 5,387.93"/>
+          <polygon class="m3" points="395,12.07 395,187.93 307.07,100"/>
+          <polygon class="m3" points="207.07,200 300,107.07 392.93,200 300,292.93"/>
+          <polygon class="m3" points="200,207.07 287.93,295 112.07,295"/>
+          <polygon class="m4" points="12.07,395 102.07,305 287.93,305 197.93,395"/>
+          <polygon class="hueco" points="395,212.07 395,395 212.07,395"/>
+        </svg>
+        <div>
+          <p class="emp-vacio-t">Falta tu pieza</p>
+          <p>Estamos confirmando las empresas participantes. Las publicaremos aquí muy pronto.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="instituciones" aria-label="Instituciones">
+    <div class="wrap inst-grid">
+      <img class="inst-cifp" src="img/logo-tony-gallardo.webp" alt="CIFP Tony Gallardo" width="104" height="104">
+      <span class="inst-sep" aria-hidden="true"></span>
+      <img class="inst-gob" src="img/gobierno-canarias.png" alt="Gobierno de Canarias" width="160" height="78">
+    </div>
+  </section>
+
   <footer class="footer">
     <div class="wrap footer-grid">
       <img class="f-logo" src="img/logo-horizontal-negativo.svg" alt="Networking 2026 · Juntos somos FP · CIFP Tony Gallardo · 20 NOV 2026" width="345" height="90">
-      <img class="f-cifp" src="img/logo-tony-gallardo.webp" alt="CIFP Tony Gallardo" width="64" height="64">
+      <p class="f-nota">20 de noviembre de 2026 · CIFP Tony Gallardo</p>
     </div>
   </footer>
 

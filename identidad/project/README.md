@@ -86,6 +86,17 @@ El CIFP Tony Gallardo organiza el evento, así que su logo aparece siempre en la
 - En la web va encima del nombre del evento: 96 px en escritorio y 56 px en móvil.
 - Respeta el logo tal cual: no lo recolorees ni lo recortes.
 
-## Logos de terceros
+## Franja de instituciones
 
-El cartel original incluía también los logotipos del Gobierno de Canarias y de FP Dual Canarias. No forman parte de este sistema: colócalos según sus propios manuales, en una franja aparte, separados del logotipo de Networking 2026 por al menos dos unidades del tangram.
+Al final de cada soporte, antes del pie, va una franja blanca con los logos institucionales: `cifp-tony-gallardo.webp` y `gobierno-canarias.png` (grupo Instituciones).
+- Fondo blanco siempre: el logo del Gobierno de Canarias lleva texto negro y no funciona sobre `marca-noche`.
+- Mismo peso visual: el CIFP a 104 px de alto y el Gobierno de Canarias a 160 px de ancho, centrados y separados por un filete vertical en `linea`. En móvil, uno debajo del otro, sin filete.
+- Usa el archivo recortado del grupo Instituciones; no estires ni recolorees los logos y no los mezcles con el tangram.
+- Si se suma otra institución (por ejemplo FP Dual Canarias), entra en esta misma franja, a la misma altura y según su propio manual.
+
+## Empresas participantes
+
+Las empresas tienen su propia sección, antes de la franja de instituciones, con el antetítulo «Juntos somos FP».
+- Cada empresa es una ficha en `superficie` con su logo (máximo 60 px de alto), su nombre en `cuerpo` 600 y, si se conocen, unos triángulos pequeños con el color de las mesas en las que participa.
+- Mientras no haya empresas confirmadas se muestra el aviso «Falta tu pieza»: el tangram con la última pieza vacía y en trazo discontinuo.
+- En la web la lista sale de `Networking/empresas.json`: cada empresa es `{"nombre", "logo", "web", "mesas"}` y solo `nombre` es obligatorio. Los logos se guardan en `Networking/img/empresas/`.

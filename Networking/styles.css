@@ -193,7 +193,34 @@ img { display: block; max-width: 100%; }
 .footer { background: var(--noche); padding: 40px 0; }
 .footer-grid { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; }
 .f-logo { width: 345px; height: auto; }
-.f-cifp { width: 64px; height: 64px; border-radius: 50%; background: #fff; }
+.f-nota { margin: 0; font-size: 13px; color: #b4b8c8; }
+
+/* ---------- Empresas participantes ---------- */
+.empresas { padding: 88px 0; background: var(--fondo); scroll-margin-top: 24px; }
+.empresas .etiqueta { color: var(--mesa-2-texto); margin-bottom: 10px; }
+.empresas h2 { margin: 0 0 16px; font-family: var(--display); font-weight: 400; font-size: clamp(2.4rem, 5vw, 3.9rem); line-height: .98; color: var(--tinta); }
+.empresas .entradilla { margin: 0 0 40px; }
+.emp-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+.emp-grid li { position: relative; background: var(--superficie); border: 1px solid var(--linea); border-radius: 4px; }
+.emp-grid a, .emp-grid .emp-card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-height: 150px; padding: 22px 18px; color: var(--tinta); text-decoration: none; text-align: center; }
+.emp-grid a:hover { background: var(--fondo); }
+.emp-grid img { max-width: 100%; max-height: 60px; object-fit: contain; }
+.emp-nombre { font-weight: 600; font-size: 1rem; line-height: 1.3; }
+.emp-mesas { position: absolute; top: 10px; right: 10px; display: flex; gap: 4px; }
+.emp-mesas i { width: 12px; height: 12px; clip-path: polygon(0 0, 100% 0, 100% 100%); }
+.emp-vacio { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; padding: 28px; border: 2px dashed var(--linea); border-radius: 4px; }
+.emp-piezas { width: 96px; height: 96px; flex: none; }
+.emp-piezas .hueco { fill: none; stroke: var(--mesa-4-texto); stroke-width: 6; stroke-dasharray: 14 10; }
+.emp-vacio p { margin: 0; color: var(--tinta-suave); max-width: 36em; }
+.emp-vacio .emp-vacio-t { font-family: var(--display); font-size: 2rem; line-height: 1; color: var(--tinta); margin-bottom: 6px; }
+
+/* ---------- Franja de instituciones ---------- */
+.instituciones { background: #fff; padding: 36px 0; border-top: 1px solid var(--linea); }
+.inst-grid { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 28px 48px; }
+.inst-cifp { width: 104px; height: 104px; }
+.inst-gob { width: 160px; height: auto; }
+.inst-sep { width: 1px; height: 64px; background: var(--linea); }
+@media (max-width: 480px) { .inst-sep { display: none; } .inst-cifp { width: 88px; height: 88px; } .inst-gob { width: 140px; } }
 
 /* ---------- Aparición de contenidos ---------- */
 .js .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }

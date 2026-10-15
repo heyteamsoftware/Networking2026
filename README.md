@@ -33,6 +33,18 @@ identidad/
 
 La web es HTML/CSS/JS estático, sin compilación.
 
+## Añadir empresas participantes
+
+La sección «Empresas participantes» se rellena desde `Networking/empresas.json`. Mientras esté vacío (`[]`) la web muestra el aviso «Falta tu pieza». Cada empresa:
+
+```json
+[
+  { "nombre": "Nombre de la empresa", "logo": "img/empresas/nombre.png", "web": "https://…", "mesas": [1, 3] }
+]
+```
+
+Solo `nombre` es obligatorio. Los logos van en `Networking/img/empresas/`. `mesas` pinta un triangulito del color de cada mesa en la que participa. Basta con subir `empresas.json` (y los logos) al servidor: no hay que tocar el HTML.
+
 ## Regenerar los logotipos
 
 Si cambian los colores o la geometría, se edita `identidad/generar.js` y se ejecuta:

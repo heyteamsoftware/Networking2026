@@ -11,7 +11,8 @@
   "sections": {},
   "groups": [
     "Logos",
-    "Mesas"
+    "Mesas",
+    "Instituciones"
   ],
   "assetGroups": {
     "Logos": {
@@ -113,6 +114,28 @@
           "type": "image/svg+xml"
         }
       }
+    },
+    "Instituciones": {
+      "name": "Instituciones",
+      "tile": "m",
+      "order": [
+        "cifp-tony-gallardo.webp",
+        "gobierno-canarias.png"
+      ],
+      "files": {
+        "cifp-tony-gallardo.webp": {
+          "name": "cifp-tony-gallardo.webp",
+          "blob": "d1bdad04d3452b321c0c5a2f5acf9aea",
+          "size": 113890,
+          "type": "image/webp"
+        },
+        "gobierno-canarias.png": {
+          "name": "gobierno-canarias.png",
+          "blob": "059c36e188c5511d0a0ea81a1ebed27e",
+          "size": 27584,
+          "type": "image/png"
+        }
+      }
     }
   },
   "blobs": {},
@@ -122,8 +145,8 @@
   },
   "lastChange": {
     "by": "Fernando",
-    "at": "2026-10-15T14:28:04Z",
+    "at": "2026-10-15T14:33:35Z",
     "via": "Claude Code",
-    "note": "Nuevo lema: Juntos somos FP."
+    "note": "Franja de instituciones y sección de empresas participantes."
   }
 }

@@ -187,6 +187,36 @@
     reveals.forEach(function (el) { el.classList.add("in"); });
   }
 
+  /* ---------- Empresas participantes (empresas.json) ----------
+     Cada empresa: { "nombre": "…", "logo": "img/empresas/archivo.png", "web": "https://…", "mesas": [1, 3] }
+     Solo "nombre" es obligatorio. Mientras la lista esté vacía se muestra el aviso. */
+  var empGrid = document.getElementById("empGrid"), empVacio = document.getElementById("empVacio");
+  var COLOR_MESA = ["", "var(--mesa-1)", "var(--mesa-2)", "var(--mesa-3)", "var(--mesa-4)"];
+  function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt) e.textContent = txt; return e; }
+  fetch("empresas.json", { cache: "no-cache" })
+    .then(function (r) { return r.ok ? r.json() : []; })
+    .then(function (lista) {
+      if (!Array.isArray(lista) || !lista.length) return;
+      lista.forEach(function (emp) {
+        if (!emp || !emp.nombre) return;
+        var li = el("li");
+        var card = emp.web ? el("a", "emp-card") : el("div", "emp-card");
+        if (emp.web) { card.href = emp.web; card.target = "_blank"; card.rel = "noopener"; }
+        if (emp.logo) { var img = el("img"); img.src = emp.logo; img.alt = ""; img.loading = "lazy"; card.appendChild(img); }
+        card.appendChild(el("span", "emp-nombre", emp.nombre));
+        li.appendChild(card);
+        if (Array.isArray(emp.mesas) && emp.mesas.length) {
+          var m = el("span", "emp-mesas");
+          m.setAttribute("aria-label", "Mesas: " + emp.mesas.join(", "));
+          emp.mesas.forEach(function (n) { if (COLOR_MESA[n]) { var t = el("i"); t.style.background = COLOR_MESA[n]; m.appendChild(t); } });
+          li.appendChild(m);
+        }
+        empGrid.appendChild(li);
+      });
+      if (empGrid.children.length) { empGrid.hidden = false; empVacio.hidden = true; }
+    })
+    .catch(function () {});
+
   /* ---------- Cuenta atrás (20 nov 2026, hora de Canarias = UTC+0) ---------- */
   var target = Date.UTC(2026, 10, 20, 0, 0, 0);
   var cdD = document.getElementById("cdD"), cdH = document.getElementById("cdH"), cdM = document.getElementById("cdM");
