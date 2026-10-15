@@ -1,0 +1,272 @@
+<title>Siete piezas, siete islas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Una sola escena oscura, la de la portada de la web: el tangram sobre azul noche. */
+  :root {
+    color-scheme: dark;
+    --noche: #14213d;
+    --noche-2: #1c2b4d;
+    --noche-3: #22325a;
+    --arena: #f5efe4;
+    --suave: #b4b8c8;
+    --linea: #34446b;
+    --mesa-1: #ee7b30;
+    --mesa-2: #d6435a;
+    --mesa-3: #2370c4;
+    --mesa-4: #f2b134;
+    --display: "Bebas Neue", Impact, "Arial Narrow", sans-serif;
+    --texto: Outfit, "Segoe UI", Arial, sans-serif;
+  }
+  :root.bandera { --mesa-3: #0768a9; --mesa-4: #ffcc00; }
+  * { box-sizing: border-box; }
+  html, body { background: var(--noche); color: var(--arena); }
+  body { margin: 0; font-family: var(--texto); font-size: 16px; line-height: 1.6; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding-inline: 16px; padding-block: 48px 72px; }
+  @media (min-width: 720px) { .wrap { padding-inline: 32px; } }
+
+  .eyebrow { margin: 0 0 10px; font-size: 13px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--mesa-4); }
+  h1 { margin: 0 0 16px; font-family: var(--display); font-weight: 400; font-size: clamp(3rem, 8vw, 6rem); line-height: .92; text-wrap: balance; }
+  h2 { margin: 0 0 18px; font-family: var(--display); font-weight: 400; font-size: clamp(2rem, 4vw, 2.8rem); line-height: 1; }
+  .lead { margin: 0; max-width: 40em; font-size: 1.15rem; color: var(--suave); }
+  .lead b { color: var(--arena); font-weight: 600; }
+
+  .escena { margin-top: 40px; background: var(--noche); border: 1px solid var(--linea); border-radius: 4px; }
+  .controles { display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: center; justify-content: space-between; padding: 16px; border-bottom: 1px solid var(--linea); }
+  .pasos { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pasos button {
+    font: 600 13px/1 var(--texto); letter-spacing: .08em; text-transform: uppercase;
+    padding: 11px 16px; border-radius: 999px; border: 1.5px solid var(--linea);
+    background: transparent; color: var(--arena); cursor: pointer;
+  }
+  .pasos button[aria-pressed="true"] { background: var(--arena); color: var(--noche); border-color: var(--arena); }
+  .opciones { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 14px; color: var(--suave); }
+  .opciones label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .opciones input { width: 18px; height: 18px; accent-color: var(--mesa-4); }
+  button:focus-visible, input:focus-visible { outline: 3px solid var(--mesa-4); outline-offset: 3px; }
+
+  .lienzo { display: block; width: 100%; height: auto; }
+  .lienzo polygon { transition: transform 1.1s cubic-bezier(.65, 0, .35, 1), fill .4s; transform-box: view-box; transform-origin: 0 0; }
+  .m1 { fill: var(--mesa-1); } .m2 { fill: var(--mesa-2); } .m3 { fill: var(--mesa-3); } .m4 { fill: var(--mesa-4); }
+  .rotulo { font-family: var(--texto); font-weight: 600; font-size: 22px; fill: var(--arena); text-anchor: middle; opacity: 0; transition: opacity .5s; }
+  .rotulo tspan.v { font-weight: 400; font-size: 18px; fill: var(--suave); }
+  .rotulo-mesa { font-family: var(--display); font-size: 30px; fill: var(--arena); text-anchor: middle; opacity: 0; transition: opacity .5s; }
+  .graciosa { fill: var(--suave); opacity: 0; transition: opacity .5s; }
+  .lienzo.archipielago .rotulo { opacity: 1; transition-delay: .7s; }
+  .lienzo.mesas .rotulo-mesa { opacity: 1; transition-delay: .7s; }
+  .lienzo.archipielago.con-graciosa .graciosa { opacity: 1; transition-delay: .7s; }
+  .pie-escena { margin: 0; padding: 14px 16px; border-top: 1px solid var(--linea); font-size: 14px; color: var(--suave); min-height: 3.2em; }
+
+  .bloque { margin-top: 64px; }
+  .tabla-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 560px; }
+  th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--linea); vertical-align: middle; }
+  th { font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--suave); }
+  td .muestra { display: inline-block; width: 14px; height: 14px; margin-right: 8px; vertical-align: -2px; clip-path: polygon(0 0, 100% 0, 0 100%); }
+  td.km { font-variant-numeric: tabular-nums; color: var(--suave); }
+
+  .apoyos { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  @media (min-width: 820px) { .apoyos { grid-template-columns: repeat(3, 1fr); } }
+  .apoyos li { background: var(--noche-2); border: 1px solid var(--linea); border-radius: 4px; padding: 22px; }
+  .apoyos h3 { margin: 0 0 8px; font-family: var(--display); font-weight: 400; font-size: 1.7rem; line-height: 1; }
+  .apoyos p { margin: 0; color: var(--suave); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .chips span { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; padding: 4px 10px; border-radius: 999px; background: var(--noche-3); }
+  .chips i { width: 10px; height: 10px; clip-path: polygon(0 0, 100% 0, 0 100%); }
+  .calado { height: 70px; margin-top: 14px; border-radius: 4px; background-color: var(--noche-3);
+    background-image:
+      linear-gradient(45deg, var(--noche-2) 25%, transparent 25%, transparent 75%, var(--noche-2) 75%),
+      linear-gradient(45deg, var(--noche-2) 25%, transparent 25%, transparent 75%, var(--noche-2) 75%),
+      radial-gradient(circle, var(--suave) 1.5px, transparent 2px);
+    background-size: 28px 28px, 28px 28px, 14px 14px;
+    background-position: 0 0, 14px 14px, 7px 7px; }
+
+  .decidir { margin: 0; padding-left: 1.2em; color: var(--suave); max-width: 44em; }
+  .decidir li + li { margin-top: 8px; }
+  .decidir b { color: var(--arena); font-weight: 600; }
+
+  @media (prefers-reduced-motion: reduce) { .lienzo polygon, .rotulo, .rotulo-mesa, .graciosa { transition: none; } }
+</style>
+
+<main class="wrap">
+  <p class="eyebrow">Propuesta · Identidad Networking 2026</p>
+  <h1>Siete piezas, siete islas</h1>
+  <p class="lead">El tangram tiene siete piezas y Canarias siete islas mayores. Cada pieza pasa a ser también una isla, con un tamaño parecido al real: <b>separadas son islas, juntas forman la figura</b>. Es la misma idea de «Juntos somos FP», contada con el territorio.</p>
+
+  <section class="escena" aria-label="Animación del tangram">
+    <div class="controles">
+      <div class="pasos" role="group" aria-label="Paso de la animación">
+        <button type="button" id="p-cuadrado" data-paso="cuadrado" aria-pressed="false">Cuadrado</button>
+        <button type="button" id="p-archipielago" data-paso="archipielago" aria-pressed="true">Archipiélago</button>
+        <button type="button" id="p-mesas" data-paso="mesas" aria-pressed="false">Mesas</button>
+      </div>
+      <div class="opciones">
+        <label><input type="checkbox" id="o-graciosa"> Señalar La Graciosa</label>
+        <label><input type="checkbox" id="o-bandera"> Azul y amarillo de la bandera</label>
+      </div>
+    </div>
+
+    <svg class="lienzo archipielago" id="lienzo" viewBox="0 0 1300 640" role="img" aria-label="Las siete piezas del tangram colocadas como las islas Canarias">
+      <g id="piezas"></g>
+      <circle class="graciosa" cx="1236" cy="92" r="8"/>
+      <text class="rotulo graciosa-t" x="1236" y="66" style="font-size:16px">La Graciosa</text>
+      <g id="rotulos"></g>
+    </svg>
+    <p class="pie-escena" id="pie" aria-live="polite"></p>
+  </section>
+
+  <section class="bloque">
+    <h2>Qué isla es cada pieza</h2>
+    <div class="tabla-wrap">
+      <table>
+        <thead><tr><th>Pieza</th><th>Isla</th><th>Superficie</th><th>Valor</th><th>Mesa</th></tr></thead>
+        <tbody id="tabla"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="bloque">
+    <h2>Tres apoyos</h2>
+    <ul class="apoyos">
+      <li>
+        <h3>Color con nombre de lugar</h3>
+        <p>Los cuatro colores se quedan, pero se llaman como el paisaje del que salen.</p>
+        <div class="chips">
+          <span><i style="background:var(--mesa-1)"></i>Naranja Timanfaya</span>
+          <span><i style="background:var(--mesa-2)"></i>Rojo Teide</span>
+          <span><i style="background:var(--mesa-3)"></i>Azul Atlántico</span>
+          <span><i style="background:var(--mesa-4)"></i>Amarillo Maspalomas</span>
+        </div>
+      </li>
+      <li>
+        <h3>Bandera, con matices</h3>
+        <p>Prueba la casilla de arriba. El azul de la bandera se pierde sobre el azul noche (2,7:1, por debajo del 3:1 que pedimos a las formas; el actual da 3,2:1). El amarillo funciona mejor. Propongo cambiar solo el amarillo y dejar el azul actual.</p>
+      </li>
+      <li>
+        <h3>Calado canario de fondo</h3>
+        <p>La retícula de 45° de la web pasaría a un patrón inspirado en el calado, el bordado geométrico tradicional. Esto es solo una primera muestra del tono.</p>
+        <div class="calado" aria-hidden="true"></div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="bloque">
+    <h2>Qué falta decidir</h2>
+    <ol class="decidir">
+      <li><b>La Graciosa.</b> Es la octava isla habitada desde 2018. Podemos hablar de «siete islas mayores» o señalarla con un punto junto a Lanzarote (casilla de arriba).</li>
+      <li><b>Dónde se ve el archipiélago.</b> Mi propuesta: como paso intermedio en la portada de la web (cuadrado, archipiélago y mesas), y como imagen propia del cartel y de las redes.</li>
+      <li><b>El reparto.</b> Las piezas siguen siendo de su mesa y llevan su valor; la isla es una tercera lectura. Si preferís otro reparto de islas, se cambia sin tocar la geometría.</li>
+    </ol>
+  </section>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  // Piezas del tangram (retícula 400×400, ya con la junta) y la isla que representa cada una.
+  // Posiciones del archipiélago a partir de la longitud y latitud reales (≈2,5 px por km).
+  var P = [
+    { pts: "12.07,5 387.93,5 200,192.93", c: [200, 66.7], mesa: 1, valor: "Ideas", forma: "Triángulo grande", isla: "Tenerife", km: 2034, a: [473, 367, -45], r: [500, 470] },
+    { pts: "5,12.07 192.93,200 5,387.93", c: [66.7, 200], mesa: 2, valor: "Proyectos", forma: "Triángulo grande", isla: "Fuerteventura", km: 1660, a: [1102, 331, 45], r: [1060, 478] },
+    { pts: "395,12.07 395,187.93 307.07,100", c: [366.7, 100], mesa: 3, valor: "Territorio", forma: "Triángulo pequeño", isla: "La Gomera", km: 370, a: [319, 412, 15], r: [306, 492] },
+    { pts: "207.07,200 300,107.07 392.93,200 300,292.93", c: [300, 200], mesa: 3, valor: "Conexiones", forma: "Cuadrado", isla: "Gran Canaria", km: 1560, a: [717, 453, 0], r: [717, 548] },
+    { pts: "200,207.07 287.93,295 112.07,295", c: [200, 266.7], mesa: 3, valor: "Personas", forma: "Triángulo pequeño", isla: "El Hierro", km: 269, a: [131, 517, -20], r: [140, 596] },
+    { pts: "12.07,395 102.07,305 287.93,305 197.93,395", c: [150, 350], mesa: 4, valor: "Futuro", forma: "Paralelogramo", isla: "Lanzarote", km: 846, a: [1196, 160, -40], r: [1180, 240] },
+    { pts: "395,212.07 395,395 212.07,395", c: [333.3, 333.3], mesa: 4, valor: "Empresa", forma: "Triángulo mediano", isla: "La Palma", km: 708, a: [165, 256, 45], r: [165, 350] }
+  ];
+  var MESAS = ["El aula como laboratorio de ideas", "Proyectos en acción", "Radio Atlante conecta", "TG Lab"];
+  var MESA_CORTO = ["Mesa 1", "Mesa 2", "Mesa 3", "Mesa 4"];
+  // Caja de cada mesa en la retícula: x, y, ancho, alto
+  var BBOX = { 1: [0, 0, 400, 200], 2: [0, 0, 200, 400], 3: [100, 0, 300, 300], 4: [0, 200, 400, 200] };
+  var SLOT_X = { 1: 172, 2: 474, 3: 806, 4: 1128 };
+  var S_ARCH = 0.5, S_MESAS = 0.6, BASE_MESAS = 430;
+
+  var NS = "http://www.w3.org/2000/svg";
+  var lienzo = document.getElementById("lienzo");
+  var gP = document.getElementById("piezas"), gR = document.getElementById("rotulos");
+  var pie = document.getElementById("pie");
+
+  function tf(x, y, r, s, c) { return "translate(" + x + "px," + y + "px) rotate(" + r + "deg) scale(" + s + ") translate(" + (-c[0]) + "px," + (-c[1]) + "px)"; }
+
+  var estados = {
+    cuadrado: function (p) { return tf(450 + p.c[0], 120 + p.c[1], 0, 1, p.c); },
+    archipielago: function (p) { return tf(p.a[0], p.a[1], p.a[2], S_ARCH, p.c); },
+    mesas: function (p) {
+      var b = BBOX[p.mesa];
+      var x = SLOT_X[p.mesa] + (p.c[0] - (b[0] + b[2] / 2)) * S_MESAS;
+      var y = BASE_MESAS - (b[1] + b[3] - p.c[1]) * S_MESAS;
+      return tf(x, y, 0, S_MESAS, p.c);
+    }
+  };
+  var textos = {
+    cuadrado: "El evento: las siete piezas juntas forman el cuadrado.",
+    archipielago: "El territorio: cada pieza en el lugar de su isla, de El Hierro a Lanzarote.",
+    mesas: "El programa: las piezas se agrupan en las cuatro mesas, cada una un cuarto del cuadrado."
+  };
+
+  var polys = P.map(function (p) {
+    var el = document.createElementNS(NS, "polygon");
+    el.setAttribute("points", p.pts);
+    el.setAttribute("class", "m" + p.mesa);
+    gP.appendChild(el);
+    var t = document.createElementNS(NS, "text");
+    t.setAttribute("class", "rotulo");
+    t.setAttribute("x", p.r[0]); t.setAttribute("y", p.r[1]);
+    t.textContent = p.isla;
+    var v = document.createElementNS(NS, "tspan");
+    v.setAttribute("class", "v"); v.setAttribute("x", p.r[0]); v.setAttribute("dy", "22");
+    v.textContent = p.valor;
+    t.appendChild(v);
+    gR.appendChild(t);
+    return el;
+  });
+  [1, 2, 3, 4].forEach(function (m) {
+    var t = document.createElementNS(NS, "text");
+    t.setAttribute("class", "rotulo-mesa");
+    t.setAttribute("x", SLOT_X[m]); t.setAttribute("y", BASE_MESAS + 52);
+    t.textContent = MESA_CORTO[m - 1];
+    gR.appendChild(t);
+  });
+
+  var botones = Array.prototype.slice.call(document.querySelectorAll(".pasos button"));
+  var actual = "archipielago";
+  function ir(paso) {
+    actual = paso;
+    polys.forEach(function (el, i) { el.style.transform = estados[paso](P[i]); });
+    lienzo.classList.remove("cuadrado", "archipielago", "mesas");
+    lienzo.classList.add(paso);
+    botones.forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.paso === paso)); });
+    pie.textContent = textos[paso];
+  }
+
+  // Recorrido automático hasta que alguien pulse un paso
+  var orden = ["cuadrado", "archipielago", "mesas"], auto = null;
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function parar() { if (auto) { clearInterval(auto); auto = null; } }
+  botones.forEach(function (b) { b.addEventListener("click", function () { parar(); ir(b.dataset.paso); }); });
+  ir("archipielago");
+  if (!reduce) {
+    auto = setInterval(function () { ir(orden[(orden.indexOf(actual) + 1) % orden.length]); }, 3400);
+  }
+
+  document.getElementById("o-graciosa").addEventListener("change", function (e) { lienzo.classList.toggle("con-graciosa", e.target.checked); });
+  document.getElementById("o-bandera").addEventListener("change", function (e) { document.documentElement.classList.toggle("bandera", e.target.checked); });
+
+  // Tabla de correspondencias, de mayor a menor superficie
+  var tabla = document.getElementById("tabla");
+  P.slice().sort(function (a, b) { return b.km - a.km; }).forEach(function (p) {
+    var tr = document.createElement("tr");
+    tr.innerHTML = "<td></td><td></td><td class='km'></td><td></td><td></td>";
+    tr.children[0].textContent = p.forma;
+    tr.children[1].textContent = p.isla;
+    tr.children[2].textContent = p.km.toLocaleString("es-ES") + " km²";
+    tr.children[3].textContent = p.valor;
+    var sw = document.createElement("span");
+    sw.className = "muestra"; sw.style.background = "var(--mesa-" + p.mesa + ")";
+    tr.children[4].appendChild(sw);
+    tr.children[4].appendChild(document.createTextNode(MESA_CORTO[p.mesa - 1] + " · " + MESAS[p.mesa - 1]));
+    tabla.appendChild(tr);
+  });
+})();
+</script>
