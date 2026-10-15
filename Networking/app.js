@@ -1,6 +1,7 @@
 /* Networking 2026 — CIFP Tony Gallardo
-   El tangram se monta al cargar y, con el scroll, se desmonta en las cuatro mesas
-   y después en el archipiélago (siete piezas, siete islas). */
+   Portada: el tangram se monta encima de la foto del horizonte. Con el scroll la foto se funde,
+   el cuadrado se desmonta en las cuatro mesas y después en el archipiélago:
+   ocho piezas, ocho islas (La Graciosa es la pieza que falta). */
 (function () {
   "use strict";
 
@@ -19,35 +20,36 @@
   var titleArch = document.getElementById("stageTitleArch");
   var hint = document.getElementById("scrollHint");
   var islasBox = document.getElementById("islas");
-  var polys = Array.prototype.slice.call(document.querySelectorAll(".grupo polygon"));
+  var piezas = Array.prototype.slice.call(document.querySelectorAll(".grupo .pieza"));
   var foto = document.getElementById("portadaFoto");
   // Desde dónde llega cada pieza en el montaje (--dx, --dy del HTML, en unidades de la retícula)
-  var MONTAJE = polys.map(function (el) {
+  var MONTAJE = piezas.map(function (el) {
     return [parseFloat(el.style.getPropertyValue("--dx")) || 0, parseFloat(el.style.getPropertyValue("--dy")) || 0];
   });
 
   // Caja de cada mesa dentro del tangram (retícula 400×400): x, y, ancho, alto
   var BBOX = [[0, 0, 400, 200], [0, 0, 200, 400], [100, 0, 300, 300], [0, 200, 400, 200]];
 
-  // Siete piezas, siete islas (mismo orden que los polígonos del HTML).
-  // c = centro de la pieza en la retícula; x, y, r = posición y giro en el mapa de 1300×640
-  // (identidad/generar.js); lx, ly = dónde va el nombre de la isla.
+  // Ocho piezas, ocho islas (mismo orden que las piezas del HTML; La Graciosa va aparte).
+  // c = centro de la pieza en la retícula; x, y, r = posición y giro en un mapa de 1300×640
+  // calculado con la longitud y latitud reales; lx, ly = dónde va el nombre de la isla.
   var ISLAS = [
-    { isla: "Tenerife",      valor: "Ideas",      c: [200, 66.7],    x: 473,  y: 367, r: -45, lx: 392,  ly: 290 },
-    { isla: "Fuerteventura", valor: "Proyectos",  c: [66.7, 200],    x: 1102, y: 331, r: 45,  lx: 1060, ly: 478 },
-    { isla: "La Gomera",     valor: "Territorio", c: [366.7, 100],   x: 319,  y: 412, r: 15,  lx: 300,  ly: 492 },
-    { isla: "Gran Canaria",  valor: "Conexiones", c: [300, 200],     x: 717,  y: 453, r: 0,   lx: 717,  ly: 548 },
-    { isla: "El Hierro",     valor: "Personas",   c: [200, 266.7],   x: 131,  y: 517, r: -20, lx: 140,  ly: 594 },
-    { isla: "Lanzarote",     valor: "Futuro",     c: [150, 350],     x: 1196, y: 160, r: -40, lx: 1060, ly: 132 },
-    { isla: "La Palma",      valor: "Empresa",    c: [333.3, 333.3], x: 165,  y: 256, r: 45,  lx: 165,  ly: 350 }
+    { isla: "Tenerife",      valor: "Ideas",      c: [200, 66.7],    x: 467,  y: 365, r: -45, lx: 392,  ly: 290 },
+    { isla: "Fuerteventura", valor: "Proyectos",  c: [66.7, 200],    x: 1092, y: 334, r: 45,  lx: 1040, ly: 480 },
+    { isla: "La Gomera",     valor: "Territorio", c: [366.7, 100],   x: 311,  y: 412, r: 15,  lx: 296,  ly: 492 },
+    { isla: "Gran Canaria",  valor: "Conexiones", c: [300, 200],     x: 709,  y: 453, r: 0,   lx: 709,  ly: 548 },
+    { isla: "El Hierro",     valor: "Personas",   c: [200, 266.7],   x: 120,  y: 515, r: -20, lx: 132,  ly: 594 },
+    { isla: "Lanzarote",     valor: "Futuro",     c: [150, 350],     x: 1180, y: 165, r: -40, lx: 1050, ly: 140 },
+    { isla: "La Palma",      valor: "Empresa",    c: [333.3, 333.3], x: 158,  y: 259, r: 45,  lx: 158,  ly: 352 }
   ];
-  var GRACIOSA = { x: 1260, y: 70 };
+  // La octava isla: una pieza pequeña, solo con el contorno, que queda por completar
+  var GRACIOSA = { isla: "La Graciosa", valor: "La pieza que falta", x: 1262, y: 48, r: 15, lado: 52, lx: 1130, ly: 30 };
   var ESCALA_ISLAS = 0.5;
   // Zona del mapa que se encuadra (x, y, ancho, alto), con sitio para los nombres
-  var MAPA = [40, 40, 1240, 580];
+  var MAPA = [40, 10, 1240, 610];
 
-  // Nombres de las islas y el punto de La Graciosa
-  var ilabels = ISLAS.map(function (d) {
+  // Nombres de las islas
+  function rotulo(d) {
     var e = document.createElement("div");
     e.className = "ilabel";
     e.innerHTML = "<b></b><span></span>";
@@ -55,13 +57,19 @@
     e.lastChild.textContent = d.valor;
     islasBox.appendChild(e);
     return e;
-  });
+  }
+  var ilabels = ISLAS.map(rotulo);
+  var glabel = rotulo(GRACIOSA);
+  glabel.classList.add("ilabel-graciosa");
+  // La pieza de La Graciosa
   var graciosa = document.createElement("div");
   graciosa.className = "graciosa";
-  graciosa.title = "La Graciosa";
-  islasBox.appendChild(graciosa);
+  graciosa.setAttribute("aria-hidden", "true");
+  graciosa.innerHTML = '<svg viewBox="-6 -6 112 112"><polygon points="0,0 100,0 0,100"/></svg>';
+  stage.insertBefore(graciosa, islasBox);
 
   var L = null;
+  var intro = (reduceMotion ? 99 : 0); // segundos transcurridos del montaje inicial
 
   function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
   function ease(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
@@ -77,26 +85,28 @@
     var W = stage.clientWidth, H = stage.clientHeight;
     var wide = W >= 900 && W / H >= 1.15;
 
-    // --- Estado inicial: texto + tangram montado ---
+    // --- Portada: texto a la izquierda (arriba en móvil) y el tangram encima de la foto ---
     var S, tx, ty;
     hero.style.maxWidth = wide ? Math.min(W * 0.5, 640) + "px" : (W - 32) + "px";
-    var hh = hero.offsetHeight, hw = hero.offsetWidth;
+    var hh = hero.offsetHeight;
     if (wide) {
       hero.style.left = Math.max(32, W * 0.07) + "px";
       hero.style.top = (TOPBAR + (H - TOPBAR - hh) / 2) + "px";
-      S = Math.round(Math.min(H * 0.6, W * 0.4));
+      S = Math.round(Math.min(H * 0.56, W * 0.34));
+      tx = Math.round(W * 0.72 - S / 2);
+      ty = Math.round(TOPBAR + (H - TOPBAR - S) / 2 - H * 0.04);
     } else {
+      var top = TOPBAR + 28;
       hero.style.left = "16px";
-      hero.style.top = (TOPBAR + 28) + "px";
-      S = Math.round(Math.min(W - 64, H * 0.55));
+      hero.style.top = top + "px";
+      S = Math.max(140, Math.round(Math.min(W - 64, H - top - hh - 110)));
+      tx = Math.round((W - S) / 2);
+      ty = Math.round(top + hh + Math.max(24, (H - top - hh - 70 - S) / 2));
     }
-    // El tangram se monta en el centro de la escena cuando la foto de portada se funde
-    tx = Math.round((W - S) / 2);
-    ty = Math.round(TOPBAR + (H - TOPBAR - S) / 2);
     var u = S / 400;
     grupos.forEach(function (g) { g.style.width = S + "px"; g.style.height = S + "px"; });
 
-    // --- Estado final: las cuatro mesas colocadas ---
+    // --- Las cuatro mesas colocadas ---
     var areaTop = TOPBAR + (wide ? 130 : 108);
     var cs, gap, labelH, slots = [];
     if (wide) {
@@ -141,19 +151,24 @@
     var km = Math.min((W - 32) / MAPA[2], mH / MAPA[3]);
     var ox = (W - MAPA[2] * km) / 2 - MAPA[0] * km;
     var oy = mTop + (mH - MAPA[3] * km) / 2 - MAPA[1] * km;
-    // Posición de cada pieza en coordenadas locales del tangram (unidades de la retícula)
+    // Posición de cada pieza en coordenadas locales de su mesa (unidades de la retícula):
+    // las mesas vuelven a su sitio de portada antes de abrirse en islas
     var A = ISLAS.map(function (d) {
       return { x: (ox + d.x * km - tx) / u, y: (oy + d.y * km - ty) / u, r: d.r, s: ESCALA_ISLAS * km / u };
     });
-    islasBox.classList.toggle("compacto", km < 0.55);
-    ilabels.forEach(function (e, n) {
-      e.style.left = (ox + ISLAS[n].lx * km) + "px";
-      e.style.top = (oy + ISLAS[n].ly * km) + "px";
+    var compacto = km < 0.55;
+    islasBox.classList.toggle("compacto", compacto);
+    ilabels.concat([glabel]).forEach(function (e, n) {
+      var d = n < ISLAS.length ? ISLAS[n] : GRACIOSA;
+      e.style.left = (ox + d.lx * km) + "px";
+      e.style.top = (oy + d.ly * km) + "px";
     });
-    var gr = Math.max(5, 16 * km);
-    graciosa.style.width = graciosa.style.height = gr + "px";
-    graciosa.style.left = (ox + GRACIOSA.x * km - gr / 2) + "px";
-    graciosa.style.top = (oy + GRACIOSA.y * km - gr / 2) + "px";
+    // La pieza de La Graciosa: más grande en móvil para que se vea
+    var gl = GRACIOSA.lado * km * (compacto ? 1.4 : 1);
+    graciosa.style.width = graciosa.style.height = gl + "px";
+    graciosa.style.left = (ox + GRACIOSA.x * km - gl / 2) + "px";
+    graciosa.style.top = (oy + GRACIOSA.y * km - gl / 2) + "px";
+    graciosa.style.setProperty("--r", GRACIOSA.r + "deg");
 
     labels.forEach(function (lb, n) {
       var w = cs + gap - 4;
@@ -173,42 +188,43 @@
   function render() {
     if (!L) return;
     var p = progress();
-    var H0 = ease(clamp(p / 0.1));                 // la foto de portada y el título se funden
-    var J = ease(clamp((p - 0.2) / 0.24));         // el cuadrado se desmonta en las cuatro mesas
-    var I = ease(clamp((p - 0.6) / 0.26));         // y las mesas se deshacen en las siete islas
-    var T = clamp((p - 0.38) / 0.07) * (1 - clamp((p - 0.56) / 0.05)); // nombres de las mesas
-    var TI = clamp((p - 0.84) / 0.07);             // nombres de las islas
+    var H0 = ease(clamp(p / 0.12));                // la foto de portada y el título se funden
+    var J = ease(clamp((p - 0.14) / 0.24));        // el cuadrado se desmonta en las cuatro mesas
+    var I = ease(clamp((p - 0.58) / 0.26));        // y las mesas se deshacen en las ocho islas
+    var T = clamp((p - 0.32) / 0.08) * (1 - clamp((p - 0.52) / 0.05)); // nombres de las mesas
+    var TI = clamp((p - 0.82) / 0.08);             // nombres de las islas
 
-    // Las mesas (grupos) van a su sitio; al pasar a islas vuelven a su posición original,
+    // Las mesas (grupos) van a su sitio; al pasar a islas vuelven a su posición de portada,
     // que es desde donde se calculan las islas
     var g = J * (1 - I);
     L.M.forEach(function (m, i) {
       var x = lerp(m.start.x, m.end.x, g), y = lerp(m.start.y, m.end.y, g), sc = lerp(1, L.endScale, g);
       grupos[i].style.transform = "translate(" + x + "px," + y + "px) scale(" + sc + ") translate(" + (-m.bcx) + "px," + (-m.bcy) + "px)";
     });
-    // Cada pieza: primero llega girando y encaja en el cuadrado (montaje, escalonado),
-    // y al final, dentro de su mesa, viaja a su isla
-    var k = I;
-    polys.forEach(function (el, n) {
+    // Cada pieza: al cargar llega girando y encaja (montaje escalonado);
+    // al final, dentro de su mesa, viaja a su isla
+    piezas.forEach(function (el, n) {
       var d = ISLAS[n];
-      if (k > 0) {
+      if (I > 0) {
         var a = L.A[n];
         el.style.opacity = 1;
-        el.style.transform = "translate(" + lerp(d.c[0], a.x, k) + "px," + lerp(d.c[1], a.y, k) + "px) rotate(" + (a.r * k) + "deg) scale(" + lerp(1, a.s, k) + ") translate(" + (-d.c[0]) + "px," + (-d.c[1]) + "px)";
+        el.style.transform = "translate(" + lerp(d.c[0], a.x, I) + "px," + lerp(d.c[1], a.y, I) + "px) rotate(" + (a.r * I) + "deg) scale(" + lerp(1, a.s, I) + ") translate(" + (-d.c[0]) + "px," + (-d.c[1]) + "px)";
         return;
       }
-      var mo = reduceMotion ? clamp((p - 0.03) / 0.1) : ease(clamp((p - 0.03 - n * 0.012) / 0.09));
+      var mo = ease(clamp((intro - 0.15 - n * 0.08) / 0.9));
       el.style.opacity = mo;
-      if (mo >= 1 || reduceMotion) { el.style.transform = ""; return; }
+      if (mo >= 1) { el.style.transform = ""; return; }
       var f = 1 - mo;
       el.style.transform = "translate(" + (d.c[0] + MONTAJE[n][0] * f) + "px," + (d.c[1] + MONTAJE[n][1] * f) + "px) rotate(" + (-135 * f) + "deg) scale(" + lerp(1, 0.6, f) + ") translate(" + (-d.c[0]) + "px," + (-d.c[1]) + "px)";
     });
+    // Las palabras se ven en el cuadrado y en las mesas; en las islas mandan los nombres
+    tangram.style.setProperty("--pal", 1 - clamp(I * 2));
 
     foto.style.opacity = 1 - H0;
     hero.style.opacity = 1 - H0;
     hero.style.transform = "translateY(" + (-40 * H0) + "px)";
     islasBox.style.opacity = TI;
-    graciosa.style.opacity = k;
+    graciosa.style.opacity = clamp((I - 0.6) / 0.4);
     titleArch.style.opacity = TI;
     titleArch.style.transform = "translateY(" + ((1 - TI) * -12) + "px)";
     labels.forEach(function (lb) {
@@ -217,8 +233,8 @@
     });
     title.style.opacity = T;
     title.style.transform = "translateY(" + ((1 - T) * -12) + "px)";
-    hint.style.opacity = clamp(1 - p * 8);
-    tangram.classList.toggle("abierto", p > 0.4);
+    hint.style.opacity = clamp(1 - p * 8) * clamp(intro - 1);
+    tangram.classList.toggle("abierto", p > 0.36);
   }
 
   var ticking = false;
@@ -229,22 +245,38 @@
   }, { passive: true });
   window.addEventListener("resize", function () { layout(); render(); });
 
-  // Pulsar una mesa: si el tangram está cerrado, lo abre; si está abierto, va a la mesa
+  // Pulsar una mesa: si el tangram está cerrado, lo abre en mesas; si está abierto, va a la mesa
   grupos.forEach(function (g) {
     g.addEventListener("click", function () {
       var behavior = reduceMotion ? "auto" : "smooth";
-      if (progress() < 0.4) {
+      if (progress() < 0.36) {
         var run = wrap.offsetHeight - stage.clientHeight;
-        window.scrollTo({ top: wrap.offsetTop + run * 0.5, behavior: behavior });
+        window.scrollTo({ top: wrap.offsetTop + run * 0.46, behavior: behavior });
       } else {
         document.getElementById(g.getAttribute("data-target")).scrollIntoView({ behavior: behavior });
       }
     });
   });
 
-  function start() { layout(); render(); }
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(start); else start();
+  // Montaje inicial encima de la foto (2 s); sin animación si el sistema pide menos movimiento
+  function arrancarMontaje() {
+    if (intro >= 2) { render(); return; }
+    var t0 = null, hecho = false;
+    function paso(ts) {
+      if (hecho) return;
+      if (t0 === null) t0 = ts;
+      intro = (ts - t0) / 1000;
+      if (intro >= 2) hecho = true;
+      render();
+      if (!hecho) requestAnimationFrame(paso);
+    }
+    requestAnimationFrame(paso);
+    // Respaldo: si el navegador pausa la animación (pestaña en segundo plano), el tangram queda montado igual
+    setTimeout(function () { if (!hecho) { hecho = true; intro = 99; render(); } }, 2600);
+  }
+  function start() { layout(); arrancarMontaje(); }
   layout(); render();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(start); else start();
 
   /* ---------- Aparición de contenidos ---------- */
   var reveals = document.querySelectorAll(".reveal");

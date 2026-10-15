@@ -57,34 +57,36 @@ img { display: block; max-width: 100%; }
 @media (min-width: 900px) { .topnav { display: flex; } .topdate { margin-left: 12px; } .topbar { padding: 0 32px; } }
 
 /* ---------- Escena del tangram ---------- */
-.stage-wrap { position: relative; height: 600vh; background: var(--noche); }
+.stage-wrap { position: relative; height: 540vh; background: var(--noche); }
 .stage {
   position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden;
   background-color: var(--noche);
 }
 
-/* Portada: foto del horizonte desde la azotea del centro (con su logo a la derecha).
+/* Portada: foto del atardecer desde el centro, con Tenerife y el Teide al fondo.
    Un velo azul noche a la izquierda (arriba en móvil) deja leer el título; al hacer scroll se funde con el fondo. */
 .portada-foto {
   position: absolute; inset: 0; will-change: opacity;
   background:
-    linear-gradient(90deg, rgba(20,33,61,.92) 0%, rgba(20,33,61,.78) 32%, rgba(20,33,61,.15) 58%, rgba(20,33,61,0) 70%),
-    url("img/portada-horizonte.webp") 70% 55% / cover no-repeat;
+    linear-gradient(90deg, rgba(20,33,61,.85) 0%, rgba(20,33,61,.6) 30%, rgba(20,33,61,.1) 55%, rgba(20,33,61,0) 66%),
+    url("img/portada-horizonte.webp") 62% 80% / cover no-repeat;
 }
 @media (max-width: 899px), (max-aspect-ratio: 23/20) {
   .portada-foto {
     background:
-      linear-gradient(180deg, rgba(20,33,61,.94) 0%, rgba(20,33,61,.82) 38%, rgba(20,33,61,.1) 62%, rgba(20,33,61,0) 72%),
-      url("img/portada-horizonte.webp") 80% 50% / cover no-repeat;
+      linear-gradient(180deg, rgba(20,33,61,.8) 0%, rgba(20,33,61,.55) 34%, rgba(20,33,61,0) 55%),
+      url("img/portada-horizonte.webp") 66% 70% / cover no-repeat;
   }
 }
 
 .hero { position: absolute; left: 0; top: 0; color: var(--arena); will-change: transform, opacity; }
-.organiza { margin-bottom: 28px; }
+.organiza { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+.organiza img { width: 96px; height: 96px; flex: none; filter: drop-shadow(0 6px 18px rgba(0,0,0,.35)); }
 .organiza p { margin: 0; font-size: 1.15rem; font-weight: 600; line-height: 1.2; }
 .organiza span { display: block; font-size: .7rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: #c9ccd8; margin-bottom: 3px; }
 @media (max-width: 899px) {
-  .organiza { margin-bottom: 18px; }
+  .organiza { margin-bottom: 18px; gap: 12px; }
+  .organiza img { width: 56px; height: 56px; }
   .organiza p { font-size: 1rem; }
 }
 .hero h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(3.6rem, 9vw, 8.5rem); line-height: .9; letter-spacing: .01em; text-wrap: balance; }
@@ -99,7 +101,15 @@ img { display: block; max-width: 100%; }
   cursor: pointer; pointer-events: none;
 }
 .grupo svg { display: block; width: 100%; height: 100%; overflow: visible; }
-.grupo polygon { pointer-events: visiblePainted; transition: filter .25s; transform-box: view-box; transform-origin: 0 0; }
+.grupo .pieza { transform-box: view-box; transform-origin: 0 0; opacity: 0; }
+.grupo polygon { pointer-events: visiblePainted; transition: filter .25s; }
+/* Palabra clave de cada pieza */
+.pal {
+  font-family: var(--display); fill: #ffffff; letter-spacing: .02em;
+  text-anchor: middle; dominant-baseline: central;
+  pointer-events: none; opacity: var(--pal, 1);
+}
+.pal.osc { fill: var(--noche); }
 
 /* Archipiélago: nombres de las islas */
 .islas { position: absolute; inset: 0; pointer-events: none; opacity: 0; }
@@ -108,7 +118,11 @@ img { display: block; max-width: 100%; }
 .ilabel span { display: block; font-size: .8rem; color: #b4b8c8; }
 .islas.compacto .ilabel b { font-size: .68rem; }
 .islas.compacto .ilabel span { display: none; }
-.graciosa { position: absolute; border-radius: 50%; background: #9aa0b4; opacity: 0; pointer-events: none; }
+/* La Graciosa: la octava pieza, la que falta, solo con su contorno */
+.graciosa { position: absolute; opacity: 0; pointer-events: none; transform: rotate(var(--r, 0deg)); }
+.graciosa svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.graciosa polygon { fill: none; stroke: var(--arena); stroke-width: 6; stroke-dasharray: 12 8; stroke-linejoin: round; }
+.ilabel-graciosa span { color: var(--mesa-4); }
 .grupo:focus-visible { outline: none; }
 .grupo:focus-visible polygon { stroke: var(--arena); stroke-width: 6; }
 .tangram.abierto .grupo:hover polygon { filter: brightness(1.1) saturate(1.1); }

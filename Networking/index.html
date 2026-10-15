@@ -36,10 +36,11 @@
     <div class="stage" id="stage">
 
       <!-- Portada: el horizonte desde la azotea del CIFP, con su logo -->
-      <div class="portada-foto" id="portadaFoto" role="img" aria-label="Atardecer sobre el mar desde la azotea del CIFP Tony Gallardo, con Tenerife y el Teide al fondo y el logo del centro"></div>
+      <div class="portada-foto" id="portadaFoto" role="img" aria-label="Atardecer sobre el mar desde Gran Canaria, con Tenerife y el Teide al fondo"></div>
 
       <div class="hero" id="hero">
         <div class="organiza">
+          <img src="img/logo-tony-gallardo.webp" alt="" width="96" height="96">
           <p><span>Organiza</span>CIFP Tony Gallardo</p>
         </div>
         <p class="eyebrow">20 de noviembre de 2026</p>
@@ -49,7 +50,7 @@
 
       <div class="stage-title" id="stageTitleArch">
         <p class="eyebrow">Juntos somos FP</p>
-        <h2>Siete piezas, siete islas</h2>
+        <h2>Ocho piezas, ocho islas</h2>
       </div>
 
       <div class="islas" id="islas" aria-hidden="true"></div>
@@ -60,23 +61,28 @@
       </div>
 
       <div class="tangram" id="tangram">
+        <!-- Cada pieza lleva su palabra clave -->
         <button class="grupo" data-mesa="1" data-target="mesa-1" aria-label="Mesa 1: El aula como laboratorio de ideas">
-          <svg viewBox="0 0 400 400" aria-hidden="true"><polygon class="m1" style="--i:0;--dx:-180px;--dy:-220px" points="12.07,5 387.93,5 200,192.93"/></svg>
+          <svg viewBox="0 0 400 400" aria-hidden="true">
+            <g class="pieza" style="--i:0;--dx:-180px;--dy:-220px"><polygon class="m1" points="12.07,5 387.93,5 200,192.93"/><text class="pal" x="200" y="72" font-size="46">IDEAS</text></g>
+          </svg>
         </button>
         <button class="grupo" data-mesa="2" data-target="mesa-2" aria-label="Mesa 2: Proyectos en acción">
-          <svg viewBox="0 0 400 400" aria-hidden="true"><polygon class="m2" style="--i:1;--dx:-260px;--dy:40px" points="5,12.07 192.93,200 5,387.93"/></svg>
+          <svg viewBox="0 0 400 400" aria-hidden="true">
+            <g class="pieza" style="--i:1;--dx:-260px;--dy:40px"><polygon class="m2" points="5,12.07 192.93,200 5,387.93"/><text class="pal" x="82" y="200" font-size="34">PROYECTOS</text></g>
+          </svg>
         </button>
         <button class="grupo" data-mesa="3" data-target="mesa-3" aria-label="Mesa 3: Radio Atlante conecta">
           <svg viewBox="0 0 400 400" aria-hidden="true">
-            <polygon class="m3" style="--i:2;--dx:240px;--dy:-200px" points="395,12.07 395,187.93 307.07,100"/>
-            <polygon class="m3" style="--i:3;--dx:280px;--dy:20px" points="207.07,200 300,107.07 392.93,200 300,292.93"/>
-            <polygon class="m3" style="--i:4;--dx:-120px;--dy:260px" points="200,207.07 287.93,295 112.07,295"/>
+            <g class="pieza" style="--i:2;--dx:240px;--dy:-200px"><polygon class="m3" points="395,12.07 395,187.93 307.07,100"/><text class="pal" x="370" y="100" font-size="22" transform="rotate(-90 370 100)">TERRITORIO</text></g>
+            <g class="pieza" style="--i:3;--dx:280px;--dy:20px"><polygon class="m3" points="207.07,200 300,107.07 392.93,200 300,292.93"/><text class="pal" x="300" y="200" font-size="24">CONEXIONES</text></g>
+            <g class="pieza" style="--i:4;--dx:-120px;--dy:260px"><polygon class="m3" points="200,207.07 287.93,295 112.07,295"/><text class="pal" x="200" y="276" font-size="22">PERSONAS</text></g>
           </svg>
         </button>
         <button class="grupo" data-mesa="4" data-target="mesa-4" aria-label="Mesa 4: TG Lab">
           <svg viewBox="0 0 400 400" aria-hidden="true">
-            <polygon class="m4" style="--i:5;--dx:-220px;--dy:240px" points="12.07,395 102.07,305 287.93,305 197.93,395"/>
-            <polygon class="m4" style="--i:6;--dx:220px;--dy:220px" points="395,212.07 395,395 212.07,395"/>
+            <g class="pieza" style="--i:5;--dx:-220px;--dy:240px"><polygon class="m4" points="12.07,395 102.07,305 287.93,305 197.93,395"/><text class="pal osc" x="150" y="350" font-size="34">FUTURO</text></g>
+            <g class="pieza" style="--i:6;--dx:220px;--dy:220px"><polygon class="m4" points="395,212.07 395,395 212.07,395"/><text class="pal osc" x="332" y="362" font-size="30">EMPRESA</text></g>
           </svg>
         </button>
       </div>

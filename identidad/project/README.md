@@ -1,4 +1,4 @@
-Networking 2026 es un encuentro entre empresas y profesorado en el CIFP Tony Gallardo, el 20 de noviembre de 2026, con el lema **Juntos somos FP**. La identidad es un tangram: siete piezas que juntas forman un cuadrado, que son también las siete islas de Canarias y que se agrupan en las cuatro mesas de trabajo. Montar el cuadrado, desmontarlo en mesas y abrirlo en el archipiélago es la idea de todo el sistema.
+Networking 2026 es un encuentro entre empresas y profesorado en el CIFP Tony Gallardo, el 20 de noviembre de 2026, con el lema **Juntos somos FP**. La identidad es un tangram: siete piezas que juntas forman un cuadrado, que se agrupan en las cuatro mesas de trabajo y que son también las islas de Canarias, más una octava pieza, la que falta. Montar el cuadrado, desmontarlo en mesas y abrirlo en el archipiélago es la idea de todo el sistema.
 
 ## El concepto: un tangram de cuatro mesas
 
@@ -9,9 +9,9 @@ El lema, **Juntos somos FP**, dice lo mismo con palabras: la Formación Profesio
 - En texto corrido se escribe «Juntos somos FP», con «FP» siempre en mayúsculas y sin punto final.
 - Acompaña al tangram montado o al archipiélago, nunca a las mesas separadas: las mesas hablan del programa; el lema, de lo que forman juntas.
 
-## Siete piezas, siete islas
+## Ocho piezas, ocho islas
 
-El tangram tiene siete piezas y Canarias siete islas mayores, y el escudo del Gobierno de Canarias son siete triángulos: es el mismo lenguaje. Cada pieza es también una isla, con un tamaño parecido al real (las dos más grandes son los triángulos grandes, las dos más pequeñas los triángulos pequeños). **Separadas son islas; juntas forman la figura.**
+Canarias tiene ocho islas habitadas. Las siete del tangram son las siete islas mayores, cada una con un tamaño parecido al real (las dos más grandes son los triángulos grandes, las dos más pequeñas los triángulos pequeños). **La octava, La Graciosa, es la pieza que falta**: una pieza pequeña que solo se dibuja con su contorno, porque la completa quien se suma. Es la misma idea del aviso «Falta tu pieza» de las empresas participantes. **Separadas son islas; juntas forman la figura.**
 
 | Pieza | Forma | Isla | Valor | Mesa | Color |
 | --- | --- | --- | --- | --- | --- |
@@ -24,11 +24,19 @@ El tangram tiene siete piezas y Canarias siete islas mayores, y el escudo del Go
 | 7 | Triángulo mediano | La Palma | Empresa | Mesa 4 · TG Lab | `mesa-4` amarillo canario |
 
 El **archipiélago** (`isotipo-archipielago.svg`) es la composición con las siete piezas en el lugar de su isla, de El Hierro a Lanzarote, calculado a partir de la longitud y latitud reales. Las piezas van al 50 % del tamaño del cuadrado y cada una con su giro.
-- **La Graciosa**, octava isla habitada desde 2018, va siempre como un punto gris junto al extremo norte de Lanzarote. No es una pieza: no lleva color de mesa ni valor.
+- **La Graciosa** va siempre al norte de Lanzarote como un triángulo pequeño, sin relleno y con contorno discontinuo (`#9aa0b4` en los archivos, `marca-arena` sobre azul noche). No lleva color de mesa; su rótulo es «La Graciosa · La pieza que falta».
 - Úsalo para hablar del territorio: cartel, redes, presentaciones y como paso intermedio de la animación. No sustituye al isotipo como firma.
 - Cuando se rotulen las islas, el nombre va en `cuerpo` 600 y el valor debajo en `nota`, en `tinta-suave`.
 
 Geometría: el tangram se dibuja sobre una retícula de 4 × 4 unidades. Todos los cortes van a 0°, 45° o 90°. Entre pieza y pieza hay siempre una **junta** del 2,5 % del lado (`junta`), que deja ver el fondo. El archivo `identidad/generar.js` del repositorio genera todos los SVG a partir de esas coordenadas y de las posiciones de las islas: cambia la geometría, las islas o los colores ahí, nunca a mano en un SVG.
+
+## Palabras en las piezas
+
+En las piezas grandes (la portada de la web, carteles, flyers y roll-ups) cada pieza lleva escrita su palabra clave: IDEAS, PROYECTOS, TERRITORIO, CONEXIONES, PERSONAS, FUTURO y EMPRESA.
+- Bebas Neue, en mayúsculas y centrada en la pieza; TERRITORIO va en vertical, a lo largo del cateto del triángulo pequeño.
+- Blanco sobre rojo, verde y azul; `marca-noche` sobre amarillo.
+- Posición y tamaño de cada palabra en `identidad/generar.js` (`PALABRAS`), en unidades de la retícula. No las cambies a mano.
+- En el isotipo, los símbolos de mesa y cualquier tangram de menos de 120 px no se ponen palabras: no se leerían. Tampoco en el archipiélago, donde mandan los nombres de las islas.
 
 ## Logotipo
 
@@ -82,9 +90,9 @@ El patrón inspirado en el **calado**, el bordado geométrico tradicional de las
 ## Movimiento
 
 La animación cuenta el concepto en tres tiempos:
-1. **Montaje** al cargar: las siete piezas llegan desde fuera girando y encajan en el cuadrado, con unos 80 ms de diferencia entre pieza y pieza (1,2 s en total, curva de salida suave).
+1. **Montaje** al cargar, encima de la foto de portada: las siete piezas llegan desde fuera girando y encajan en el cuadrado, con unos 80 ms de diferencia entre pieza y pieza (unos 1,5 s en total, curva de salida suave). Por las juntas se ve la foto.
 2. **Mesas** al empezar el scroll: el cuadrado se desmonta en las cuatro mesas, que se colocan una junto a otra con su nombre debajo bajo el título «Elige tu mesa». Al pulsar una mesa se va a su sección.
-3. **Archipiélago** al seguir: las mesas se deshacen y cada pieza viaja a su isla, gira y se reduce. Aparece el título «Siete piezas, siete islas» y el nombre de cada isla con su valor. Es el final de la escena: del evento al programa, y del programa al territorio.
+3. **Archipiélago** al seguir: las mesas se deshacen y cada pieza viaja a su isla, gira y se reduce. Aparece la pieza de La Graciosa, el título «Ocho piezas, ocho islas» y el nombre de cada isla con su valor. Es el final de la escena: del evento al programa, y del programa al territorio.
 
 Respeta `prefers-reduced-motion`: sin montaje y con los pasos sustituidos por estados fijos.
 
@@ -106,7 +114,7 @@ No hay una familia de iconos. Los únicos símbolos de la marca son las cuatro m
 
 El CIFP Tony Gallardo organiza el evento, así que su logo aparece siempre en la portada de cada soporte (web, cartel, presentación, acreditación), con la palabra «Organiza» en `etiqueta` y el nombre «CIFP Tony Gallardo» al lado.
 - Ponlo sobre un círculo blanco, ya que el logo es redondo, y nunca dentro del tangram ni pegado a él.
-- En la web, la portada es la foto del horizonte desde la azotea del centro, con Tenerife y el Teide al fondo y el logo del CIFP a la derecha. Un velo `marca-noche` a la izquierda (arriba en móvil) deja leer «Organiza · CIFP Tony Gallardo», el nombre y el lema; al hacer scroll la foto se funde con el azul noche y empieza el montaje del tangram. La foto es la única imagen fotográfica de la web.
+- En la web, la portada es la foto del atardecer sobre el mar, con Tenerife y el Teide al fondo. Encima van, a la izquierda (arriba en móvil), el logo del CIFP con «Organiza · CIFP Tony Gallardo», el nombre y el lema sobre un velo `marca-noche`; y a la derecha (debajo en móvil), el tangram montado. Al hacer scroll la foto se funde con el azul noche. Es la única imagen fotográfica de la web.
 - Respeta el logo tal cual: no lo recolorees ni lo recortes.
 
 ## Franja de instituciones

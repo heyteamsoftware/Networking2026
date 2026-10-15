@@ -64,10 +64,21 @@ function parrafo(f, s, x, y, size, maxW, fill, { lh = 1.35, anchor = "start" } =
 }
 
 // ---------- Tangram, mesas y archipiélago ----------
-function tangram(x, y, lado) {
+// El tangram montado; con `palabras`, cada pieza lleva su palabra clave (en contornos)
+function tangram(x, y, lado, { palabras = false } = {}) {
   const k = lado / 400;
-  return `<g transform="translate(${x} ${y}) scale(${k})">` + G.PIEZAS.map((p) =>
-    `<polygon points="${G.pts(G.inset(p.pts, G.JUNTA))}" fill="${G.MESA_COLOR[p.mesa]}"/>`).join("") + `</g>`;
+  let s = `<g transform="translate(${x} ${y}) scale(${k})">` + G.PIEZAS.map((p) =>
+    `<polygon points="${G.pts(G.inset(p.pts, G.JUNTA))}" fill="${G.MESA_COLOR[p.mesa]}"/>`).join("");
+  if (palabras) {
+    for (const p of G.PIEZAS) {
+      const w = G.PALABRAS[p.id], palabra = G.ISLAS[p.id].palabra;
+      const color = w.oscura ? C.noche : "#ffffff";
+      // la línea base queda media altura de mayúscula por debajo del centro
+      const t = txt(G.BEBAS, palabra, w.x, w.y + w.size * CAP / 2, w.size, color, { anchor: "middle", tracking: w.size * 0.02 });
+      s += w.rot ? `<g transform="rotate(${w.rot} ${w.x} ${w.y})">${t}</g>` : t;
+    }
+  }
+  return s + `</g>`;
 }
 const BBOX = [[0, 0, 400, 200], [0, 0, 200, 400], [100, 0, 300, 300], [0, 200, 400, 200]];
 // Símbolo de la mesa m (0..3): `lado` es el lado del tangram completo, así todas van a la misma escala.
@@ -80,13 +91,13 @@ function simbolo(m, x, y, lado) {
 const simboloTam = (m, lado) => [BBOX[m][2] * lado / 400, BBOX[m][3] * lado / 400];
 // Archipiélago encuadrado en un ancho dado; (x, y) arriba a la izquierda del encuadre 40,40,1240,560
 function archipielago(x, y, ancho, { rotulos = false, colorRotulo = C.arena, colorValor = SUAVE } = {}) {
-  const k = ancho / 1240, ox = x - 40 * k, oy = y - 40 * k;
+  const k = ancho / 1240, ox = x - 40 * k, oy = y - 15 * k;
   let s = `<g transform="translate(${ox} ${oy}) scale(${k})">`;
   for (const p of G.PIEZAS) {
     const i = G.ISLAS[p.id], [cx, cy] = G.centroide(p.pts);
     s += `<polygon points="${G.pts(G.inset(p.pts, G.JUNTA))}" fill="${G.MESA_COLOR[p.mesa]}" transform="translate(${i.x} ${i.y}) rotate(${i.r}) scale(${G.ESCALA_ISLAS}) translate(${-cx} ${-cy})"/>`;
   }
-  s += `<circle cx="${G.GRACIOSA.x}" cy="${G.GRACIOSA.y}" r="${G.GRACIOSA.r}" fill="#9aa0b4"/></g>`;
+  s += G.graciosaSVG("#9aa0b4") + `</g>`;
   if (rotulos) {
     // Nombres de isla (mismas posiciones que la web)
     const R = { ideas: [392, 290], proyectos: [1060, 478], territorio: [300, 492], conexiones: [717, 548], personas: [140, 594], futuro: [1060, 132], empresa: [165, 350] };
@@ -170,7 +181,7 @@ function cartel() {
   s += organiza(m, m, 24);
 
   const lado = 168, ty = 54;
-  s += tangram((W - lado) / 2, ty, lado);
+  s += tangram((W - lado) / 2, ty, lado, { palabras: true });
 
   const tTam = tamPara(G.BEBAS, "NETWORKING 2026", ancho);
   let y = ty + lado + 16 + tTam * CAP;
@@ -216,7 +227,7 @@ function flyerFrente() {
   let s = "";
   s += organiza(m, m, 14);
   const lado = 82, ty = 32;
-  s += tangram((W - lado) / 2, ty, lado);
+  s += tangram((W - lado) / 2, ty, lado, { palabras: true });
   const tTam = tamPara(G.BEBAS, "NETWORKING 2026", ancho);
   let y = ty + lado + 9 + tTam * CAP;
   s += tramos(G.BEBAS, [{ t: "NETWORKING ", fill: C.arena }, { t: "2026", fill: C.sol }], W / 2, y, tTam, { anchor: "middle" });
@@ -302,7 +313,7 @@ function rollup() {
   // Tangram
   y += 45;
   const lado = 320;
-  s += tangram((W - lado) / 2, y, lado);
+  s += tangram((W - lado) / 2, y, lado, { palabras: true });
   y += lado + 50;
 
   // Fecha

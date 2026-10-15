@@ -39,15 +39,31 @@ const DESPIECE = [[0, -42], [-42, 0], [38, -14], [0, 42]];
 // Cada pieza es también una isla, de tamaño parecido al real. Posición en un lienzo de 1300×640
 // a partir de la longitud y latitud reales (≈2,5 px por km); r = giro en grados; las piezas van al 50 %.
 const ISLAS = {
-  ideas:      { isla: "Tenerife",      km: 2034, x: 473,  y: 367, r: -45 },
-  proyectos:  { isla: "Fuerteventura", km: 1660, x: 1102, y: 331, r: 45 },
-  territorio: { isla: "La Gomera",     km: 370,  x: 319,  y: 412, r: 15 },
-  conexiones: { isla: "Gran Canaria",  km: 1560, x: 717,  y: 453, r: 0 },
-  personas:   { isla: "El Hierro",     km: 269,  x: 131,  y: 517, r: -20 },
-  futuro:     { isla: "Lanzarote",     km: 846,  x: 1196, y: 160, r: -40 },
-  empresa:    { isla: "La Palma",      km: 708,  x: 165,  y: 256, r: 45 },
+  ideas:      { isla: "Tenerife",      km: 2034, x: 467,  y: 365, r: -45, palabra: "IDEAS" },
+  proyectos:  { isla: "Fuerteventura", km: 1660, x: 1092, y: 334, r: 45,  palabra: "PROYECTOS" },
+  territorio: { isla: "La Gomera",     km: 370,  x: 311,  y: 412, r: 15,  palabra: "TERRITORIO" },
+  conexiones: { isla: "Gran Canaria",  km: 1560, x: 709,  y: 453, r: 0,   palabra: "CONEXIONES" },
+  personas:   { isla: "El Hierro",     km: 269,  x: 120,  y: 515, r: -20, palabra: "PERSONAS" },
+  futuro:     { isla: "Lanzarote",     km: 846,  x: 1180, y: 165, r: -40, palabra: "FUTURO" },
+  empresa:    { isla: "La Palma",      km: 708,  x: 158,  y: 259, r: 45,  palabra: "EMPRESA" },
 };
-const GRACIOSA = { x: 1260, y: 70, r: 8 }; // la octava isla, como un punto junto a Lanzarote
+// La octava isla es la pieza que falta: un triángulo pequeño, solo con su contorno discontinuo.
+// lado = longitud de sus catetos en unidades del mapa; r = giro.
+const GRACIOSA = { isla: "La Graciosa", x: 1262, y: 48, r: 15, lado: 52 };
+function graciosaSVG(color, grosor = 3) {
+  const l = GRACIOSA.lado;
+  return `<g transform="translate(${GRACIOSA.x} ${GRACIOSA.y}) rotate(${GRACIOSA.r}) translate(${-l / 3} ${-l / 3})"><polygon points="0,0 ${l},0 0,${l}" fill="none" stroke="${color}" stroke-width="${grosor}" stroke-dasharray="${grosor * 2.5} ${grosor * 1.6}" stroke-linejoin="round" data-isla="La Graciosa"/></g>`;
+}
+// Palabra clave de cada pieza: posición y tamaño en la retícula 400×400 (como en la web)
+const PALABRAS = {
+  ideas:      { x: 200, y: 72,  size: 46 },
+  proyectos:  { x: 82,  y: 200, size: 34 },
+  territorio: { x: 370, y: 100, size: 22, rot: -90 },
+  conexiones: { x: 300, y: 200, size: 24 },
+  personas:   { x: 200, y: 276, size: 22 },
+  futuro:     { x: 150, y: 350, size: 34, oscura: true },
+  empresa:    { x: 332, y: 362, size: 30, oscura: true },
+};
 const ESCALA_ISLAS = 0.5;
 function centroide(p) { return p.reduce((a, [x, y]) => [a[0] + x / p.length, a[1] + y / p.length], [0, 0]); }
 
@@ -133,10 +149,10 @@ const files = {};
 
 files["isotipo.svg"] = svg("0 0 400 400", `  ${piezas({ colores: MESA_COLOR })}`, "Networking 2026 — isotipo");
 files["isotipo-despiezado.svg"] = svg("-60 -60 520 520", `  ${piezas({ colores: MESA_COLOR, mover: DESPIECE })}`, "Networking 2026 — isotipo despiezado");
-files["isotipo-archipielago.svg"] = svg("40 40 1240 560", PIEZAS.map((p) => {
+files["isotipo-archipielago.svg"] = svg("40 15 1240 585", PIEZAS.map((p) => {
   const i = ISLAS[p.id], [cx, cy] = centroide(p.pts);
   return `  <polygon points="${pts(inset(p.pts, JUNTA))}" fill="${MESA_COLOR[p.mesa]}" data-isla="${i.isla}" transform="translate(${i.x} ${i.y}) rotate(${i.r}) scale(${ESCALA_ISLAS}) translate(${fmt(-cx)} ${fmt(-cy)})"/>`;
-}).join("\n") + `\n  <circle cx="${GRACIOSA.x}" cy="${GRACIOSA.y}" r="${GRACIOSA.r}" fill="#9aa0b4" data-isla="La Graciosa"/>`, "Networking 2026 — siete piezas, siete islas");
+}).join("\n") + "\n  " + graciosaSVG("#9aa0b4"), "Networking 2026 — ocho piezas, ocho islas");
 files["isotipo-noche.svg"] = svg("0 0 400 400", `  ${piezas({ colores: C.noche })}`, "Networking 2026 — isotipo a una tinta (noche)");
 files["isotipo-arena.svg"] = svg("0 0 400 400", `  ${piezas({ colores: C.arena })}`, "Networking 2026 — isotipo a una tinta (arena)");
 
@@ -214,4 +230,4 @@ const pares = process.argv.slice(2);
 for (let i = 0; i + 1 < pares.length; i += 2) console.log(pares[i], "sobre", pares[i + 1], "→", ratio(pares[i], pares[i + 1]));
 
 // Exporta la geometría para la web
-module.exports = { PIEZAS, ISLAS, GRACIOSA, ESCALA_ISLAS, MESA_COLOR, inset, centroide, pts, fmt, JUNTA, C, BEBAS, OUTFIT, OUTFIT_SB, medir, linea };
+module.exports = { PIEZAS, ISLAS, GRACIOSA, graciosaSVG, PALABRAS, ESCALA_ISLAS, MESA_COLOR, inset, centroide, pts, fmt, JUNTA, C, BEBAS, OUTFIT, OUTFIT_SB, medir, linea };
