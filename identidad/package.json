@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "generar": "node generar.js",
-    "piezas": "node piezas.js"
+    "piezas": "node piezas.js",
+    "juego": "node juego.js"
   },
   "dependencies": {
     "opentype.js": "1.3.4",

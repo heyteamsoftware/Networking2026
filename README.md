@@ -113,6 +113,19 @@ En `piezas/` están el cartel A3, el flyer A5 (frente y dorso) y el roll-up de 8
 - En `piezas/referencias-ia/` están las imágenes de referencia (tangram, mesas, archipiélago, paleta y cartel) para adjuntar a las IA generadoras de imagen, junto con la hoja de estilo para IA.
 - Para regenerarlas tras un cambio de identidad o de textos: `cd identidad && npm install && npm run piezas` (necesita Edge o Chrome instalado para crear los PDF).
 
+## Juego «10 minutos para conectar»
+
+Material físico para las mesas, en `piezas/juego/` (PDF de imprenta con sangrado y vistas PNG), a partir de la propuesta de la dirección:
+
+- **01 · Piezas recortables (A3).** Las siete piezas del tangram, cada una con su isla, su número y su valor, más La Graciosa en blanco para que la empresa escriba su nombre. Se imprime a una cara, se pega sobre cartón pluma de 5 mm y se recorta. El cuadrado mide 18 × 18 cm. Una lámina por mesa.
+- **02 · Tablero (A2).** El archipiélago con el hueco de cada pieza a tamaño real (reto 1) y las tres preguntas del territorio.
+- **03 · Cartas (A6, frente y dorso).** Tres retos, uno por capa (identidad, territorio, oportunidad), y cuatro figuras con las ocho piezas (Sinergia, Sostenibilidad, Innovación, Emprendimiento): silueta delante y solución detrás. El generador comprueba que cada figura usa las ocho piezas con su forma real y sin dar la vuelta al paralelogramo.
+- **04 · Reglas (A4).** Minuto a minuto, roles del equipo y la regla de oro: ninguna figura está terminada sin La Graciosa.
+- **05 · Tarjeta «Reto superado» (A6 horizontal).** Se la lleva la empresa: el reto, la colaboración propuesta y el primer paso.
+- **campana/.** Publicaciones 1080 × 1080 y una historia 1080 × 1920 para «La pieza que nos falta eres tú»: mapa incompleto, plantilla «nueva pieza» y mapa completo.
+
+Para regenerarlo: `cd identidad && npm run juego`.
+
 ## Regenerar los logotipos
 
 Si cambian los colores o la geometría, se edita `identidad/generar.js` y se ejecuta:

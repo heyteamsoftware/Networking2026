@@ -373,7 +373,10 @@ async function png(nombre, svg, altoPx) {
   await sharp(Buffer.from(svg), { density }).png().toFile(path.join(OUT, nombre + ".png"));
 }
 
-(async () => {
+module.exports = { txt, tramos, tamPara, parrafo, tangram, qr, cargarLogos, img, cifpCirculo, franjaLogos, lienzo, organiza, navegador, png,
+  logos: () => ({ LOGO_CIFP, LOGO_GOB, GOB_RATIO }), CAP, SUAVE, TINTA_SUAVE, MESA_TEXTO_CLARO, MESA_TEXTO_OSCURO, URL_WEB, URL_TXT };
+
+if (require.main === module) (async () => {
   fs.mkdirSync(OUT, { recursive: true });
   await cargarLogos();
   const piezas = {
