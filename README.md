@@ -52,7 +52,9 @@ https://myappsserver.duckdns.org/Networking/panel/
 Con la contraseña del equipo se ven todas las solicitudes (las más recientes primero) y se pueden:
 
 - filtrar por modalidad (participante, colaboradora, impulsora, sin decidir) y por mesa;
-- descargar el CSV completo con el botón **Descargar CSV**;
+- descargar una hoja de Excel (**Descargar Excel**) con las solicitudes que se ven según los filtros;
+- imprimir esas mismas solicitudes o guardarlas en PDF (**Imprimir / PDF**: en el diálogo de impresión, elegir «Guardar como PDF»; en A4 horizontal);
+- descargar el CSV completo, sin filtros, con **Descargar CSV completo**;
 - consultar el resumen de cuántas hay por modalidad y por mesa.
 
 Sin contraseña no se ve nada: el CSV solo se descarga con la sesión abierta. Seguridad:
