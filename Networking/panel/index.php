@@ -18,7 +18,7 @@ header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: no-referrer');
 header('X-Robots-Tag: noindex, nofollow');
 header('Cache-Control: no-store');
-header("Content-Security-Policy: default-src 'none'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; script-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'");
+header("Content-Security-Policy: default-src 'none'; style-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'");
 
 $https = ($_SERVER['HTTPS'] ?? '') !== '' && $_SERVER['HTTPS'] !== 'off';
 define('RUTA', rtrim(dirname($_SERVER['SCRIPT_NAME']), '/') . '/'); // /Networking/panel/
@@ -194,6 +194,12 @@ if (!isset($mesas[$fMesa])) $fMesa = 0;
 $vistas = array_values(array_filter($filas, fn($r) =>
   ($fMod === '' || $r['modalidad'] === $fMod) && ($fMesa === 0 || in_array($fMesa, $numMesas($r), true))));
 
+// Excel e impresión usan los mismos filtros que la tabla
+$enlaceXlsx = '?' . http_build_query(array_filter(['exportar' => 'xlsx', 'modalidad' => $fMod, 'mesa' => $fMesa ?: ''], fn($v) => $v !== ''));
+$partesFiltro = array_filter([$fMod !== '' ? "Modalidad: $fMod" : '', $fMesa ? "Mesa $fMesa" : '']);
+$etiquetaFiltro = $partesFiltro ? implode(' · ', $partesFiltro) : 'Todas las solicitudes';
+if (($_GET['exportar'] ?? '') === 'xlsx') descargarXlsx($vistas, 'solicitudes-networking2026-' . date('Y-m-d') . '.xlsx');
+
 $porModalidad = array_fill_keys($modalidades, 0);
 $porMesa = array_fill_keys(array_keys($mesas), 0);
 foreach ($filas as $r) {
@@ -217,13 +223,18 @@ pintarCabecera('Solicitudes', 'panel');
   </header>
 
   <main class="wrap">
+    <p class="solo-imprimir">Networking 2026 · Solicitudes de empresas · <?= e($etiquetaFiltro) ?> · <?= date('d/m/Y') ?></p>
     <section class="cabeza">
       <div>
         <p class="etiqueta">Quiero participar como empresa</p>
         <h1><?= count($filas) ?> <?= count($filas) === 1 ? 'solicitud' : 'solicitudes' ?></h1>
       </div>
       <?php if ($filas): ?>
-        <a class="btn btn-primario" href="?descargar=1" download>Descargar CSV</a>
+        <div class="acciones">
+          <button type="button" class="btn btn-borde" data-imprimir>Imprimir / PDF</button>
+          <a class="btn btn-borde" href="<?= e($enlaceXlsx) ?>" download>Descargar Excel</a>
+          <a class="btn btn-primario" href="?descargar=1" download>Descargar CSV completo</a>
+        </div>
       <?php endif; ?>
     </section>
 
@@ -302,6 +313,85 @@ pintarCabecera('Solicitudes', 'panel');
 </body></html>
 <?php
 
+/**
+ * Descarga las solicitudes como .xlsx. Sin librerías externas: un .xlsx es un zip de XML
+ * y PHP trae ZipArchive. Las celdas son texto (inlineStr), así que Excel no ejecuta fórmulas.
+ */
+function descargarXlsx(array $filas, string $nombre): never {
+  $columnas = [ // [título, clave en $filas, ancho]
+    ['Fecha', 'fecha', 17], ['Empresa', 'empresa', 32], ['Sector', 'sector', 22], ['Persona de contacto', 'persona', 24],
+    ['Cargo', 'cargo', 24], ['Correo', 'correo', 30], ['Teléfono', 'telefono', 16], ['Modalidad', 'modalidad', 14],
+    ['Mesas', 'mesas', 18], ['Propuesta', 'propuesta', 70],
+  ];
+  $celda = fn(string $ref, string $texto, int $estilo = 0) => sprintf(
+    '<c r="%s" s="%d" t="inlineStr"><is><t xml:space="preserve">%s</t></is></c>',
+    $ref, $estilo, htmlspecialchars($texto, ENT_QUOTES | ENT_XML1, 'UTF-8'));
+
+  $filasXml = '<row r="1">';
+  foreach ($columnas as $i => [$titulo]) $filasXml .= $celda(chr(65 + $i) . '1', $titulo, 1);
+  $filasXml .= '</row>';
+  foreach (array_values($filas) as $n => $r) {
+    $fila = $n + 2;
+    $filasXml .= "<row r=\"$fila\">";
+    foreach ($columnas as $i => [, $clave]) $filasXml .= $celda(chr(65 + $i) . $fila, (string)$r[$clave]);
+    $filasXml .= '</row>';
+  }
+
+  $anchos = '';
+  foreach ($columnas as $i => [, , $ancho]) $anchos .= sprintf('<col min="%d" max="%d" width="%d" customWidth="1"/>', $i + 1, $i + 1, $ancho);
+
+  $cabeceraXml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+  $partes = [
+    '[Content_Types].xml' => $cabeceraXml
+      . '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
+      . '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
+      . '<Default Extension="xml" ContentType="application/xml"/>'
+      . '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'
+      . '<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'
+      . '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>'
+      . '</Types>',
+    '_rels/.rels' => $cabeceraXml
+      . '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+      . '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>'
+      . '</Relationships>',
+    'xl/workbook.xml' => $cabeceraXml
+      . '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
+      . '<sheets><sheet name="Solicitudes" sheetId="1" r:id="rId1"/></sheets></workbook>',
+    'xl/_rels/workbook.xml.rels' => $cabeceraXml
+      . '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+      . '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>'
+      . '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>'
+      . '</Relationships>',
+    'xl/styles.xml' => $cabeceraXml
+      . '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+      . '<fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FFF5EFE4"/><name val="Calibri"/></font></fonts>'
+      . '<fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>'
+      . '<fill><patternFill patternType="solid"><fgColor rgb="FF14213D"/><bgColor indexed="64"/></patternFill></fill></fills>'
+      . '<borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders>'
+      . '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'
+      . '<cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>'
+      . '<xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/></cellXfs>'
+      . '</styleSheet>',
+    'xl/worksheets/sheet1.xml' => $cabeceraXml
+      . '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+      . '<sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>'
+      . "<cols>$anchos</cols><sheetData>$filasXml</sheetData></worksheet>",
+  ];
+
+  $tmp = tempnam(sys_get_temp_dir(), 'ng26');
+  $zip = new ZipArchive();
+  if ($zip->open($tmp, ZipArchive::OVERWRITE) !== true) { http_response_code(500); exit('No se ha podido crear el Excel.'); }
+  foreach ($partes as $ruta => $contenido) $zip->addFromString($ruta, $contenido);
+  $zip->close();
+
+  header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  header('Content-Disposition: attachment; filename="' . $nombre . '"');
+  header('Content-Length: ' . filesize($tmp));
+  readfile($tmp);
+  unlink($tmp);
+  exit;
+}
+
 function pintarCabecera(string $titulo, string $clase): void { ?>
 <!doctype html>
 <html lang="es">
@@ -312,9 +402,6 @@ function pintarCabecera(string $titulo, string $clase): void { ?>
   <title><?= e($titulo) ?> — Networking 2026</title>
   <meta name="theme-color" content="#14213d">
   <link rel="icon" href="../img/isotipo.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="panel.css">
 </head>
 <body class="<?= e($clase) ?>">

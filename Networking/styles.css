@@ -1,3 +1,5 @@
+@font-face{font-family:"Bebas Neue";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/BebasNeue-Regular.woff2") format("woff2")}
+@font-face{font-family:"Outfit";font-style:normal;font-weight:100 900;font-display:swap;src:url("fonts/Outfit-Variable.woff2") format("woff2")}
 /* Networking 2026 — CIFP Tony Gallardo
    Identidad: tangram de cuatro mesas. Tokens según el manual de identidad. */
 :root {
@@ -404,3 +406,4 @@ img { display: block; max-width: 100%; }
   .js .reveal { opacity: 1; transform: none; transition: none; }
   .ticker-track, .scroll-hint i { animation: none; }
 }
+.form .consentimiento a { color: var(--mesa-4); text-decoration: underline; }
