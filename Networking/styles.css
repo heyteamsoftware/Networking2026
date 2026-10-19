@@ -407,3 +407,12 @@ img { display: block; max-width: 100%; }
   .ticker-track, .scroll-hint i { animation: none; }
 }
 .form .consentimiento a { color: var(--mesa-4); text-decoration: underline; }
+
+/* ---------- Aviso de cookies (discreto, una sola vez) ---------- */
+.aviso-cookies { position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 60; display: flex; gap: 12px; align-items: center; max-width: 560px; padding: 10px 12px 10px 14px; background: rgba(20,33,61,.96); color: #e7e2d8; border-radius: 6px; box-shadow: 0 8px 24px rgba(0,0,0,.25); font-size: .84rem; line-height: 1.45; }
+.aviso-cookies p { margin: 0; flex: 1; }
+.aviso-cookies a { color: var(--mesa-4); }
+.aviso-cookies button { flex: none; min-height: 36px; padding: 6px 14px; border: 0; border-radius: 999px; background: var(--mesa-4); color: var(--noche); font: 600 .84rem/1 var(--texto); cursor: pointer; }
+.aviso-cookies button:hover { background: #ffd83d; }
+.aviso-cookies a:focus-visible, .aviso-cookies button:focus-visible { outline: 3px solid var(--mesa-4); outline-offset: 2px; }
+@media (min-width: 900px) { .aviso-cookies { left: auto; right: 24px; bottom: 24px; max-width: 460px; } }
