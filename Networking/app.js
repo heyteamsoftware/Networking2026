@@ -294,35 +294,128 @@
     reveals.forEach(function (el) { el.classList.add("in"); });
   }
 
-  /* ---------- Empresas participantes (empresas.json) ----------
-     Cada empresa: { "nombre": "…", "logo": "img/empresas/archivo.png", "web": "https://…", "mesas": [1, 3] }
-     Solo "nombre" es obligatorio. Mientras la lista esté vacía se muestra el aviso. */
-  var empGrid = document.getElementById("empGrid"), empVacio = document.getElementById("empVacio");
   var COLOR_MESA = ["", "var(--mesa-1)", "var(--mesa-2)", "var(--mesa-3)", "var(--mesa-4)"];
   function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt) e.textContent = txt; return e; }
-  fetch("empresas.json", { cache: "no-cache" })
-    .then(function (r) { return r.ok ? r.json() : []; })
-    .then(function (lista) {
-      if (!Array.isArray(lista) || !lista.length) return;
-      lista.forEach(function (emp) {
-        if (!emp || !emp.nombre) return;
-        var li = el("li");
-        var card = emp.web ? el("a", "emp-card") : el("div", "emp-card");
-        if (emp.web) { card.href = emp.web; card.target = "_blank"; card.rel = "noopener"; }
-        if (emp.logo) { var img = el("img"); img.src = emp.logo; img.alt = ""; img.loading = "lazy"; card.appendChild(img); }
-        card.appendChild(el("span", "emp-nombre", emp.nombre));
-        li.appendChild(card);
-        if (Array.isArray(emp.mesas) && emp.mesas.length) {
-          var m = el("span", "emp-mesas");
-          m.setAttribute("aria-label", "Mesas: " + emp.mesas.join(", "));
-          emp.mesas.forEach(function (n) { if (COLOR_MESA[n]) { var t = el("i"); t.style.background = COLOR_MESA[n]; m.appendChild(t); } });
-          li.appendChild(m);
-        }
-        empGrid.appendChild(li);
-      });
-      if (empGrid.children.length) { empGrid.hidden = false; empVacio.hidden = true; }
-    })
-    .catch(function () {});
+  function cargar(url, pintar) {
+    fetch(url, { cache: "no-cache" })
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (lista) { if (Array.isArray(lista) && lista.length) pintar(lista); })
+      .catch(function () {});
+  }
+
+  /* ---------- Escaparate de empresas (empresas.json) ----------
+     Cada empresa: { "nombre": "…", "logo": "img/empresas/archivo.png", "sector": "…",
+     "motivo": "Por qué participa, en una frase", "web": "https://…", "mesas": [1, 3] }
+     Solo "nombre" es obligatorio. Publicad solo logos autorizados por cada empresa.
+     Mientras la lista esté vacía se muestra la convocatoria «¿Te sumas?». */
+  var empGrid = document.getElementById("empGrid"), empVacio = document.getElementById("empVacio");
+  cargar("empresas.json", function (lista) {
+    lista.forEach(function (emp) {
+      if (!emp || !emp.nombre) return;
+      var li = el("li");
+      var card = emp.web ? el("a", "emp-card") : el("div", "emp-card");
+      if (emp.web) { card.href = emp.web; card.target = "_blank"; card.rel = "noopener"; }
+      if (emp.logo) { var img = el("img"); img.src = emp.logo; img.alt = ""; img.loading = "lazy"; card.appendChild(img); }
+      card.appendChild(el("span", "emp-nombre", emp.nombre));
+      if (emp.sector) card.appendChild(el("span", "emp-sector", emp.sector));
+      if (emp.motivo) card.appendChild(el("p", "emp-motivo", "«" + emp.motivo + "»"));
+      li.appendChild(card);
+      if (Array.isArray(emp.mesas) && emp.mesas.length) {
+        var m = el("span", "emp-mesas");
+        m.setAttribute("aria-label", "Mesas: " + emp.mesas.join(", "));
+        emp.mesas.forEach(function (n) { if (COLOR_MESA[n]) { var t = el("i"); t.style.background = COLOR_MESA[n]; m.appendChild(t); } });
+        li.appendChild(m);
+      }
+      empGrid.appendChild(li);
+    });
+    if (empGrid.children.length) { empGrid.hidden = false; empVacio.hidden = true; }
+  });
+
+  /* ---------- Colaboraciones posteriores (colaboraciones.json) ----------
+     Cada una: { "tipo": "Proyecto" | "Visita" | "Reto" | "Actividad", "titulo": "…",
+     "empresa": "…", "fecha": "2027-01", "descripcion": "…", "imagen": "img/colaboraciones/archivo.jpg" }
+     Solo "titulo" es obligatorio. */
+  var COLOR_TIPO = { proyecto: "var(--mesa-1)", visita: "var(--mesa-2)", reto: "var(--mesa-3)", actividad: "var(--mesa-4)" };
+  var colGrid = document.getElementById("colGrid"), colVacio = document.getElementById("colVacio");
+  cargar("colaboraciones.json", function (lista) {
+    lista.forEach(function (c) {
+      if (!c || !c.titulo) return;
+      var li = el("li");
+      if (c.imagen) { var img = el("img"); img.src = c.imagen; img.alt = ""; img.loading = "lazy"; li.appendChild(img); }
+      var cuerpo = el("div", "col-cuerpo");
+      if (c.tipo) {
+        var t = el("span", "col-tipo", c.tipo);
+        var col = COLOR_TIPO[String(c.tipo).toLowerCase()];
+        if (col) t.style.setProperty("--c", col);
+        cuerpo.appendChild(t);
+      }
+      cuerpo.appendChild(el("h3", "", c.titulo));
+      var meta = [c.empresa, c.fecha].filter(Boolean).join(" · ");
+      if (meta) cuerpo.appendChild(el("p", "col-meta", meta));
+      if (c.descripcion) cuerpo.appendChild(el("p", "", c.descripcion));
+      li.appendChild(cuerpo);
+      colGrid.appendChild(li);
+    });
+    if (colGrid.children.length) { colGrid.hidden = false; colVacio.hidden = true; }
+  });
+
+  /* ---------- Formulario «Quiero participar» ---------- */
+  var form = document.getElementById("formParticipa");
+  var formOk = document.getElementById("formOk");
+  var formError = document.getElementById("formError");
+  var formEnviar = document.getElementById("formEnviar");
+  var selModalidad = document.getElementById("f-modalidad");
+
+  // Los botones de modalidad y de mesa dejan el formulario ya preparado
+  Array.prototype.forEach.call(document.querySelectorAll("[data-modalidad]"), function (a) {
+    a.addEventListener("click", function () { selModalidad.value = a.getAttribute("data-modalidad"); });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll(".btn-mesa[data-mesa]"), function (a) {
+    a.addEventListener("click", function () {
+      var cb = document.getElementById("f-mesa-" + a.getAttribute("data-mesa"));
+      if (cb) cb.checked = true;
+    });
+  });
+
+  function mostrarOk() {
+    form.hidden = true;
+    formOk.hidden = false;
+    formOk.focus();
+  }
+  // Sin JavaScript el formulario vuelve con ?enviado=1
+  if (/[?&]enviado=1/.test(location.search)) mostrarOk();
+
+  function error(msg, campo) {
+    formError.textContent = msg;
+    formError.hidden = false;
+    if (campo) { campo.setAttribute("aria-invalid", "true"); campo.focus(); }
+  }
+  form.addEventListener("input", function (e) { e.target.removeAttribute("aria-invalid"); });
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    formError.hidden = true;
+    var req = [["f-empresa", "Escribe el nombre de tu empresa u organización."],
+               ["f-persona", "Escribe el nombre de la persona de contacto."],
+               ["f-email", "Escribe un correo electrónico válido para poder contactarte."],
+               ["f-modalidad", "Elige cómo quieres participar (o «Aún no lo sé»)."]];
+    for (var i = 0; i < req.length; i++) {
+      var c = document.getElementById(req[i][0]);
+      if (!c.value.trim() || (c.type === "email" && !c.checkValidity())) { error(req[i][1], c); return; }
+    }
+    var acepto = document.getElementById("f-acepto");
+    if (!acepto.checked) { error("Para enviar la solicitud necesitamos que aceptes el uso de tus datos para contactarte.", acepto); return; }
+
+    formEnviar.disabled = true;
+    formEnviar.textContent = "Enviando…";
+    fetch(form.action, { method: "POST", body: new FormData(form), headers: { "Accept": "application/json" } })
+      .then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
+      .then(function (res) {
+        if (res && res.ok) { mostrarOk(); return; }
+        error((res && res.error) || "No hemos podido guardar la solicitud. Inténtalo de nuevo en unos minutos.");
+      })
+      .catch(function () { error("No hay conexión con el servidor. Comprueba tu conexión e inténtalo de nuevo."); })
+      .then(function () { formEnviar.disabled = false; formEnviar.textContent = "Enviar solicitud"; });
+  });
 
   /* ---------- Cuenta atrás (20 nov 2026, hora de Canarias = UTC+0) ---------- */
   var target = Date.UTC(2026, 10, 20, 0, 0, 0);

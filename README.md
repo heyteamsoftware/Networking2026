@@ -31,19 +31,49 @@ identidad/
     └── components/         # fichas de ejemplo (tangram animado, ficha de mesa, portada)
 ```
 
-La web es HTML/CSS/JS estático, sin compilación.
+La web es HTML/CSS/JS estático, sin compilación, más un único archivo PHP (`participa.php`) que recibe el formulario.
 
-## Añadir empresas participantes
+## Solicitudes de participación
 
-La sección «Empresas participantes» se rellena desde `Networking/empresas.json`. Mientras esté vacío (`[]`) la web muestra el aviso «Falta tu pieza». Cada empresa:
+El formulario «Quiero participar como empresa» guarda cada solicitud en un CSV privado del servidor, fuera de la carpeta pública (no se puede descargar desde la web):
+
+```
+/var/www/networking_data/solicitudes.csv
+```
+
+Se abre directamente con Excel (separador `;`, UTF-8). Para descargarlo:
+
+```bash
+ssh -i <ruta>/servidor-apps.key ubuntu@129.151.249.242 "sudo cat /var/www/networking_data/solicitudes.csv" > solicitudes.csv
+```
+
+El servidor no envía correos: hay que revisar el CSV. Las fórmulas que alguien escriba en el formulario se guardan como texto, para que Excel no las ejecute.
+
+## Escaparate de empresas participantes
+
+La sección «Empresas participantes» se rellena desde `Networking/empresas.json`. Mientras esté vacío (`[]`) la web muestra la convocatoria «Estamos construyendo las conexiones de esta edición. ¿Te sumas?». Cada empresa:
 
 ```json
 [
-  { "nombre": "Nombre de la empresa", "logo": "img/empresas/nombre.png", "web": "https://…", "mesas": [1, 3] }
+  { "nombre": "Nombre de la empresa", "logo": "img/empresas/nombre.png", "sector": "Energía",
+    "motivo": "Por qué participa, en una frase", "web": "https://…", "mesas": [1, 3] }
 ]
 ```
 
-Solo `nombre` es obligatorio. Los logos van en `Networking/img/empresas/`. `mesas` pinta un triangulito del color de cada mesa en la que participa. Basta con subir `empresas.json` (y los logos) al servidor: no hay que tocar el HTML.
+Solo `nombre` es obligatorio. Publicad solo logos autorizados por cada empresa; van en `Networking/img/empresas/`. `mesas` pinta un triangulito del color de cada mesa en la que participa. Basta con subir `empresas.json` (y los logos) al servidor: no hay que tocar el HTML.
+
+## Colaboraciones posteriores
+
+La sección «Lo que nace del encuentro» se rellena desde `Networking/colaboraciones.json`, igual que el escaparate. Mientras esté vacío muestra un aviso. Cada colaboración:
+
+```json
+[
+  { "tipo": "Proyecto", "titulo": "…", "empresa": "…", "fecha": "Enero 2027",
+    "descripcion": "…", "imagen": "img/colaboraciones/foto.jpg" }
+]
+```
+
+`tipo` es Proyecto, Visita, Reto o Actividad (cada uno con el color de una mesa). Solo `titulo` es obligatorio.
 
 ## Piezas impresas
 
