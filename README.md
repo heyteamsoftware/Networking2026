@@ -62,7 +62,7 @@ Sin contraseña no se ve nada: el CSV solo se descarga con la sesión abierta. S
 - La sesión caduca tras 20 minutos sin uso. Para cerrarla antes, botón **Salir**.
 - Todo lo que llega del formulario se muestra escapado y la página no se indexa ni se puede incrustar en otra web.
 
-**Cambiar la contraseña** (mínimo 12 caracteres; la pide dos veces sin mostrarla):
+**Cambiar la contraseña** (mínimo 10 caracteres; la pide dos veces sin mostrarla):
 
 ```bash
 ssh -i <ruta>/servidor-apps.key -t ubuntu@129.151.249.242 "sudo -u www-data php /var/www/html/Networking/panel/cambiar-clave.php"

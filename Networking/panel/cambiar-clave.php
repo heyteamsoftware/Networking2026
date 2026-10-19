@@ -20,8 +20,8 @@ function pedir(string $texto): string {
   return $v;
 }
 
-$clave = pedir('Nueva contraseña del panel (mínimo 12 caracteres): ');
-if (mb_strlen($clave) < 12) { fwrite(STDERR, "Demasiado corta: usa al menos 12 caracteres.\n"); exit(1); }
+$clave = pedir('Nueva contraseña del panel (mínimo 10 caracteres): ');
+if (mb_strlen($clave) < 10) { fwrite(STDERR, "Demasiado corta: usa al menos 10 caracteres.\n"); exit(1); }
 if (stream_isatty(STDIN) && pedir('Repítela: ') !== $clave) { fwrite(STDERR, "No coinciden. No se ha cambiado nada.\n"); exit(1); }
 
 if (file_put_contents($archivo, password_hash($clave, PASSWORD_DEFAULT) . PHP_EOL, LOCK_EX) === false) {
