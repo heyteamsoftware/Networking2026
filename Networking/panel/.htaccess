@@ -1,0 +1,5 @@
+# Panel de solicitudes: sin listado de carpeta y sin acceso web a la utilidad de consola
+Options -Indexes
+<Files "cambiar-clave.php">
+  Require all denied
+</Files>

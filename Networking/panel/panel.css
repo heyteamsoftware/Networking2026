@@ -1,0 +1,124 @@
+/* Networking 2026 — panel privado de solicitudes. Mismos tokens que la web (identidad/project/tokens.json). */
+:root {
+  --fondo: #f5efe4;
+  --fondo-2: #ebe3d4;
+  --superficie: #ffffff;
+  --tinta: #14213d;
+  --tinta-suave: #555c72;
+  --linea: #d9cfbd;
+  --foco: #1e64b4;
+  --noche: #14213d;
+  --noche-2: #1c2b4d;
+  --noche-3: #22325a;
+  --arena: #f5efe4;
+
+  --mesa-1: #c8452b;
+  --mesa-2: #e8862a;
+  --mesa-3: #2370c4;
+  --mesa-4: #ffcc00;
+  --mesa-1-texto: #a8361f;
+  --mesa-2-texto: #9c4f12;
+  --mesa-3-texto: #1e64b4;
+  --mesa-4-texto: #875800;
+
+  --display: "Bebas Neue", Impact, "Arial Narrow", sans-serif;
+  --texto: Outfit, "Segoe UI", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; font-family: var(--texto); color: var(--tinta); background: var(--fondo); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+:focus-visible { outline: 3px solid var(--foco); outline-offset: 3px; }
+a { color: var(--mesa-3-texto); }
+h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(44px, 7vw, 72px); line-height: .95; letter-spacing: .01em; }
+.etiqueta { margin: 0 0 8px; font-size: 13px; font-weight: 600; letter-spacing: .16em; line-height: 1.3; text-transform: uppercase; color: var(--mesa-3-texto); }
+.nota { margin: 0; font-size: 13px; color: var(--tinta-suave); }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 12px 22px; border-radius: 999px; font: 600 1rem/1.2 var(--texto); text-decoration: none; cursor: pointer; border: 2px solid transparent; }
+.btn-primario { background: var(--mesa-4); color: var(--noche); }
+.btn-primario:hover { background: #ffd83d; }
+.btn-primario[disabled] { opacity: .5; cursor: not-allowed; }
+.btn-borde { min-height: 44px; padding: 8px 20px; border-color: var(--tinta); color: var(--tinta); background: transparent; }
+.btn-borde:hover { background: var(--tinta); color: var(--arena); }
+
+/* ---------- Acceso ---------- */
+body.acceso { background: var(--noche); color: var(--arena); }
+.acceso main, main.acceso { min-height: 100vh; min-height: 100svh; display: grid; place-items: center; padding: 24px 16px; }
+.acceso-caja { width: 100%; max-width: 400px; display: grid; gap: 14px; padding: 32px 24px; background: var(--noche-2); border: 1px solid #34446b; border-radius: 4px; }
+.acceso-caja img { width: 64px; height: 64px; }
+.acceso .etiqueta { color: var(--mesa-4); margin: 6px 0 0; }
+.acceso h1 { font-size: 52px; }
+.acceso label { margin-top: 8px; font-weight: 600; }
+.acceso input[type=password] { width: 100%; min-height: 48px; padding: 10px 14px; border: 1.5px solid #4a5a82; border-radius: 4px; background: var(--noche); color: var(--arena); font: 1rem var(--texto); }
+.acceso input[type=password]:focus-visible { outline-color: var(--mesa-4); }
+.acceso .btn-primario { width: 100%; margin-top: 4px; }
+.acceso :focus-visible { outline-color: var(--mesa-4); }
+.acceso .nota { color: #b4b8c8; text-align: center; }
+.acceso .nota a { color: var(--arena); }
+.aviso { margin: 0; padding: 10px 14px; border-left: 4px solid var(--mesa-3); background: rgba(35,112,196,.18); border-radius: 4px; font-size: .95rem; }
+.aviso-error { border-left-color: var(--mesa-1); background: rgba(200,69,43,.2); }
+
+/* ---------- Barra superior ---------- */
+.barra { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 16px; height: 60px; padding: 0 16px; background: var(--noche); color: var(--arena); }
+@media (min-width: 720px) { .barra { padding: 0 32px; } }
+.marca { display: flex; align-items: center; gap: 10px; color: inherit; text-decoration: none; font-family: var(--display); font-size: 1.5rem; letter-spacing: .03em; line-height: 1; }
+.marca b { color: var(--mesa-4); font-weight: 400; }
+.barra-titulo { display: none; padding-left: 16px; border-left: 1px solid #34446b; color: #b4b8c8; font-size: .9rem; }
+@media (min-width: 640px) { .barra-titulo { display: block; } }
+.salir { margin: 0 0 0 auto; }
+.btn-salir { padding: 7px 16px; border: 1.5px solid rgba(245,239,228,.6); border-radius: 999px; background: transparent; color: var(--arena); font: 600 .9rem var(--texto); cursor: pointer; }
+.btn-salir:hover { background: rgba(245,239,228,.12); }
+.barra :focus-visible { outline-color: var(--mesa-4); }
+
+/* ---------- Panel ---------- */
+.wrap { max-width: 1280px; margin: 0 auto; padding: 32px 16px 64px; }
+@media (min-width: 720px) { .wrap { padding: 48px 32px 88px; } }
+.cabeza { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; }
+
+.resumen { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 24px 0; }
+@media (min-width: 560px) { .resumen { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1100px) { .resumen { grid-template-columns: repeat(8, 1fr); } }
+.dato { display: grid; padding: 10px 14px; background: var(--superficie); border: 1px solid var(--linea); border-top: 6px solid var(--c, var(--linea)); border-radius: 4px; }
+.dato b { font-family: var(--display); font-weight: 400; font-size: 40px; line-height: 1; }
+.dato span { font-size: 13px; color: var(--tinta-suave); }
+.mod-1, .mesa-1 { --c: var(--mesa-1); --ct: var(--mesa-1-texto); }
+.mod-2, .mesa-2 { --c: var(--mesa-2); --ct: var(--mesa-2-texto); }
+.mod-3, .mesa-3 { --c: var(--mesa-3); --ct: var(--mesa-3-texto); }
+.mod-4, .mesa-4 { --c: var(--mesa-4); --ct: var(--mesa-4-texto); }
+.mod-0 { --c: var(--tinta-suave); --ct: var(--tinta-suave); }
+
+.filtros { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px 16px; padding: 16px; background: var(--fondo-2); border-radius: 4px; }
+.filtros label { display: grid; gap: 4px; font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--tinta-suave); flex: 1 1 200px; min-width: 0; max-width: 340px; }
+.filtros select { width: 100%; min-height: 44px; padding: 8px 12px; border: 1.5px solid var(--linea); border-radius: 4px; background: var(--superficie); color: var(--tinta); font: 1rem var(--texto); text-transform: none; letter-spacing: 0; }
+.quitar { align-self: center; font-weight: 600; }
+.cuenta { margin: 16px 0 12px; font-size: 13px; color: var(--tinta-suave); }
+
+.tabla-caja { overflow-x: auto; background: var(--superficie); border: 1px solid var(--linea); border-radius: 4px; }
+.tabla { width: 100%; border-collapse: collapse; font-size: .95rem; }
+.tabla th { position: sticky; top: 0; padding: 12px 14px; background: var(--noche); color: var(--arena); text-align: left; font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; white-space: nowrap; }
+.tabla td { padding: 14px; border-top: 1px solid var(--linea); vertical-align: top; }
+.tabla tbody tr:nth-child(even) { background: #fbf8f2; }
+.tabla .sub { display: block; font-size: .85rem; color: var(--tinta-suave); overflow-wrap: anywhere; }
+.tabla a.sub { color: var(--mesa-3-texto); }
+.fecha { white-space: nowrap; color: var(--tinta-suave); font-variant-numeric: tabular-nums; }
+.propuesta { min-width: 240px; max-width: 420px; overflow-wrap: anywhere; }
+.tabla td[data-col="Empresa"] { min-width: 160px; }
+.tabla td[data-col="Contacto"] { min-width: 210px; }
+.tabla td[data-col="Mesas"] { min-width: 76px; }
+
+.pildora { display: inline-block; padding: 3px 10px; border: 1.5px solid var(--c); border-radius: 999px; color: var(--ct); font-size: 13px; font-weight: 600; white-space: nowrap; }
+.mesa-chip { display: inline-grid; place-items: center; width: 28px; height: 28px; margin: 0 4px 4px 0; background: var(--c); color: var(--noche); font-family: var(--display); font-size: 20px; line-height: 1; padding-top: 2px; }
+.mesa-chip.mesa-1, .mesa-chip.mesa-3 { color: #fff; }
+
+.vacio { margin: 24px 0; padding: 32px 24px; background: var(--superficie); border: 1px dashed var(--linea); border-radius: 4px; color: var(--tinta-suave); text-align: center; }
+
+/* En móvil cada solicitud es una ficha */
+@media (max-width: 760px) {
+  .tabla-caja { background: none; border: 0; overflow: visible; }
+  .tabla thead { display: none; }
+  .tabla, .tabla tbody, .tabla tr, .tabla td { display: block; }
+  .tabla tr { margin-bottom: 12px; background: var(--superficie) !important; border: 1px solid var(--linea); border-radius: 4px; }
+  .tabla td { padding: 10px 14px; border-top: 1px solid var(--fondo-2); }
+  .tabla td:first-child { border-top: 0; }
+  .tabla td::before { content: attr(data-col); display: block; font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--tinta-suave); }
+  .propuesta { max-width: none; min-width: 0; }
+}

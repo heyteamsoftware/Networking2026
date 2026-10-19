@@ -18,6 +18,8 @@ Networking/                 # la web que se publica
 ├── index.html              # contenido (mesas y textos)
 ├── styles.css              # estilos con los colores y fuentes de la identidad
 ├── app.js                  # montaje del tangram, despiece con el scroll, cuenta atrás
+├── participa.php           # recibe el formulario «Quiero participar como empresa»
+├── panel/                  # panel privado de solicitudes (con contraseña)
 └── img/                    # isotipo, logo en negativo, símbolos de mesa (generados) y logo del CIFP
 
 identidad/
@@ -31,7 +33,7 @@ identidad/
     └── components/         # fichas de ejemplo (tangram animado, ficha de mesa, portada)
 ```
 
-La web es HTML/CSS/JS estático, sin compilación, más un único archivo PHP (`participa.php`) que recibe el formulario.
+La web es HTML/CSS/JS estático, sin compilación, más `participa.php`, que recibe el formulario, y el panel privado `panel/`.
 
 ## Solicitudes de participación
 
@@ -41,13 +43,38 @@ El formulario «Quiero participar como empresa» guarda cada solicitud en un CSV
 /var/www/networking_data/solicitudes.csv
 ```
 
-Se abre directamente con Excel (separador `;`, UTF-8). Para descargarlo:
+Se abre directamente con Excel (separador `;`, UTF-8). El servidor no envía correos: hay que revisar las solicitudes en el panel. Las fórmulas que alguien escriba en el formulario se guardan como texto, para que Excel no las ejecute.
+
+### Panel de solicitudes (equipo del centro)
+
+https://myappsserver.duckdns.org/Networking/panel/
+
+Con la contraseña del equipo se ven todas las solicitudes (las más recientes primero) y se pueden:
+
+- filtrar por modalidad (participante, colaboradora, impulsora, sin decidir) y por mesa;
+- descargar el CSV completo con el botón **Descargar CSV**;
+- consultar el resumen de cuántas hay por modalidad y por mesa.
+
+Sin contraseña no se ve nada: el CSV solo se descarga con la sesión abierta. Seguridad:
+
+- La contraseña no está en el repositorio. En el servidor solo se guarda su hash, en `/var/www/networking_data/panel-clave.txt`.
+- Tras 5 intentos fallidos seguidos desde la misma conexión hay que esperar 15 minutos. Ojo: en el centro todos salen por la misma IP, así que el bloqueo afecta a todo el que esté en esa red.
+- La sesión caduca tras 20 minutos sin uso. Para cerrarla antes, botón **Salir**.
+- Todo lo que llega del formulario se muestra escapado y la página no se indexa ni se puede incrustar en otra web.
+
+**Cambiar la contraseña** (mínimo 12 caracteres; la pide dos veces sin mostrarla):
+
+```bash
+ssh -i <ruta>/servidor-apps.key -t ubuntu@129.151.249.242 "sudo -u www-data php /var/www/html/Networking/panel/cambiar-clave.php"
+```
+
+Las sesiones que ya estén abiertas siguen activas hasta que salgan o caduquen. `cambiar-clave.php` solo funciona desde la consola: la web lo bloquea.
+
+Para descargar el CSV sin el panel, por SSH:
 
 ```bash
 ssh -i <ruta>/servidor-apps.key ubuntu@129.151.249.242 "sudo cat /var/www/networking_data/solicitudes.csv" > solicitudes.csv
 ```
-
-El servidor no envía correos: hay que revisar el CSV. Las fórmulas que alguien escriba en el formulario se guardan como texto, para que Excel no las ejecute.
 
 ## Escaparate de empresas participantes
 
