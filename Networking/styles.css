@@ -391,6 +391,7 @@ img { display: block; max-width: 100%; }
 .form-error { margin: 0; padding: 10px 12px; border-radius: 4px; background: rgba(255,138,107,.15); color: #ffb4a0; }
 .form .btn-primario { justify-self: start; min-width: 200px; }
 .form .btn-primario[disabled] { opacity: .6; cursor: wait; }
+.form-ok[hidden] { display: none; }
 .form-ok { display: grid; gap: 12px; justify-items: start; background: var(--noche-2); padding: 32px; border-radius: 4px; }
 .form-ok svg { width: 96px; height: 96px; }
 .form-ok h3 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 2.4rem; line-height: 1; color: var(--arena); }
@@ -418,96 +419,136 @@ img { display: block; max-width: 100%; }
 @media (min-width: 900px) { .aviso-cookies { left: auto; right: 24px; bottom: 24px; max-width: 460px; } }
 
 /* ---------- Cronograma ---------- */
-/* De noche, como el cielo del atardecer canario: cada actividad es una pieza del tangram que se va colocando. */
-.cronograma { padding: 96px 0; background: var(--noche); color: var(--arena); scroll-margin-top: 40px; overflow: hidden; }
-.cronograma .etiqueta { color: var(--mesa-4); margin-bottom: 12px; }
-.cronograma h2 { margin: 0 0 20px; font-family: var(--display); font-weight: 400; font-size: clamp(3rem, 8vw, 6rem); line-height: .9; color: var(--arena); }
-.crono-cabecera { display: grid; gap: 24px; margin-bottom: 40px; }
-.crono-capas { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 0; }
-.crono-capas span { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
-.crono-capas span::before { content: ""; width: 10px; height: 10px; background: var(--c); clip-path: polygon(0 100%, 50% 0, 100% 100%); }
-.crono-intro { margin: 0; font-size: 19px; line-height: 1.55; color: #c9ccd8; max-width: 30em; align-self: end; }
-.crono-intro strong { color: var(--arena); font-weight: 600; }
+/* La mañana es un tangram: cada ficha es una pieza y, al bajar, el panel la encaja en su sitio. */
+.cronograma { position: relative; padding: 104px 0 96px; background: var(--noche); color: var(--arena); scroll-margin-top: 40px; overflow: clip; }
+.cronograma::before { content: ""; position: absolute; inset: 0 0 auto; height: 520px; background: radial-gradient(60% 100% at 85% 0%, rgba(232, 134, 42, .22), transparent 70%), radial-gradient(50% 80% at 10% 10%, rgba(35, 112, 196, .2), transparent 70%); pointer-events: none; }
+.cronograma .wrap { position: relative; }
+.cr-kicker { margin: 0 0 16px; font-size: 13px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--mesa-4); }
+.cr-cabecera { max-width: 900px; margin-bottom: 64px; }
+.cr-cabecera h2 { margin: 0 0 20px; font-family: var(--display); font-weight: 400; font-size: clamp(3.4rem, 10vw, 7.5rem); line-height: .86; letter-spacing: .005em; color: var(--arena); }
+.cr-cabecera h2 em { font-style: normal; color: var(--mesa-4); }
+.cr-intro { margin: 0; max-width: 32em; font-size: 20px; line-height: 1.5; color: #c9ccd8; }
 
-/* La jornada de un vistazo */
-.jornada { margin-bottom: 56px; }
-.jornada-barra { display: flex; gap: 3px; height: 14px; }
-.jornada-barra > span { flex: var(--m) 1 0; background: var(--c); }
-.jornada-barra > .doble { display: flex; flex-direction: column; gap: 2px; background: none; }
-.jornada-barra > .doble i { flex: 1; background: var(--c); }
-.jornada-barra > .falta { background: none; outline: 2px dashed var(--mesa-4); outline-offset: -2px; }
-.jornada-horas { position: relative; height: 1.4em; margin-top: 8px; font-family: var(--display); font-size: 1.15rem; letter-spacing: .04em; color: #9aa0b4; }
+/* Rejilla: panel fijo + fichas */
+.cr-grid { display: grid; gap: 28px; }
 
-.jornada-horas span { position: absolute; left: var(--x); transform: translateX(-50%); }
-.jornada-horas span:first-child { transform: none; }
-.jornada-horas span:last-child { left: auto; right: 0; transform: none; }
+/* Panel: en móvil, una barra pegada bajo la cabecera */
+.cr-panel { position: sticky; top: var(--topbar); z-index: 6; margin: 0 -16px; padding: 10px 16px 12px; display: grid; grid-template-columns: 64px 1fr; grid-template-rows: auto auto; column-gap: 14px; align-items: center; background: rgba(20, 33, 61, .92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid #2b3a5e; }
+.cr-tangram { grid-row: 1 / span 2; width: 64px; height: 64px; overflow: visible; }
+.cr-reloj { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
+.cr-ahora { display: none; }
+.cr-hora { font-family: var(--display); font-size: 2.2rem; line-height: 1; color: var(--arena); }
+.cr-hora.cambia { animation: cr-flip .5s cubic-bezier(.2, .8, .2, 1); }
+.cr-que { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 14px; font-weight: 600; color: var(--mesa-4); }
+.cr-progreso { height: 4px; margin-top: 8px; background: #2b3a5e; border-radius: 2px; overflow: hidden; }
+.cr-progreso span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--mesa-1), var(--mesa-2), var(--mesa-4)); transition: width .8s cubic-bezier(.2, .8, .2, 1); }
+.cr-extremos { display: none; }
+@keyframes cr-flip { from { transform: translateY(45%); opacity: 0; } }
 
-/* Línea de tiempo */
-.crono { list-style: none; margin: 0; padding: 0; }
-.crono > li { position: relative; display: grid; grid-template-columns: 26px 1fr; column-gap: 16px; padding-bottom: 40px; }
-.crono > li::after { content: ""; position: absolute; left: 12px; top: 30px; bottom: 2px; width: 2px; background: repeating-linear-gradient(to bottom, #3a4766 0 6px, transparent 6px 12px); }
-.crono > li:last-child::after { display: none; }
-.crono-hora { grid-column: 2; margin: 0 0 12px; font-family: var(--display); font-size: clamp(2.6rem, 6vw, 3.6rem); line-height: .85; color: var(--arena); letter-spacing: .01em; }
-.pieza { grid-column: 1; grid-row: 1; width: 24px; height: 24px; margin-top: 4px; background: var(--c); }
-.pieza.tri { clip-path: polygon(0 100%, 50% 0, 100% 100%); }
-.pieza.cuad { width: 18px; height: 18px; margin: 7px 0 0 3px; transform: rotate(45deg); }
-.pieza.para { height: 14px; margin-top: 9px; clip-path: polygon(30% 0, 100% 0, 70% 100%, 0 100%); }
-.pieza.falta { background: none; clip-path: none; width: 0; height: 0; border: 12px solid transparent; border-bottom: 22px dashed var(--mesa-4); border-top: 0; }
-.crono > li > .crono-card, .crono-grupo { grid-column: 2; }
-.crono-grupo { display: grid; gap: 14px; }
+/* El tangram del panel */
+.cr-huecos polygon { fill: none; stroke: #3a4766; stroke-width: 3; stroke-dasharray: 10 8; stroke-linejoin: round; }
+.cr-piezas polygon { fill: var(--c); transform-box: fill-box; transform-origin: center; opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(var(--r)) scale(.5); transition: transform 1s cubic-bezier(.3, 1.35, .45, 1), opacity .45s ease; }
+.cr-piezas polygon.on { opacity: 1; transform: none; }
+.cr-tangram.completo .cr-graciosa { animation: cr-brillo 1.8s ease-in-out .9s infinite; }
+@keyframes cr-brillo { 50% { fill: #fff3b0; } }
 
-.crono-card { --c: #3a4766; --t: var(--mesa-4); position: relative; background: var(--noche-2); border-top: 3px solid var(--c); border-radius: 4px; padding: 22px 22px 24px; overflow: hidden; transition: transform .25s ease, background .25s ease; }
-.crono-card:hover { transform: translateY(-3px); background: #22335a; }
-.crono-card h3 { position: relative; margin: 6px 0 10px; font-family: var(--display); font-weight: 400; font-size: clamp(1.8rem, 3.4vw, 2.3rem); line-height: .98; color: var(--arena); max-width: 18em; }
-.crono-card p { position: relative; margin: 0 0 10px; color: #b4b8c8; line-height: 1.55; }
-.crono-card p:last-child { margin-bottom: 0; }
-.crono-card .crono-tag { margin: 0; font-size: 12.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--t); }
-.crono-card .crono-sub { margin-top: -4px; color: var(--arena); font-weight: 500; }
-.crono-card .crono-resp { font-size: 14px; font-weight: 600; color: var(--arena); }
-.crono-card .crono-extra { font-size: 14.5px; font-style: italic; color: #9aa0b4; }
-/* Número gigante del reto, como recortado en la tarjeta */
-.crono-card.reto::before { content: attr(data-n); position: absolute; right: -6px; top: -18px; font-family: var(--display); font-size: 9rem; line-height: 1; color: var(--c); opacity: .16; pointer-events: none; }
-.crono-voces { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 6px; }
-.crono-voces li { color: #b4b8c8; font-size: 15px; }
-.crono-voces strong { display: block; color: var(--arena); font-weight: 600; font-size: 16px; }
-.crono-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-.crono-lista li { padding-left: 16px; border-left: 2px solid var(--c); color: #b4b8c8; font-size: 15px; }
-.crono-lista strong { display: block; color: var(--arena); font-weight: 600; }
-.crono-paralelo { margin: 6px 0 0; display: flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #9aa0b4; }
-.crono-paralelo span { white-space: nowrap; font-family: var(--display); font-size: 1.5rem; letter-spacing: .02em; color: var(--arena); }
-.crono-paralelo::after { content: ""; flex: 1; height: 1px; background: #3a4766; }
-.crono-par { display: grid; gap: 14px; }
-.en-directo { display: inline-flex; align-items: center; gap: 6px; margin-right: 8px; padding: 2px 8px; border-radius: 99px; background: rgba(127, 178, 240, .16); }
-.en-directo::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #ff8a6b; animation: latido 1.6s ease-in-out infinite; }
-@keyframes latido { 50% { opacity: .25; } }
+/* Fichas */
+.cr-fichas { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; }
+.ficha { --bg: var(--noche-2); --tx: var(--arena); --sub: #c9ccd8; --ac: var(--mesa-4); position: relative; padding: 26px 24px 28px; background: var(--bg); color: var(--tx); clip-path: polygon(0 0, calc(100% - 34px) 0, 100% 34px, 100% 100%, 0 100%); overflow: hidden; transition: opacity .9s ease, transform .9s cubic-bezier(.2, .9, .25, 1.08), filter .5s ease; }
+.ficha > *:not(.f-forma):not(.f-num) { position: relative; z-index: 1; }
+.f-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.f-hora { white-space: nowrap; font-family: var(--display); font-size: clamp(3.6rem, 9vw, 5.2rem); line-height: .8; letter-spacing: .01em; }
+.f-hora small { font-size: .42em; margin-left: 4px; opacity: .75; }
+.f-dur { flex: none; padding: 5px 12px; border: 1.5px solid currentColor; border-radius: 99px; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+.ficha .f-tag { margin: 0 0 6px; font-size: 12.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ac); }
+.ficha h3 { margin: 0 0 12px; font-family: var(--display); font-weight: 400; font-size: clamp(2rem, 4.4vw, 2.9rem); line-height: .94; max-width: 15em; text-wrap: balance; }
+.ficha p { margin: 0 0 10px; max-width: 36em; color: var(--sub); line-height: 1.55; }
+.ficha p:last-child { margin-bottom: 0; }
+.ficha .f-resp { font-size: 14px; font-weight: 600; letter-spacing: .04em; color: var(--tx); }
+.ficha .f-extra { font-size: 14px; font-style: italic; }
+.f-voces, .f-ondas { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 10px; }
+.f-voces { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.f-voces li, .f-ondas li { padding-left: 12px; border-left: 3px solid var(--ac); font-size: 14px; line-height: 1.35; color: var(--sub); }
+.f-voces strong, .f-ondas strong { display: block; font-size: 16px; color: var(--tx); }
+.f-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; }
+.f-chips span { padding: 4px 10px; border-radius: 99px; background: rgba(255, 255, 255, .16); font-size: 13px; font-weight: 500; }
+/* Pieza gigante de fondo: muestra dónde encaja en el cuadrado */
+.f-forma { position: absolute; right: -60px; bottom: -70px; width: 300px; height: 300px; fill: currentColor; opacity: .1; transition: transform 1.2s cubic-bezier(.2, .8, .2, 1); pointer-events: none; }
+.ficha:hover .f-forma { transform: rotate(-12deg) scale(1.06); }
+/* Número del reto, en contorno */
+.f-num { position: absolute; right: 18px; top: 46px; font-family: var(--display); font-size: clamp(7rem, 16vw, 11rem); line-height: .8; color: transparent; -webkit-text-stroke: 2px currentColor; opacity: .22; pointer-events: none; }
 
-/* Final: la pieza que falta, en amarillo canario */
-.crono-final .crono-card { background: var(--mesa-4); border-top: 0; }
-.crono-final .crono-card:hover { background: #ffd526; }
-.crono-final .crono-card h3 { font-size: clamp(2.2rem, 5vw, 3.4rem); color: var(--noche); }
-.crono-final .crono-card p { color: #3d3a2a; }
-.crono-final .crono-card .crono-tag { color: var(--noche); }
-.crono-final .crono-card::after { content: ""; position: absolute; right: 22px; bottom: -14px; width: 120px; height: 120px; border: 3px dashed var(--noche); clip-path: polygon(0 100%, 50% 0, 100% 100%); opacity: .2; }
+/* Colores de ficha */
+.f-arena { --bg: var(--arena); --tx: var(--noche); --sub: #4a5068; --ac: var(--mesa-3-texto); }
+.f-naranja { --bg: var(--mesa-2); --tx: var(--noche); --sub: #3a2a1a; --ac: var(--noche); }
+.f-rojo { --bg: var(--mesa-1); --tx: #fff; --sub: #fde6df; --ac: #ffd9a8; }
+.f-azul { --bg: var(--mesa-3); --tx: #fff; --sub: #e2edfa; --ac: #ffcc00; }
+.f-amarillo { --bg: var(--mesa-4); --tx: var(--noche); --sub: #4a3f12; --ac: var(--mesa-1-texto); }
+.f-noche { --bg: #22335a; --tx: var(--arena); --sub: #c9ccd8; --ac: var(--mesa-4); }
+.f-radio { --bg: #0f1a33; --tx: var(--arena); --sub: #b4b8c8; --ac: #7fb2f0; }
+
+/* Fichas dobles: dos piezas que se juntan */
+.f-doble { --bg: #1a2848; --ac: var(--mesa-4); background: var(--bg) linear-gradient(135deg, rgba(255, 255, 255, .04) 25%, transparent 25% 50%, rgba(255, 255, 255, .04) 50% 75%, transparent 75%) 0 0 / 22px 22px; }
+.f-mitades { position: relative; display: grid; gap: 10px; margin-top: 16px; }
+.f-mitad { position: relative; padding: 22px 20px 24px; background: var(--bg); color: var(--tx); overflow: hidden; border-radius: 3px; }
+.f-mitad > *:not(.f-num) { position: relative; z-index: 1; }
+.f-mitad .f-num { top: 10px; right: 10px; font-size: 8rem; }
+.f-mitad h3 { font-size: clamp(1.9rem, 3.6vw, 2.4rem); }
+.f-o { justify-self: center; display: grid; place-items: center; width: 44px; height: 44px; margin: -26px 0; z-index: 2; border-radius: 50%; background: var(--arena); color: var(--noche); font-family: var(--display); font-size: 1.6rem; box-shadow: 0 0 0 6px #1a2848; }
+.f-antena { display: inline-flex; align-items: center; gap: 6px; margin-right: 10px; padding: 2px 9px; border-radius: 99px; background: rgba(255, 138, 107, .16); color: #ff8a6b; }
+.f-antena::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #ff8a6b; animation: cr-latido 1.4s ease-in-out infinite; }
+.f-radio::after { content: ""; position: absolute; right: -50px; bottom: -50px; width: 200px; height: 200px; border-radius: 50%; background: repeating-radial-gradient(circle, transparent 0 14px, rgba(127, 178, 240, .18) 14px 16px); animation: cr-ondas 3s linear infinite; }
+@keyframes cr-latido { 50% { opacity: .25; } }
+@keyframes cr-ondas { to { transform: scale(1.25); opacity: .3; } }
+
+/* Final: La Graciosa. Empieza en contorno y se rellena de amarillo al llegar */
+.f-final { --bg: transparent; --tx: var(--arena); --sub: #c9ccd8; --ac: var(--mesa-4); background: var(--bg); outline: 2px dashed var(--mesa-4); outline-offset: -2px; clip-path: none; border-radius: 4px; transition: background .8s ease, color .8s ease, opacity .9s ease, transform .9s cubic-bezier(.2, .9, .25, 1.08); }
+.f-final h3 { font-size: clamp(2.6rem, 7vw, 4.6rem); max-width: 11em; }
+.f-final h3 span { color: var(--mesa-4); transition: color .8s ease; }
+.f-final .f-forma { width: 240px; height: 150px; right: -40px; bottom: -70px; opacity: .14; }
+.f-final.activa { --bg: var(--mesa-4); --tx: var(--noche); --sub: #4a3f12; --ac: var(--mesa-1-texto); outline-color: transparent; }
+.f-final.activa h3 span { color: var(--mesa-1-texto); }
+
+/* Animación de entrada y foco: solo con JavaScript */
+.js .ficha:not(.vista) { opacity: 0; transform: translateY(70px) rotate(-2.5deg) scale(.97); }
+.js .cr-fichas.listo .ficha.vista:not(.activa) { filter: saturate(.55) brightness(.82); }
 
 /* El legado */
-.legado { margin-top: 24px; background: var(--arena); color: var(--tinta); border-radius: 4px; padding: 32px 24px; display: grid; gap: 28px; }
-.legado .etiqueta { color: var(--mesa-1-texto); }
-.legado-lema { margin: 0 0 14px; font-family: var(--display); font-size: clamp(2.2rem, 5vw, 3.4rem); line-height: .95; color: var(--tinta); }
-.legado-intro p:last-child { margin: 0; color: var(--tinta-suave); line-height: 1.55; }
-.legado-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
-.legado-lista li { display: flex; align-items: center; gap: 14px; background: var(--superficie); border: 1px solid var(--linea); border-radius: 4px; padding: 14px 16px; color: var(--tinta-suave); line-height: 1.4; }
-.legado-lista img { width: 44px; height: 44px; object-fit: contain; flex: none; }
-.legado-lista strong { color: var(--tinta); }
+.cr-legado { margin-top: 96px; }
+.cr-lema { margin: 0 0 40px; font-family: var(--display); font-size: clamp(2.8rem, 8vw, 6rem); line-height: .9; color: var(--arena); }
+.cr-lema em { font-style: normal; color: var(--mesa-4); }
+.cr-cuatro { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.cr-cuatro li { position: relative; display: grid; grid-template-columns: 56px 1fr; grid-template-rows: auto auto; column-gap: 16px; align-items: center; padding: 22px 20px; background: var(--noche-2); border-top: 4px solid var(--c); border-radius: 4px; transition: transform .35s cubic-bezier(.2, .8, .2, 1.2), background .35s ease; }
+.cr-cuatro li:hover { transform: translateY(-6px) rotate(-1deg); background: #22335a; }
+.cr-cuatro img { grid-row: 1 / span 2; width: 56px; height: 56px; object-fit: contain; transition: transform .6s cubic-bezier(.3, 1.4, .5, 1); }
+.cr-cuatro li:hover img { transform: rotate(-15deg) scale(1.1); }
+.cr-cuatro b { font-family: var(--display); font-weight: 400; font-size: 1.6rem; line-height: 1; color: var(--c); }
+.cr-cuatro span { color: #c9ccd8; line-height: 1.4; }
+.cr-cuatro strong { color: var(--arena); }
 
 @media (min-width: 720px) {
-  .crono-cabecera { grid-template-columns: 1fr 1fr; }
-  .crono > li { grid-template-columns: 150px 28px 1fr; column-gap: 20px; }
-  .crono > li::after { left: 183px; }
-  .crono-hora { grid-column: 1; grid-row: 1 / span 2; text-align: right; margin: 0; }
-  .pieza { grid-column: 2; }
-  .crono > li > .crono-card, .crono-grupo { grid-column: 3; grid-row: 1 / span 2; }
-  .crono-par { grid-template-columns: 1fr 1fr; }
-  .legado { grid-template-columns: 1fr 1.2fr; align-items: center; padding: 44px 48px; }
-  .legado-lista { grid-template-columns: 1fr 1fr; }
+  .ficha { padding: 32px 34px 34px; }
+  .f-mitades { grid-template-columns: 1fr auto 1fr; gap: 0; align-items: stretch; }
+  .f-o { align-self: center; margin: 0 -22px; }
+  .cr-cuatro { grid-template-columns: 1fr 1fr; }
 }
-@media (prefers-reduced-motion: reduce) { .en-directo::before { animation: none; } .crono-card { transition: none; } }
+@media (min-width: 980px) {
+  .cr-grid { grid-template-columns: 330px 1fr; gap: 56px; align-items: start; }
+  .cr-panel { top: calc(var(--topbar) + 32px); margin: 0; padding: 0; display: block; background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border: 0; }
+  .cr-reloj { flex-direction: column; align-items: flex-start; gap: 4px; margin-bottom: 18px; }
+  .cr-ahora { display: block; font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: #9aa0b4; }
+  .cr-hora { font-size: 6.4rem; line-height: .82; }
+  .cr-que { white-space: normal; font-size: 17px; }
+  .cr-tangram { width: 100%; height: auto; }
+  .cr-progreso { margin-top: 22px; }
+  .cr-extremos { display: flex; justify-content: space-between; margin-top: 8px; font-family: var(--display); font-size: 1.1rem; letter-spacing: .04em; color: #9aa0b4; }
+  .cr-extremos #crPaso { color: var(--arena); }
+  .cr-cuatro { grid-template-columns: repeat(4, 1fr); }
+  .cr-cuatro li { grid-template-columns: 1fr; grid-template-rows: auto; row-gap: 10px; padding: 26px 22px 28px; }
+  .cr-cuatro img { grid-row: auto; width: 64px; height: 64px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ficha, .cr-piezas polygon, .f-forma, .cr-cuatro li, .cr-cuatro img { transition: none; }
+  .js .ficha:not(.vista) { opacity: 1; transform: none; }
+  .f-antena::before, .f-radio::after, .cr-tangram.completo .cr-graciosa, .cr-hora.cambia { animation: none; }
+}
