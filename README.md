@@ -137,11 +137,11 @@ Necesita ffmpeg (`winget install Gyan.FFmpeg`).
 
 ```bash
 cd identidad
-node video.js "<video.mp4>" "<locucion.mp3>" "<salida.mp4>"
+node video.js "<video.mp4>" "<locucion.mp3>" "<salida.mp4>" --musica "<musica.mp3>"
 node video.js "<video.mp4>" "<locucion.mp3>" "<carpeta>" --muestras 5,30,60   # fotogramas de prueba
 ```
 
-Los tiempos de cada escena y los tramos del vídeo de origen están al principio de `video.js` (`TRAMOS`), por si cambia la locución.
+Los tiempos de cada escena y los tramos del vídeo de origen están al principio de `video.js` (`TRAMOS`). Si cambia la locución, basta con actualizar `ANCLAS`: dónde empieza cada frase en la nueva voz (se mide con `ffmpeg -af silencedetect`). La música entra en `MUSICA_DESDE` para que su final natural coincida con el del vídeo, y baja sola cuando se habla.
 
 ## Regenerar los logotipos
 

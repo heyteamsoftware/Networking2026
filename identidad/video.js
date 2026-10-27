@@ -3,6 +3,7 @@
 //
 // Uso:
 //   node video.js <video.mp4> <locucion.mp3> <salida.mp4>
+//   node video.js <video.mp4> <locucion.mp3> <salida.mp4> --musica <musica.mp3>   (música por debajo de la voz)
 //   node video.js <video.mp4> <locucion.mp3> <carpeta> --muestras 2,5,11   (fotogramas de prueba en PNG)
 //
 // Necesita ffmpeg en el PATH. La capa animada se dibuja en SVG fotograma a fotograma (textos en contornos,
@@ -14,7 +15,7 @@ const sharp = require("sharp");
 const G = require("./generar.js");
 const P = require("./piezas.js");
 
-const W = 1920, H = 1080, FPS = 25, TOTAL = 77; // segundos (la locución dura 75,6)
+const W = 1920, H = 1080, FPS = 25, DISENO = 77; // duración del guion de diseño, en segundos
 const C = G.C, NOCHE2 = "#1c2b4d", SUAVE = "#b4b8c8";
 const MESA = G.MESA_COLOR; // rojo, naranja, azul, amarillo
 const CAP = 0.7;
@@ -36,6 +37,30 @@ const TRAMOS = [
   [67.1, 77.0, 86.0], // (oculto por el cierre)
 ];
 const BARRIDOS = [9.7, 41.6, 61.3]; // cambios de capítulo con barrido de piezas
+
+// ---------- Sincronía con la locución ----------
+// Todas las animaciones y tramos están escritos sobre un guion de diseño (la primera locución).
+// Cada par [diseño, locución] dice cuándo empieza la misma frase en la locución que se usa ahora
+// (medido con silencedetect); entre pares, el tiempo se estira o encoge en línea recta.
+const ANCLAS = [[0, 0], [1.76, 1.91], [3.49, 3.48], [9.73, 9.29], [11.2, 10.81], [13.43, 13.81], [17.95, 17.81], [20.49, 20.47],
+  [22.48, 22.83], [25.16, 25.07], [27.55, 27.16], [29.89, 29.45], [31.8, 31.62], [35.18, 34.94], [36.95, 36.67], [38.57, 38.48],
+  [41.71, 41.73], [43.75, 43.82], [44.93, 45.31], [46.7, 47.28], [49.73, 50.18], [53.4, 53.94], [55.46, 55.89], [57.45, 58.05],
+  [58.57, 59.51], [59.71, 60.59], [61.45, 62.59], [63.29, 64.33], [64.86, 66.08], [66.99, 67.99], [69.45, 70.87], [70.96, 72.42],
+  [73.37, 74.81], [75.21, 75.83]];
+function interpolar(x, de, a) {
+  const n = ANCLAS.length;
+  if (x <= ANCLAS[0][de]) return ANCLAS[0][a] + (x - ANCLAS[0][de]);
+  if (x >= ANCLAS[n - 1][de]) return ANCLAS[n - 1][a] + (x - ANCLAS[n - 1][de]);
+  let i = 0;
+  while (ANCLAS[i + 1][de] < x) i++;
+  const [p, q] = [ANCLAS[i], ANCLAS[i + 1]];
+  return p[a] + ((x - p[de]) / (q[de] - p[de])) * (q[a] - p[a]);
+}
+const diseno = (t) => interpolar(t, 1, 0); // instante de la locución → instante del guion
+const real = (t) => interpolar(t, 0, 1);   // instante del guion → instante de la locución
+const TOTAL = +real(DISENO).toFixed(2);
+const TRAMOS_REALES = TRAMOS.map(([a, b, o]) => [real(a), real(b), o]);
+const MUSICA_DESDE = 75.4; // segundo de la música en el que empieza: así su final natural coincide con el del vídeo
 
 // ---------- Utilidades ----------
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
@@ -405,20 +430,21 @@ function escenaCierre(t) {
 // Render
 // =========================================================================================
 const [, , VIDEO, AUDIO, SALIDA, ...resto] = process.argv;
+const MUSICA = resto.includes("--musica") ? resto[resto.indexOf("--musica") + 1] : null;
 if (!VIDEO || !AUDIO || !SALIDA) { console.log("Uso: node video.js <video.mp4> <locucion.mp3> <salida.mp4> [--muestras 2,5,11]"); process.exit(1); }
 
 async function cargar() {
   const b = await sharp(path.join(__dirname, "project", "assets", "Instituciones", "cifp-tony-gallardo.png")).resize(400).png().toBuffer();
   LOGO_CIFP = "data:image/png;base64," + b.toString("base64");
 }
-const renderCapa = (t) => sharp(Buffer.from(capa(t))).ensureAlpha().raw().toBuffer();
-const origen = (t) => { const s = TRAMOS.find(([a, b]) => t >= a && t < b) || TRAMOS[TRAMOS.length - 1]; return s[2] + (t - s[0]); };
+const renderCapa = (t) => sharp(Buffer.from(capa(diseno(t)))).ensureAlpha().raw().toBuffer();
+const origen = (t) => { const s = TRAMOS_REALES.find(([a, b]) => t >= a && t < b) || TRAMOS_REALES[TRAMOS_REALES.length - 1]; return s[2] + (t - s[0]); };
 
 async function muestras(lista) {
   fs.mkdirSync(SALIDA, { recursive: true });
   for (const t of lista) {
     const fondo = execFileSync("ffmpeg", ["-v", "error", "-ss", String(origen(t)), "-i", VIDEO, "-frames:v", "1", "-f", "image2pipe", "-vcodec", "png", "-"], { maxBuffer: 64 << 20 });
-    const capaPng = await sharp(Buffer.from(capa(t))).png().toBuffer();
+    const capaPng = await sharp(Buffer.from(capa(diseno(t)))).png().toBuffer();
     await sharp(fondo).resize(W, H).composite([{ input: capaPng }]).jpeg({ quality: 80 }).toFile(path.join(SALIDA, `t${String(t).replace(".", "_")}.jpg`));
     process.stdout.write(t + " ");
   }
@@ -428,10 +454,16 @@ async function muestras(lista) {
 async function video() {
   const N = Math.round(TOTAL * FPS);
   // Montaje de las imágenes: cada tramo se recorta del original y se concatenan
-  const trozos = TRAMOS.map(([a, b, o], i) => `[0:v]trim=start=${o}:end=${(o + b - a).toFixed(3)},setpts=PTS-STARTPTS,fps=${FPS},scale=${W}:${H},setsar=1[v${i}]`);
-  const filtro = trozos.join(";") + ";" + TRAMOS.map((_, i) => `[v${i}]`).join("") + `concat=n=${TRAMOS.length}:v=1:a=0[base];` +
-    `[1:v]format=rgba[capa];[base][capa]overlay=0:0:format=auto,format=yuv420p[out];[2:a]apad,atrim=0:${TOTAL}[a]`;
-  const ff = spawn("ffmpeg", ["-v", "error", "-y", "-i", VIDEO, "-f", "rawvideo", "-pix_fmt", "rgba", "-s", `${W}x${H}`, "-r", String(FPS), "-i", "-", "-i", AUDIO,
+  const trozos = TRAMOS_REALES.map(([a, b, o], i) => `[0:v]trim=start=${o}:end=${(o + b - a).toFixed(3)},setpts=PTS-STARTPTS,fps=${FPS},scale=${W}:${H},setsar=1[v${i}]`);
+  // Audio: la voz delante; la música, más baja y que se aparta (compresión lateral) cuando se habla
+  const audio = MUSICA
+    ? `[2:a]asplit=2[voz][llave];[3:a]atrim=start=${MUSICA_DESDE},asetpts=PTS-STARTPTS,volume=0.13,afade=t=in:d=1.5,afade=t=out:st=${(TOTAL - 2.5).toFixed(2)}:d=2.5[mus];` +
+      `[mus][llave]sidechaincompress=threshold=0.015:ratio=8:attack=20:release=500[musb];[voz]apad[vozp];` +
+      `[vozp][musb]amix=inputs=2:duration=longest:normalize=0,atrim=0:${TOTAL},loudnorm=I=-15:TP=-1.5:LRA=11[a]`
+    : `[2:a]apad,atrim=0:${TOTAL}[a]`;
+  const filtro = trozos.join(";") + ";" + TRAMOS_REALES.map((_, i) => `[v${i}]`).join("") + `concat=n=${TRAMOS_REALES.length}:v=1:a=0[base];` +
+    `[1:v]format=rgba[capa];[base][capa]overlay=0:0:format=auto,format=yuv420p[out];` + audio;
+  const ff = spawn("ffmpeg", ["-v", "error", "-y", "-i", VIDEO, "-f", "rawvideo", "-pix_fmt", "rgba", "-s", `${W}x${H}`, "-r", String(FPS), "-i", "-", "-i", AUDIO, ...(MUSICA ? ["-i", MUSICA] : []),
     "-filter_complex", filtro, "-map", "[out]", "-map", "[a]", "-t", String(TOTAL), "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
     "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", SALIDA], { stdio: ["pipe", "inherit", "inherit"] });
   const cerrado = new Promise((ok, ko) => ff.on("close", (c) => (c === 0 ? ok() : ko(new Error("ffmpeg terminó con código " + c)))));
