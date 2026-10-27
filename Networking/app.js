@@ -360,6 +360,66 @@
     if (colGrid.children.length) { colGrid.hidden = false; colVacio.hidden = true; }
   });
 
+  /* ---------- Media (media.json) ----------
+     Cada contenido: { "tipo": "Vídeo", "titulo": "…", "descripcion": "…", "fecha": "…", "duracion": "1:18",
+     "video": "media/archivo.mp4", "portada": "media/archivo.webp" }
+     Solo "titulo" y "video" son obligatorios. El primero se muestra en grande; el resto, en una lista
+     debajo que, al pulsarlos, pasan al reproductor. Mientras la lista esté vacía, la sección no se ve. */
+  var mediaSec = document.getElementById("media");
+  var mediaDest = document.getElementById("mediaDestacado"), mediaLista = document.getElementById("mediaLista");
+  function pintarDestacado(m) {
+    mediaDest.textContent = "";
+    var fig = el("figure", "media-player");
+    var marco = el("div", "media-marco");
+    var v = el("video");
+    v.src = m.video;
+    v.preload = "none";
+    v.setAttribute("playsinline", "");
+    if (m.portada) v.poster = m.portada;
+    v.setAttribute("aria-label", m.titulo);
+    var play = el("button", "media-play");
+    play.type = "button";
+    play.setAttribute("aria-label", "Reproducir: " + m.titulo);
+    play.appendChild(el("span"));
+    play.addEventListener("click", function () {
+      v.controls = true;
+      play.hidden = true;
+      v.play();
+    });
+    marco.appendChild(v);
+    marco.appendChild(play);
+    fig.appendChild(marco);
+    var pie = el("figcaption", "media-pie");
+    var datos = [m.tipo, m.duracion].filter(Boolean).join(" · ");
+    if (datos) pie.appendChild(el("span", "media-tipo", datos));
+    pie.appendChild(el("h3", "", m.titulo));
+    if (m.descripcion) pie.appendChild(el("p", "", m.descripcion));
+    if (m.fecha) pie.appendChild(el("p", "media-fecha", m.fecha));
+    fig.appendChild(pie);
+    mediaDest.appendChild(fig);
+  }
+  cargar("media.json", function (lista) {
+    lista = lista.filter(function (m) { return m && m.titulo && m.video; });
+    if (!lista.length) return;
+    pintarDestacado(lista[0]);
+    lista.slice(1).forEach(function (m) {
+      var li = el("li");
+      var b = el("button", "media-item");
+      b.type = "button";
+      if (m.portada) { var img = el("img"); img.src = m.portada; img.alt = ""; img.loading = "lazy"; b.appendChild(img); }
+      b.appendChild(el("span", "media-item-titulo", m.titulo));
+      if (m.tipo || m.duracion) b.appendChild(el("span", "media-tipo", [m.tipo, m.duracion].filter(Boolean).join(" · ")));
+      b.addEventListener("click", function () {
+        pintarDestacado(m);
+        mediaDest.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+      li.appendChild(b);
+      mediaLista.appendChild(li);
+    });
+    mediaLista.hidden = !mediaLista.children.length;
+    mediaSec.hidden = false;
+  });
+
   /* ---------- Formulario «Quiero participar» ---------- */
   var form = document.getElementById("formParticipa");
   var formOk = document.getElementById("formOk");

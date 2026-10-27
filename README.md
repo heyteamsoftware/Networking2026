@@ -91,6 +91,19 @@ La sección «Empresas participantes» se rellena desde `Networking/empresas.jso
 
 Solo `nombre` es obligatorio. Publicad solo logos autorizados por cada empresa; van en `Networking/img/empresas/`. `mesas` pinta un triangulito del color de cada mesa en la que participa. Basta con subir `empresas.json` (y los logos) al servidor: no hay que tocar el HTML.
 
+## Media
+
+La sección «Media» se rellena desde `Networking/media.json`. El primer contenido se muestra en grande con su reproductor; los siguientes, en una lista debajo que, al pulsarlos, pasan al reproductor. Mientras la lista esté vacía la sección no se ve. Cada contenido:
+
+```json
+[
+  { "tipo": "Vídeo", "titulo": "…", "descripcion": "…", "fecha": "Octubre de 2026", "duracion": "1:18",
+    "video": "media/archivo.mp4", "portada": "media/archivo.webp" }
+]
+```
+
+Solo `titulo` y `video` son obligatorios. Los vídeos van en `Networking/media/`, en MP4 (H.264) preparados para web: `ffmpeg -i original.mp4 -c:v libx264 -preset slow -crf 23 -c:a aac -b:a 160k -movflags +faststart media/archivo.mp4`. No se guardan en el repositorio (`.gitignore`), porque pesan demasiado: se suben al servidor aparte.
+
 ## Colaboraciones posteriores
 
 La sección «Lo que nace del encuentro» se rellena desde `Networking/colaboraciones.json`, igual que el escaparate. Mientras esté vacío muestra un aviso. Cada colaboración:

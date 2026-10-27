@@ -3,3 +3,6 @@
 .DS_Store
 Thumbs.db
 node_modules/
+
+# Vídeos de la sección Media: se suben al servidor aparte (pesan demasiado para el repositorio)
+Networking/media/*.mp4
