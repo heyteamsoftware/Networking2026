@@ -126,6 +126,23 @@ Material físico para las mesas, en `piezas/juego/` (PDF de imprenta con sangrad
 
 Para regenerarlo: `cd identidad && npm run juego`.
 
+## Vídeo promocional
+
+`identidad/video.js` monta el vídeo de 77 s a partir de las imágenes del encuentro y la locución. Lo que hace:
+
+- Corta las imágenes en tramos sincronizados con las frases de la locución.
+- Les superpone una capa animada con la identidad: el tangram que se monta y hace de ventana a las imágenes, las tarjetas de Conectar, Descubrir y Activar, los retos, Radio Atlante, el cuadrado que se abre en las islas con el hueco de La Graciosa, «La pieza que nos falta eres tú» y el cierre con el logotipo y el CIFP Tony Gallardo.
+
+Necesita ffmpeg (`winget install Gyan.FFmpeg`).
+
+```bash
+cd identidad
+node video.js "<video.mp4>" "<locucion.mp3>" "<salida.mp4>"
+node video.js "<video.mp4>" "<locucion.mp3>" "<carpeta>" --muestras 5,30,60   # fotogramas de prueba
+```
+
+Los tiempos de cada escena y los tramos del vídeo de origen están al principio de `video.js` (`TRAMOS`), por si cambia la locución.
+
 ## Regenerar los logotipos
 
 Si cambian los colores o la geometría, se edita `identidad/generar.js` y se ejecuta:
