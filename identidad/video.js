@@ -280,7 +280,7 @@ function verbo(t, a, b, palabra, color, sub, chips) {
 }
 
 // Logotipo animado: tangram que se monta + NETWORKING 2026 + JUNTOS SOMOS FP. (cx, cy) es el centro del conjunto.
-function logotipo(t, a, cx, cy, escala, conTarjeta = true) {
+function logotipo(t, a, cx, cy, escala, conTarjeta = true, juntos = 2.0) {
   const lado = 230 * escala, size = 170 * escala;
   const tw = ancho(G.BEBAS, "NETWORKING 2026", size, 2);
   const total = lado + 50 * escala + tw;
@@ -295,7 +295,7 @@ function logotipo(t, a, cx, cy, escala, conTarjeta = true) {
   const tx = x0 + lado + 50 * escala, et = eout(prog(t, a + 0.35, a + 0.85));
   s += grupo(et, txt(G.BEBAS, "NETWORKING", tx + (1 - et) * 40, y0 + lado * 0.62, size, C.arena, { tracking: 2 }) +
     txt(G.BEBAS, "2026", tx + ancho(G.BEBAS, "NETWORKING ", size, 2) + (1 - et) * 40, y0 + lado * 0.62, size, C.sol, { tracking: 2 }));
-  const ej = prog(t, a + 2.0, a + 2.4);
+  const ej = prog(t, a + juntos, a + juntos + 0.4);
   s += grupo(ej, txt(G.OUTFIT_SB, "JUNTOS SOMOS FP", tx + 4, y0 + lado * 0.93, 40 * escala, SUAVE, { tracking: 12 * escala }));
   return s;
 }
@@ -372,29 +372,29 @@ function escenaGraciosa(t) {
   return s;
 }
 
-// Reserva tu plaza y cierre con el logotipo y el CIFP Tony Gallardo
+// Reserva tu plaza con un QR a la web, y cierre: el CIFP Tony Gallardo en grande y el logotipo de Networking debajo
 function escenaCierre(t) {
   let s = `<rect width="${W}" height="${H}" fill="${C.noche}" opacity="${f2(prog(t, 69.2, 69.5))}"/>`;
-  // Botón «Reserva tu plaza»
-  const vb = vis(t, 69.45, 71.0, 0.3, 0.35);
+  // Botón «Reserva tu plaza» y el QR (unos tres segundos en pantalla, para poder escanearlo)
+  const vb = vis(t, 69.45, 72.5, 0.3, 0.4);
   if (vb > 0) {
     const e = eback(prog(t, 69.45, 69.9)), sc = lerp(0.6, 1, e);
     const b = `<rect x="-330" y="-62" width="660" height="124" rx="62" fill="${C.sol}"/>` + txt(G.OUTFIT_SB, "Reserva tu plaza", 0, 18, 54, C.noche, { anchor: "middle" });
-    s += grupo(vb, b, `translate(960 500) scale(${f2(sc)})`);
-    s += grupo(vb * prog(t, 69.8, 70.2), txt(G.OUTFIT, "myappsserver.duckdns.org/Networking", 960, 620, 34, SUAVE, { anchor: "middle" }));
+    s += grupo(vb, b, `translate(960 250) scale(${f2(sc)})`);
+    const eq = eout(prog(t, 69.75, 70.25)), lado = 400;
+    const q = `<rect x="${-lado / 2 - 24}" y="${-lado / 2 - 24}" width="${lado + 48}" height="${lado + 48}" rx="16" fill="#ffffff"/>` + P.qr(P.URL_WEB, -lado / 2, -lado / 2, lado, { color: C.noche, fondo: "#ffffff", margen: 0.02 });
+    s += grupo(vb * eq, q, `translate(960 ${f2(630 + (1 - eq) * 40)})`);
+    s += grupo(vb * prog(t, 70.1, 70.5), txt(G.OUTFIT, "Escanea el código y apúntate", 960, 1000, 36, SUAVE, { anchor: "middle" }));
   }
-  // Logotipo
-  if (t >= 70.9) {
-    s += logotipo(t, 70.95, 960, 430, 1.2, false);
-    // Organiza: CIFP Tony Gallardo
-    const vo = eout(prog(t, 72.4, 72.9));
-    if (vo > 0) {
-      const d = 170, cx = 960 - 230, cy = 800;
-      let o = `<circle cx="${cx}" cy="${cy}" r="${d / 2}" fill="#ffffff"/><image href="${LOGO_CIFP}" x="${cx - d / 2}" y="${cy - d / 2}" width="${d}" height="${d}"/>`;
-      o += txt(G.OUTFIT_SB, "ORGANIZA", cx + 120, cy - 18, 26, SUAVE, { tracking: 6 });
-      o += txt(G.BEBAS, "CIFP TONY GALLARDO", cx + 120, cy + 52, 76, C.arena, { tracking: 2 });
-      s += grupo(vo, o, `translate(0 ${f2((1 - vo) * 40)})`);
-    }
+  // Cierre: logo del CIFP en grande, su nombre debajo y el logotipo de Networking más pequeño
+  if (t >= 72.2) {
+    const e = eback(prog(t, 72.3, 72.9)), d = 400, cx = 960, cy = 330;
+    const logo = `<circle cx="0" cy="0" r="${d / 2}" fill="#ffffff"/><image href="${LOGO_CIFP}" x="${-d / 2}" y="${-d / 2}" width="${d}" height="${d}"/>`;
+    s += grupo(clamp(prog(t, 72.3, 72.6)), logo, `translate(${cx} ${cy}) scale(${f2(lerp(0.7, 1, e))})`);
+    const en = eout(prog(t, 72.7, 73.1));
+    s += grupo(en, txt(G.BEBAS, "CIFP TONY GALLARDO", 960, 640 + (1 - en) * 30, 110, C.arena, { anchor: "middle", tracking: 3 }));
+    s += grupo(prog(t, 73.0, 73.3), `<rect x="900" y="690" width="120" height="4" fill="${C.sol}"/>`);
+    s += logotipo(t, 73.2, 960, 850, 0.6, false, 0.3);
   }
   // Fundido final
   s += `<rect width="${W}" height="${H}" fill="#000" opacity="${f2(prog(t, 76.2, 77.0))}"/>`;
