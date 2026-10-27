@@ -416,3 +416,41 @@ img { display: block; max-width: 100%; }
 .aviso-cookies button:hover { background: #ffd83d; }
 .aviso-cookies a:focus-visible, .aviso-cookies button:focus-visible { outline: 3px solid var(--mesa-4); outline-offset: 2px; }
 @media (min-width: 900px) { .aviso-cookies { left: auto; right: 24px; bottom: 24px; max-width: 460px; } }
+
+/* ---------- Cronograma ---------- */
+.cronograma { padding: 88px 0; background: var(--fondo); scroll-margin-top: 40px; }
+.cronograma h2 { margin: 0 0 16px; font-family: var(--display); font-weight: 400; font-size: clamp(2.4rem, 5vw, 3.9rem); line-height: .98; color: var(--tinta); text-wrap: balance; }
+.cronograma .etiqueta { color: var(--mesa-1-texto); margin-bottom: 10px; }
+.cronograma .entradilla { margin: 0 0 40px; }
+.crono { list-style: none; margin: 0; padding: 0; }
+.crono > li { --c: var(--noche); position: relative; display: grid; gap: 10px; padding: 0 0 32px 28px; }
+.crono > li::before { content: ""; position: absolute; left: 0; top: 7px; width: 12px; height: 12px; background: var(--c); transform: rotate(45deg); }
+.crono > li::after { content: ""; position: absolute; left: 5px; top: 26px; bottom: 6px; width: 2px; background: var(--linea); }
+.crono > li:last-child::after { display: none; }
+.crono-hora { margin: 0; font-family: var(--display); font-size: 1.9rem; line-height: 1; color: var(--tinta); }
+.crono-hora span { display: block; margin-top: 6px; font-family: var(--texto); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--tinta-suave); }
+.crono-cuerpo { background: var(--superficie); border: 1px solid var(--linea); border-left: 4px solid var(--c); border-radius: 4px; padding: 20px 22px; }
+.crono-cuerpo h3 { margin: 4px 0 8px; font-family: var(--display); font-weight: 400; font-size: 1.75rem; line-height: 1.02; color: var(--tinta); }
+.crono-cuerpo p { margin: 0 0 8px; color: var(--tinta-suave); line-height: 1.55; }
+.crono-cuerpo p:last-child { margin-bottom: 0; }
+.crono-cuerpo .crono-tag { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--tinta); }
+.crono-cuerpo .crono-quien { color: var(--tinta); font-weight: 500; }
+.crono-cuerpo .crono-extra { font-size: .95rem; font-style: italic; }
+.crono-lista { margin: 0 0 8px; padding-left: 1.1em; color: var(--tinta-suave); line-height: 1.55; }
+.crono-par { display: grid; gap: 12px; }
+.crono-final .crono-cuerpo { background: var(--noche); border-color: var(--noche); border-left-color: var(--mesa-4); }
+.crono-final .crono-cuerpo h3, .crono-final .crono-cuerpo .crono-tag { color: var(--arena); }
+.crono-final .crono-cuerpo p { color: #c9ccd8; }
+.legado { margin-top: 16px; background: var(--fondo-2); border-radius: 4px; padding: 28px 24px; }
+.legado .etiqueta { color: var(--mesa-3-texto); margin-bottom: 10px; }
+.legado p { color: var(--tinta-suave); line-height: 1.55; }
+.legado-lista { margin: 0 0 20px; padding: 0; list-style: none; display: grid; gap: 10px; counter-reset: l; }
+.legado-lista li { counter-increment: l; display: flex; gap: 12px; align-items: baseline; color: var(--tinta); font-weight: 500; }
+.legado-lista li::before { content: counter(l); font-family: var(--display); font-size: 1.6rem; line-height: 1; color: var(--mesa-1-texto); }
+.legado .legado-lema { margin: 0; font-family: var(--display); font-size: clamp(1.8rem, 4vw, 2.6rem); line-height: 1; color: var(--tinta); }
+@media (min-width: 720px) {
+  .crono > li { grid-template-columns: 170px 1fr; gap: 24px; padding-left: 36px; }
+  .crono-par { grid-template-columns: 1fr 1fr; }
+  .legado { padding: 36px 40px; }
+  .legado-lista { grid-template-columns: 1fr 1fr; }
+}
