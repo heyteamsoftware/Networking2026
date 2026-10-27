@@ -397,8 +397,7 @@
     formError.hidden = true;
     var req = [["f-empresa", "Escribe el nombre de tu empresa u organización."],
                ["f-persona", "Escribe el nombre de la persona de contacto."],
-               ["f-email", "Escribe un correo electrónico válido para poder contactarte."],
-               ["f-modalidad", "Elige cómo quieres participar (o «Aún no lo sé»)."]];
+               ["f-email", "Escribe un correo electrónico válido para poder contactarte."]];
     for (var i = 0; i < req.length; i++) {
       var c = document.getElementById(req[i][0]);
       if (!c.value.trim() || (c.type === "email" && !c.checkValidity())) { error(req[i][1], c); return; }

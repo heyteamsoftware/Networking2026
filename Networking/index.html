@@ -455,28 +455,11 @@
             <input id="f-telefono" name="telefono" type="tel" maxlength="30" autocomplete="tel">
           </div>
         </div>
-        <div class="campo">
-          <label for="f-modalidad">Cómo quieres participar *</label>
-          <select id="f-modalidad" name="modalidad" required>
-            <option value="">Elige una opción</option>
-            <option value="participante">Empresa participante · conocer y conectar</option>
-            <option value="colaboradora">Empresa colaboradora · aportar y experimentar</option>
-            <option value="impulsora">Empresa impulsora · dejar huella y movilizar</option>
-            <option value="sin-decidir">Aún no lo sé, quiero que me lo expliquéis</option>
-          </select>
-        </div>
-        <fieldset class="campo">
-          <legend>Mesas que te interesan</legend>
-          <div class="chips">
-            <label class="chip" style="--c:var(--mesa-1)"><input type="checkbox" name="mesas[]" value="1" id="f-mesa-1"> Mesa 1 · El aula como laboratorio de ideas</label>
-            <label class="chip" style="--c:var(--mesa-2)"><input type="checkbox" name="mesas[]" value="2" id="f-mesa-2"> Mesa 2 · Proyectos en acción</label>
-            <label class="chip" style="--c:var(--mesa-3)"><input type="checkbox" name="mesas[]" value="3" id="f-mesa-3"> Mesa 3 · Radio Atlante conecta</label>
-            <label class="chip" style="--c:var(--mesa-4)"><input type="checkbox" name="mesas[]" value="4" id="f-mesa-4"> Mesa 4 · TG Lab</label>
-          </div>
-        </fieldset>
+        <!-- La modalidad la marca el botón de «Formas de participar» por el que se llega; por defecto, «Sin decidir» -->
+        <input type="hidden" id="f-modalidad" name="modalidad" value="sin-decidir">
         <div class="campo">
           <label for="f-propuesta">Tu propuesta de colaboración</label>
-          <textarea id="f-propuesta" name="propuesta" rows="4" maxlength="1000" placeholder="Un reto, una experiencia que quieras contar, prácticas, una idea… (opcional)"></textarea>
+          <textarea id="f-propuesta" name="propuesta" rows="4" maxlength="1000" placeholder="Ej.: un reto, una experiencia que quieras contar, prácticas del alumnado, un proyecto o una idea con la que quieras que el centro colabore contigo (opcional)"></textarea>
         </div>
         <div class="campo">
           <label for="f-logo">Logo de tu empresa (opcional)</label>
