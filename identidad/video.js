@@ -151,7 +151,7 @@ function capa(t) {
       if (abiertas) s += pieza(p, px, py, r, k, `fill="none" stroke="${MESA[p.mesa]}" stroke-width="${f2(6 / k)}" stroke-linejoin="round"`);
     });
     // «Siete piezas · y una pregunta»
-    s += grupo(vis(t, 0.3, 3.4) * (1 - m), txt(G.OUTFIT_SB, "SIETE PIEZAS", 960, 830, 34, C.sol, { anchor: "middle", tracking: 7 }));
+    s += grupo(vis(t, 0, 3.4, 0.15, 0.35) * (1 - m), txt(G.OUTFIT_SB, "SIETE PIEZAS", 960, 830, 34, C.sol, { anchor: "middle", tracking: 7 }));
     s += grupo(vis(t, 1.75, 3.4) * (1 - m), txt(G.OUTFIT_SB, "Y UNA PREGUNTA", 960, 885, 28, SUAVE, { anchor: "middle", tracking: 6 }));
     // La pregunta, línea a línea
     const LINEAS = [["¿QUÉ PASA CUANDO", 3.5, C.arena], ["LA FORMACIÓN PROFESIONAL", 4.53, C.arena], ["Y LAS EMPRESAS", 5.96, C.arena], ["SE SIENTAN A", 6.86, C.arena], ["CONSTRUIR JUNTAS?", 7.54, C.sol]];
@@ -205,14 +205,14 @@ function capa(t) {
     s += grupo(v, txt(G.BEBAS, "NO VENIMOS A", 960, 470, 120, C.arena, { anchor: "middle", tracking: 2 }));
     const l2 = "ESCUCHAR DISCURSOS", w2 = ancho(G.BEBAS, l2, 150, 2);
     s += grupo(v, txt(G.BEBAS, l2, 960, 630, 150, C.arena, { anchor: "middle", tracking: 2 }));
-    const tach = eio(prog(t, 23.4, 24.0));
+    const tach = eio(prog(t, 23.94, 24.42)); // se tacha cuando la voz termina «discursos»
     if (tach > 0) s += grupo(v, `<rect x="${960 - w2 / 2 - 20}" y="566" width="${(w2 + 40) * tach}" height="22" fill="${MESA[0]}"/>`);
   }
 
   // ---------- 25,1–41,6 · Conectar · Descubrir · Activar ----------
   if (t >= 25.0 && t < 41.7) {
     s += grupo(vis(t, 25.1, 41.6, 0.3, 0.3), `<rect width="${W}" height="${H}" fill="url(#abajo)"/>`);
-    s += verbo(t, 25.2, 29.75, "CONECTAR", MESA[2], "con el profesorado y con el talento que viene");
+    s += verbo(t, 25.2, 29.88, "CONECTAR", MESA[2], "con el profesorado y con el talento que viene");
     s += verbo(t, 29.9, 35.05, "DESCUBRIR", MESA[1], "proyectos que ya están en marcha");
     s += verbo(t, 35.2, 41.4, "ACTIVAR", MESA[0], null, [["Retos compartidos", 36.95], ["Prácticas", 38.6], ["Colaboraciones reales", 39.56]]);
   }
