@@ -256,7 +256,8 @@
         var run = wrap.offsetHeight - stage.clientHeight;
         window.scrollTo({ top: wrap.offsetTop + run * 0.46, behavior: behavior });
       } else {
-        document.getElementById(g.getAttribute("data-target")).scrollIntoView({ behavior: behavior });
+        var destino = document.getElementById(g.getAttribute("data-target"));
+        if (destino) destino.scrollIntoView({ behavior: behavior });
       }
     });
   });
