@@ -65,6 +65,23 @@ if (!$acepto) responder(false, 'Para enviar la solicitud necesitamos que aceptes
 
 if (!is_dir(DATOS) || !is_writable(DATOS)) responder(false, 'No hemos podido guardar la solicitud. Inténtalo más tarde.', 500);
 
+// Reduce el logo para que su lado mayor no pase de $max píxeles (basta para verlo pequeño en el panel y en la web)
+function reducirLogo($imagen, int $max = 400) {
+  $w = imagesx($imagen);
+  $h = imagesy($imagen);
+  $k = min(1, $max / max($w, $h));
+  if ($k >= 1) return $imagen;
+  $nw = max(1, (int)round($w * $k));
+  $nh = max(1, (int)round($h * $k));
+  $nueva = imagecreatetruecolor($nw, $nh);
+  imagealphablending($nueva, false);
+  imagesavealpha($nueva, true);
+  imagefill($nueva, 0, 0, imagecolorallocatealpha($nueva, 0, 0, 0, 127));
+  imagecopyresampled($nueva, $imagen, 0, 0, 0, 0, $nw, $nh, $w, $h);
+  imagedestroy($imagen);
+  return $nueva;
+}
+
 // Logo opcional. Se valida y se vuelve a codificar como PNG (así no viaja nada que no sea imagen),
 // y se guarda con un nombre aleatorio fuera de la web. Solo se guarda si la empresa autoriza su uso.
 function guardarLogo(bool $autoriza): string {
@@ -81,6 +98,7 @@ function guardarLogo(bool $autoriza): string {
     default => false,
   };
   if (!$imagen) responder(false, $error, 422);
+  $imagen = reducirLogo($imagen);
   if (!is_dir(LOGOS) && !mkdir(LOGOS, 0750, true)) responder(false, 'No hemos podido guardar la solicitud. Inténtalo más tarde.', 500);
   $nombre = date('Ymd-His') . '-' . bin2hex(random_bytes(6)) . '.png';
   imagesavealpha($imagen, true);
