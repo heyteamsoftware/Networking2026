@@ -154,7 +154,7 @@ function capa(t) {
     s += grupo(vis(t, 0.3, 3.4) * (1 - m), txt(G.OUTFIT_SB, "SIETE PIEZAS", 960, 830, 34, C.sol, { anchor: "middle", tracking: 7 }));
     s += grupo(vis(t, 1.75, 3.4) * (1 - m), txt(G.OUTFIT_SB, "Y UNA PREGUNTA", 960, 885, 28, SUAVE, { anchor: "middle", tracking: 6 }));
     // La pregunta, línea a línea
-    const LINEAS = [["¿QUÉ PASA CUANDO", 3.5, C.arena], ["LA FORMACIÓN PROFESIONAL", 4.3, C.arena], ["Y LAS EMPRESAS", 6.0, C.arena], ["SE SIENTAN A", 6.9, C.arena], ["CONSTRUIR JUNTAS?", 7.8, C.sol]];
+    const LINEAS = [["¿QUÉ PASA CUANDO", 3.5, C.arena], ["LA FORMACIÓN PROFESIONAL", 4.53, C.arena], ["Y LAS EMPRESAS", 5.96, C.arena], ["SE SIENTAN A", 6.86, C.arena], ["CONSTRUIR JUNTAS?", 7.54, C.sol]];
     const salida = 1 - prog(t, 8.6, 9.0);
     LINEAS.forEach(([l, a, col], i) => {
       const v = eout(prog(t, a, a + 0.45)) * salida;
@@ -186,7 +186,7 @@ function capa(t) {
     const v = vis(t, 17.9, 22.4, 0.3, 0.3);
     s += grupo(v, `<rect width="${W}" height="${H}" fill="url(#abajo)"/>`);
     s += grupo(v * prog(t, 17.95, 18.3), txt(G.OUTFIT_SB, "UN ENCUENTRO ENTRE", 120, 760, 34, C.sol, { tracking: 6 }));
-    const CARTAS = [["EMPRESAS", 18.2, MESA[0]], ["TALENTO", 20.4, MESA[2]], ["FORMACIÓN PROFESIONAL", 21.0, MESA[1]]];
+    const CARTAS = [["EMPRESAS", 19.13, MESA[0]], ["TALENTO", 20.4, MESA[2]], ["FORMACIÓN PROFESIONAL", 21.0, MESA[1]]];
     let x = 120;
     for (const [w, a, col] of CARTAS) {
       const tw = ancho(G.BEBAS, w, 80, 1) + 100;
@@ -212,7 +212,7 @@ function capa(t) {
     s += grupo(vis(t, 25.1, 41.6, 0.3, 0.3), `<rect width="${W}" height="${H}" fill="url(#abajo)"/>`);
     s += verbo(t, 25.2, 29.75, "CONECTAR", MESA[2], "con el profesorado y con el talento que viene");
     s += verbo(t, 29.9, 35.05, "DESCUBRIR", MESA[1], "proyectos que ya están en marcha");
-    s += verbo(t, 35.2, 41.4, "ACTIVAR", MESA[0], null, [["Retos compartidos", 36.95], ["Prácticas", 38.6], ["Colaboraciones reales", 39.3]]);
+    s += verbo(t, 35.2, 41.4, "ACTIVAR", MESA[0], null, [["Retos compartidos", 36.95], ["Prácticas", 38.6], ["Colaboraciones reales", 39.56]]);
   }
 
   // ---------- 41,6–49,6 · Una mañana de retos en equipo ----------
@@ -248,7 +248,7 @@ function capa(t) {
     let c = ondas + `<rect x="120" y="740" width="270" height="60" rx="30" fill="${NOCHE2}"/>` +
       `<circle cx="150" cy="770" r="11" fill="#ff5a3c" opacity="${f2(late)}"/>` +
       txt(G.OUTFIT_SB, "EN ANTENA", 176, 781, 28, "#ff8a6b", { tracking: 4 });
-    c += txt(G.BEBAS, "RADIO ATLANTE", 120 + (1 - eout(prog(t, 49.9, 50.4))) * -80, 935, 150, C.arena, { tracking: 2 });
+    c += grupo(prog(t, 51.65, 51.95), txt(G.BEBAS, "RADIO ATLANTE", 120 + (1 - eout(prog(t, 51.65, 52.1))) * -80, 935, 150, C.arena, { tracking: 2 })); // con la voz: «desde Radio Atlante»
     c += txt(G.OUTFIT, "Experiencias contadas en directo", 124, 995, 38, SUAVE);
     s += grupo(v, c);
   }
