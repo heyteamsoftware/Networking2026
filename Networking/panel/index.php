@@ -9,6 +9,7 @@ $datos = getenv('NETWORKING_DATA') ?: '/var/www/networking_data';
 define('CSV', $datos . '/solicitudes.csv');
 define('CLAVE', $datos . '/panel-clave.txt');
 define('INTENTOS', $datos . '/panel-intentos.json');
+define('LOGOS', $datos . '/logos');
 const MAX_FALLOS = 5;          // fallos seguidos permitidos desde una misma conexión…
 const BLOQUEO = 15 * 60;       // …antes de tener que esperar 15 minutos
 const INACTIVIDAD = 20 * 60;   // la sesión caduca tras 20 minutos sin uso (el servidor borra las de más de 24)
@@ -156,6 +157,18 @@ if (!$dentro) {
   exit;
 }
 
+// ---------- Con sesión: logo de una empresa ----------
+// Los logos viven fuera de la web: solo se sirven desde aquí, con sesión y con un nombre con el formato que genera participa.php.
+if (isset($_GET['logo'])) {
+  $nombre = (string)$_GET['logo'];
+  $ruta = LOGOS . '/' . $nombre;
+  if (!preg_match('/^\d{8}-\d{6}-[0-9a-f]{12}\.png$/', $nombre) || !is_file($ruta)) { http_response_code(404); exit; }
+  header('Content-Type: image/png');
+  header('Content-Length: ' . filesize($ruta));
+  readfile($ruta);
+  exit;
+}
+
 // ---------- Con sesión: leer el CSV ----------
 if (isset($_GET['descargar'])) {
   if (!is_readable(CSV)) volver();
@@ -166,7 +179,7 @@ if (isset($_GET['descargar'])) {
   exit;
 }
 
-$columnas = ['fecha', 'empresa', 'sector', 'persona', 'cargo', 'correo', 'telefono', 'modalidad', 'mesas', 'propuesta'];
+$columnas = ['fecha', 'empresa', 'sector', 'persona', 'cargo', 'correo', 'telefono', 'modalidad', 'mesas', 'propuesta', 'logo'];
 $filas = [];
 if (is_readable(CSV) && ($f = fopen(CSV, 'r'))) {
   flock($f, LOCK_SH);
@@ -174,7 +187,7 @@ if (is_readable(CSV) && ($f = fopen(CSV, 'r'))) {
   while (($c = fgetcsv($f, 0, ';', '"', '')) !== false) {
     if ($cabecera) { $cabecera = false; continue; }
     if ($c === [null]) continue;
-    $c = array_pad(array_slice($c, 0, 10), 10, '');
+    $c = array_pad(array_slice($c, 0, 11), 11, ''); // 11 columnas: la última es el logo (las solicitudes anteriores no lo tienen)
     // participa.php antepone «'» a lo que empieza por = + - @ para que Excel no lo tome por fórmula
     $c = array_map(fn($v) => preg_match("/^'[=+\-@\t\r]/", (string)$v) ? substr((string)$v, 1) : (string)$v, $c);
     $filas[] = array_combine($columnas, $c);
@@ -277,7 +290,7 @@ pintarCabecera('Solicitudes', 'panel');
     <div class="tabla-caja">
       <table class="tabla">
         <thead>
-          <tr><th>Fecha</th><th>Empresa</th><th>Contacto</th><th>Modalidad</th><th>Mesas</th><th>Propuesta</th></tr>
+          <tr><th>Fecha</th><th>Empresa</th><th>Contacto</th><th>Modalidad</th><th>Mesas</th><th>Propuesta</th><th>Logo</th></tr>
         </thead>
         <tbody>
         <?php foreach ($vistas as $r): $tel = preg_replace('/[^0-9+]/', '', $r['telefono']); ?>
@@ -296,6 +309,7 @@ pintarCabecera('Solicitudes', 'panel');
               <?php endforeach; else: ?><span class="sub">—</span><?php endif; ?>
             </td>
             <td data-col="Propuesta" class="propuesta"><?= $r['propuesta'] !== '' ? nl2br(e($r['propuesta'])) : '<span class="sub">—</span>' ?></td>
+            <td data-col="Logo" class="logo"><?php if ($r['logo'] !== ''): ?><a href="?logo=<?= e(rawurlencode($r['logo'])) ?>" target="_blank" rel="noopener"><img src="?logo=<?= e(rawurlencode($r['logo'])) ?>" alt="Logo de <?= e($r['empresa']) ?>" loading="lazy"></a><?php else: ?><span class="sub">Sin logo</span><?php endif; ?></td>
           </tr>
         <?php endforeach; ?>
         </tbody>

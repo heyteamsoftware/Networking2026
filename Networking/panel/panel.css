@@ -151,3 +151,8 @@ body.acceso { background: var(--noche); color: var(--arena); }
   .propuesta { max-width: none; min-width: 0; }
   .tabla td[data-col="Empresa"], .tabla td[data-col="Contacto"], .tabla td[data-col="Mesas"] { min-width: 0; }
 }
+
+/* Logo enviado por la empresa: se ve sobre fondo claro, con el tamaño justo para reconocerlo */
+.tabla td.logo { width: 120px; }
+.tabla td.logo a { display: inline-block; padding: 6px; background: #fff; border: 1px solid var(--linea); border-radius: 4px; }
+.tabla td.logo img { display: block; width: 96px; height: 56px; object-fit: contain; }
