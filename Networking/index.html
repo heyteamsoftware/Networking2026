@@ -319,169 +319,120 @@
     </div>
   </section>
 
-  <!-- CRONOGRAMA: la mañana es un tangram que se monta ficha a ficha -->
+  <!-- CRONOGRAMA: horario tipo festival. Cada fila de la rejilla es un minuto desde las 11:15 -->
   <section class="cronograma" id="cronograma" aria-labelledby="crono-titulo">
     <div class="wrap">
-      <header class="cr-cabecera">
-        <p class="cr-kicker">Cronograma · Viernes 20 de noviembre · 11:15 – 13:50</p>
-        <h2 id="crono-titulo">La mañana<br><em>se construye</em> pieza a pieza</h2>
-        <p class="cr-intro">Ocho momentos, ocho piezas. Baja y mira cómo se monta el encuentro: la última la pones tú.</p>
-      </header>
+      <div class="tt-cabecera">
+        <div>
+          <p class="etiqueta">Cronograma · 20 de noviembre</p>
+          <h2 id="crono-titulo">El horario de la mañana</h2>
+        </div>
+        <ul class="tt-leyenda" aria-label="Tipos de actividad">
+          <li><i style="--c:var(--noche)"></i>Encuentro</li>
+          <li><i style="--c:var(--mesa-1)"></i>Retos</li>
+          <li><i style="--c:var(--mesa-3)"></i>Experiencias</li>
+          <li><i style="--c:var(--mesa-4)"></i>Actividad final</li>
+        </ul>
+      </div>
+      <p class="tt-ayuda">Pulsa un bloque para ver quién participa y de qué trata.</p>
 
-      <div class="cr-grid">
-        <!-- Panel fijo: reloj, progreso y tangram que se va montando -->
-        <aside class="cr-panel" aria-hidden="true">
-          <div class="cr-reloj">
-            <span class="cr-ahora">Ahora</span>
-            <span class="cr-hora" id="crHora">11:15</span>
-            <span class="cr-que" id="crQue">Recepción</span>
-          </div>
-          <svg class="cr-tangram" viewBox="-10 -80 490 490">
-            <g class="cr-huecos">
-              <polygon points="12.07,5 387.93,5 200,192.93"/>
-              <polygon points="5,12.07 192.93,200 5,387.93"/>
-              <polygon points="395,12.07 395,187.93 307.07,100"/>
-              <polygon points="207.07,200 300,107.07 392.93,200 300,292.93"/>
-              <polygon points="200,207.07 287.93,295 112.07,295"/>
-              <polygon points="12.07,395 102.07,305 287.93,305 197.93,395"/>
-              <polygon points="395,212.07 395,395 212.07,395"/>
-              <polygon points="405,-66 465,-66 435,-36"/>
-            </g>
-            <g class="cr-piezas">
-              <polygon data-p="0" style="--c:var(--mesa-3); --dx:140px; --dy:-160px; --r:40deg" points="395,12.07 395,187.93 307.07,100"/>
-              <polygon data-p="1" style="--c:var(--mesa-2); --dx:-180px; --dy:60px; --r:-35deg" points="5,12.07 192.93,200 5,387.93"/>
-              <polygon data-p="2" style="--c:var(--mesa-1); --dx:20px; --dy:-220px; --r:25deg" points="12.07,5 387.93,5 200,192.93"/>
-              <polygon data-p="3" style="--c:var(--mesa-3); --dx:200px; --dy:40px; --r:-45deg" points="207.07,200 300,107.07 392.93,200 300,292.93"/>
-              <polygon data-p="4" style="--c:var(--mesa-4); --dx:-120px; --dy:200px; --r:30deg" points="12.07,395 102.07,305 287.93,305 197.93,395"/>
-              <polygon data-p="5" style="--c:var(--mesa-3); --dx:-40px; --dy:220px; --r:-60deg" points="200,207.07 287.93,295 112.07,295"/>
-              <polygon data-p="6" style="--c:var(--mesa-4); --dx:180px; --dy:180px; --r:50deg" points="395,212.07 395,395 212.07,395"/>
-              <polygon data-p="7" class="cr-graciosa" style="--c:var(--mesa-4); --dx:60px; --dy:-120px; --r:-90deg" points="405,-66 465,-66 435,-36"/>
-            </g>
-          </svg>
-          <div class="cr-progreso"><span id="crBarra"></span></div>
-          <div class="cr-extremos"><span>11:15</span><span id="crPaso">1 / 8</span><span>13:50</span></div>
-        </aside>
+      <div class="tt" id="tt">
+        <!-- Eje de horas -->
+        <span class="tt-linea" style="--m:0">11:15</span>
+        <span class="tt-linea" style="--m:15">11:30</span>
+        <span class="tt-linea" style="--m:45">12:00</span>
+        <span class="tt-linea" style="--m:75">12:30</span>
+        <span class="tt-linea" style="--m:105">13:00</span>
+        <span class="tt-linea" style="--m:135">13:30</span>
+        <span class="tt-linea fin" style="--m:155">13:50</span>
 
-        <!-- Las fichas -->
-        <ol class="cr-fichas">
-          <li class="ficha f-arena" data-hora="11:15" data-que="Recepción" data-min="0">
-            <div class="f-top"><span class="f-hora">11:15</span><span class="f-dur">15 min</span></div>
-            <p class="f-tag">Pieza 1 · Recepción y puntos de información</p>
-            <h3>Bienvenida a las entidades participantes</h3>
-            <p>Acreditación, orientación y preparación de los equipos de trabajo. Aquí recibes tu pieza.</p>
-            <svg class="f-forma" viewBox="0 0 400 400" aria-hidden="true"><polygon points="395,12.07 395,187.93 307.07,100"/></svg>
-          </li>
+        <button type="button" class="tt-b t-noche corto" style="--a:0; --z:15; --i:0" data-det="d-recepcion">
+          <span class="tt-h">11:15 – 11:30</span>
+          <span class="tt-t">Recepción y acreditación</span>
+        </button>
+        <button type="button" class="tt-b t-noche corto" style="--a:15; --z:25; --i:1" data-det="d-apertura">
+          <span class="tt-h">11:30</span>
+          <span class="tt-t">Apertura institucional</span>
+        </button>
+        <button type="button" class="tt-b t-rojo" style="--a:25; --z:55; --i:2" data-det="d-reto1">
+          <span class="tt-h">11:40 – 12:10 <em>30'</em></span>
+          <span class="tt-k">Reto 01 · Identidad</span>
+          <span class="tt-t">¿Qué necesita Canarias para construir su futuro?</span>
+          <span class="tt-p">Agar García</span>
+        </button>
 
-          <li class="ficha f-naranja" data-hora="11:30" data-que="Apertura institucional" data-min="15">
-            <div class="f-top"><span class="f-hora">11:30</span><span class="f-dur">10 min</span></div>
-            <p class="f-tag">Pieza 2 · Apertura institucional</p>
-            <h3>Bienvenida al encuentro</h3>
-            <ul class="f-voces">
-              <li><strong>Agar García</strong>Directora del CIFP Tony Gallardo</li>
-              <li><strong>Carolina de León</strong>Directora general de Formación Profesional</li>
-            </ul>
-            <p>Por qué conectar la FP con las empresas, las instituciones y las necesidades reales del territorio.</p>
-            <svg class="f-forma" viewBox="0 0 400 400" aria-hidden="true"><polygon points="5,12.07 192.93,200 5,387.93"/></svg>
-          </li>
+        <!-- 12:10: arranque común y dos retos en paralelo -->
+        <div class="tt-banda" style="--a:55; --z:85; --i:3">
+          <button type="button" class="tt-b t-arena tt-arranque" data-det="d-aula">
+            <span class="tt-h">12:10</span>
+            <span class="tt-t">El aula como laboratorio de ideas</span>
+            <span class="tt-p">Sabina Santana</span>
+          </button>
+          <button type="button" class="tt-b t-naranja" data-det="d-reto2">
+            <span class="tt-h">12:10 – 12:40 <em>30'</em></span>
+            <span class="tt-k">Reto 02</span>
+            <span class="tt-t">Emprender</span>
+            <span class="tt-p">Raquel Cabrera</span>
+          </button>
+          <button type="button" class="tt-b t-amarillo" data-det="d-reto3">
+            <span class="tt-h">12:10 – 12:40 <em>30'</em></span>
+            <span class="tt-k">Reto 03</span>
+            <span class="tt-t">Sostenibilidad</span>
+            <span class="tt-p">Juanjo García</span>
+          </button>
+        </div>
 
-          <li class="ficha f-rojo" data-hora="11:40" data-que="Reto 01 · Identidad" data-min="25">
-            <span class="f-num" aria-hidden="true">01</span>
-            <div class="f-top"><span class="f-hora">11:40</span><span class="f-dur">30 min</span></div>
-            <p class="f-tag">Pieza 3 · Reto 01 · Identidad: lo que somos</p>
-            <h3>¿Qué necesita Canarias para construir su futuro?</h3>
-            <p class="f-resp">Responsable · Agar García</p>
-            <p>Qué representa Canarias, qué hace únicas a nuestras islas y cómo convertir nuestras diferencias en un futuro común.</p>
-            <svg class="f-forma" viewBox="0 0 400 400" aria-hidden="true"><polygon points="12.07,5 387.93,5 200,192.93"/></svg>
-          </li>
+        <button type="button" class="tt-b t-azul" style="--a:85; --z:105; --i:4" data-det="d-reto4">
+          <span class="tt-h">12:40 – 13:00 <em>20'</em></span>
+          <span class="tt-k">Reto 04</span>
+          <span class="tt-t">Internacionalización e innovación</span>
+        </button>
+        <button type="button" class="tt-b t-rojo col1" style="--a:105; --z:135; --i:5" data-det="d-reto5">
+          <span class="tt-h">13:00 – 13:30 <em>30'</em></span>
+          <span class="tt-k">Reto 05</span>
+          <span class="tt-t">El talento que crea futuro</span>
+        </button>
+        <button type="button" class="tt-b t-radio col2" style="--a:105; --z:145; --i:6" data-det="d-radio">
+          <span class="tt-h">13:00 – 13:40 <em>40'</em></span>
+          <span class="tt-k"><b class="tt-vivo">En antena</b></span>
+          <span class="tt-t">Radio Atlante conecta</span>
+          <span class="tt-p">Las Indias · Felo Monzón · PLOCAN</span>
+        </button>
+        <button type="button" class="tt-b t-final col1" style="--a:135; --z:155; --i:7" data-det="d-final">
+          <span class="tt-h">13:30 – 13:50 <em>20'</em></span>
+          <span class="tt-t">La pieza que nos falta eres tú</span>
+        </button>
+      </div>
 
-          <li class="ficha f-azul" data-hora="12:10" data-que="El aula como laboratorio" data-min="55">
-            <div class="f-top"><span class="f-hora">12:10</span><span class="f-dur">Apertura de áreas</span></div>
-            <p class="f-tag">Pieza 4 · El aula como laboratorio de ideas</p>
-            <h3>Presentación de las áreas</h3>
-            <ul class="f-voces"><li><strong>Sabina Santana</strong>Jefa de Estudios del CIFP Tony Gallardo</li></ul>
-            <p>«Las necesidades del alumnado, del entorno y el currículo como base del diseño».</p>
-            <svg class="f-forma" viewBox="0 0 400 400" aria-hidden="true"><polygon points="207.07,200 300,107.07 392.93,200 300,292.93"/></svg>
-          </li>
-
-          <li class="ficha f-doble" data-hora="12:10" data-que="Retos 02 y 03" data-min="70">
-            <div class="f-top"><span class="f-hora">12:10<small>–12:40</small></span><span class="f-dur">Elige tu reto</span></div>
-            <p class="f-tag">Pieza 5 · Dos retos a la vez</p>
-            <div class="f-mitades">
-              <div class="f-mitad f-amarillo">
-                <span class="f-num" aria-hidden="true">02</span>
-                <p class="f-tag">De la idea a la oportunidad</p>
-                <h3>Emprender</h3>
-                <p class="f-resp">Responsable · Raquel Cabrera</p>
-                <p>Una necesidad real se convierte en una iniciativa emprendedora entre familias profesionales.</p>
-                <p class="f-extra">Experiencia: Adelina De La Jara, «Las profesiones de una Escuela Azul como eje transversal de un proyecto para la ciudadanía».</p>
-              </div>
-              <span class="f-o" aria-hidden="true">o</span>
-              <div class="f-mitad f-noche">
-                <span class="f-num" aria-hidden="true">03</span>
-                <p class="f-tag">Profesiones que reivindican una identidad</p>
-                <h3>Sostenibilidad</h3>
-                <p class="f-resp">Responsable · Juanjo García</p>
-                <p>Oficios tradicionales y el valor de los conocimientos vinculados al territorio.</p>
-              </div>
-            </div>
-          </li>
-
-          <li class="ficha f-azul" data-hora="12:40" data-que="Reto 04 · Internacional" data-min="85">
-            <span class="f-num" aria-hidden="true">04</span>
-            <div class="f-top"><span class="f-hora">12:40</span><span class="f-dur">20 min</span></div>
-            <p class="f-tag">Pieza 6 · Reto 04</p>
-            <h3>Internacionalización e innovación al servicio del alumnado</h3>
-            <div class="f-chips"><span>CIFP Tony Gallardo</span><span>CIFP Las Indias · Embajador Erasmus</span><span>CIFP Felo Monzón</span></div>
-            <p>Cómo las ideas, los productos y el talento de Canarias se conectan con otros territorios.</p>
-            <svg class="f-forma" viewBox="0 0 400 400" aria-hidden="true"><polygon points="200,207.07 287.93,295 112.07,295"/></svg>
-          </li>
-
-          <li class="ficha f-doble" data-hora="13:00" data-que="Reto 05 y Radio Atlante" data-min="105">
-            <div class="f-top"><span class="f-hora">13:00</span><span class="f-dur">Dos escenarios</span></div>
-            <p class="f-tag">Pieza 7 · El talento y la radio</p>
-            <div class="f-mitades">
-              <div class="f-mitad f-amarillo">
-                <span class="f-num" aria-hidden="true">05</span>
-                <p class="f-tag">13:00 – 13:30 · El talento que crea futuro</p>
-                <h3>Alumnado competente y emprendimiento</h3>
-                <div class="f-chips"><span>Orientación</span><span>Emprendimiento</span><span>Calidad</span><span>Clúster Tecnológico</span><span>ITC</span><span>Erasmus Jóvenes Emprendedores</span></div>
-                <p>Las competencias que pide la empresa y cómo el alumnado de FP aporta valor.</p>
-              </div>
-              <span class="f-o" aria-hidden="true">+</span>
-              <div class="f-mitad f-radio">
-                <p class="f-tag"><span class="f-antena">En antena</span>13:00 – 13:40</p>
-                <h3>Radio Atlante conecta</h3>
-                <ul class="f-ondas">
-                  <li><strong>CIFP Las Indias</strong>Embajadores Erasmus</li>
-                  <li><strong>CIFP Felo Monzón</strong>Internacionalización</li>
-                  <li><strong>PLOCAN</strong>Escuelas Azules</li>
-                  <li><strong>Deporte y juegos</strong>Identidad tradicional</li>
-                </ul>
-              </div>
-            </div>
-          </li>
-
-          <li class="ficha f-final" data-hora="13:30" data-que="La pieza que falta" data-min="135">
-            <div class="f-top"><span class="f-hora">13:30<small>–13:50</small></span><span class="f-dur">Actividad final</span></div>
-            <p class="f-tag">Pieza 8 · La Graciosa</p>
-            <h3>La pieza que nos falta <span>eres tú</span></h3>
-            <p>Cada equipo descubre qué puede aportar, con quién colaborar y qué oportunidad desarrollar juntos. Se define una idea, las personas implicadas… y se encaja la última pieza.</p>
-            <svg class="f-forma" viewBox="0 0 100 60" aria-hidden="true"><polygon points="4,4 96,4 50,50"/></svg>
-          </li>
+      <!-- El legado, en una franja -->
+      <div class="tt-legado">
+        <p class="tt-lema">El éxito no es reunirnos. <em>Es lo que construimos después.</em></p>
+        <ol>
+          <li><img src="img/mesa-1.svg" alt="">Una necesidad compartida</li>
+          <li><img src="img/mesa-2.svg" alt="">Una acción en 30 días</li>
+          <li><img src="img/mesa-3.svg" alt="">Un contacto por cada parte</li>
+          <li><img src="img/mesa-4.svg" alt="">Una fecha de revisión</li>
         </ol>
       </div>
 
-      <!-- El legado -->
-      <div class="cr-legado">
-        <p class="cr-kicker">El legado · Del encuentro a la acción</p>
-        <p class="cr-lema">El éxito no es reunirnos.<br><em>Es lo que construimos después.</em></p>
-        <ol class="cr-cuatro">
-          <li style="--c:var(--mesa-1)"><img src="img/mesa-1.svg" alt=""><b>01</b><span>Una necesidad o interés <strong>compartido</strong></span></li>
-          <li style="--c:var(--mesa-2)"><img src="img/mesa-2.svg" alt=""><b>02</b><span>Una acción que empiece en los próximos <strong>30 días</strong></span></li>
-          <li style="--c:var(--mesa-3)"><img src="img/mesa-3.svg" alt=""><b>03</b><span>Una persona de <strong>contacto</strong> por cada parte</span></li>
-          <li style="--c:var(--mesa-4)"><img src="img/mesa-4.svg" alt=""><b>04</b><span>Una <strong>fecha</strong> para revisar los avances</span></li>
-        </ol>
+      <!-- Detalle de cada bloque (se abre en una ficha) -->
+      <div class="tt-detalles" hidden>
+        <div id="d-recepcion" data-c="var(--noche)"><p class="k">11:15 – 11:30 · Recepción y puntos de información</p><h3>Bienvenida a las entidades participantes</h3><p>Recepción de asistentes, acreditación, orientación y preparación de los equipos de trabajo.</p></div>
+        <div id="d-apertura" data-c="var(--noche)"><p class="k">11:30 · Apertura institucional</p><h3>Bienvenida al encuentro</h3><ul><li><strong>Agar García</strong>, directora del CIFP Tony Gallardo.</li><li><strong>Carolina de León</strong>, directora general de Formación Profesional.</li></ul><p>Presentación del propósito del networking y de la importancia de conectar la Formación Profesional con las empresas, las instituciones y las necesidades reales del territorio.</p></div>
+        <div id="d-reto1" data-c="var(--mesa-1)"><p class="k">11:40 – 12:10 · Reto 01 · Identidad: lo que somos</p><h3>¿Qué necesita Canarias para construir su futuro?</h3><p><strong>Responsable:</strong> Agar García.</p><p>Los equipos explorarán qué representa Canarias, qué hace únicas a nuestras islas y cómo aprovechar nuestras diferencias para construir un futuro común.</p></div>
+        <div id="d-aula" data-c="var(--mesa-4)"><p class="k">12:10 · El aula como laboratorio de ideas</p><h3>Presentación de las áreas</h3><p><strong>Interviene:</strong> Sabina Santana, jefa de Estudios del CIFP Tony Gallardo.</p><p>«Las necesidades del alumnado, del entorno y el currículo como base del diseño». Una reflexión sobre cómo conectar las necesidades del entorno con la formación, las competencias profesionales y el diseño de nuevas oportunidades.</p></div>
+        <div id="d-reto2" data-c="var(--mesa-2)"><p class="k">12:10 – 12:40 · Reto 02 · De la idea a la oportunidad</p><h3>Emprender</h3><p><strong>Responsable:</strong> Raquel Cabrera.</p><p>Los equipos identificarán una necesidad de las empresas, la ciudadanía o el territorio y la transformarán en una posible iniciativa emprendedora. Se trabajará la colaboración entre familias profesionales y la capacidad de convertir una idea en una propuesta viable.</p><p><strong>Experiencia relacionada:</strong> Adelina De La Jara, «Las profesiones de una Escuela Azul como eje transversal de un proyecto para la ciudadanía».</p></div>
+        <div id="d-reto3" data-c="var(--mesa-4)"><p class="k">12:10 – 12:40 · Reto 03 · Profesiones que reivindican una identidad</p><h3>Sostenibilidad</h3><p><strong>Responsable:</strong> Juanjo García.</p><p>Un reto centrado en la sostenibilidad, los oficios tradicionales y el valor de los conocimientos vinculados al territorio.</p></div>
+        <div id="d-reto4" data-c="var(--mesa-3)"><p class="k">12:40 – 13:00 · Reto 04</p><h3>Internacionalización e innovación al servicio del alumnado</h3><p>Participan profesionales de internacionalización e innovación del CIFP Tony Gallardo, el CIFP Las Indias —Centro Embajador Erasmus— y el CIFP Felo Monzón.</p><p>El reto invita a explorar cómo las ideas, los productos, los servicios y el talento desarrollado en Canarias pueden conectarse con otros territorios y generar oportunidades internacionales.</p></div>
+        <div id="d-reto5" data-c="var(--mesa-1)"><p class="k">13:00 – 13:30 · Reto 05 · El talento que crea futuro</p><h3>Alumnado competente y emprendimiento como oportunidad</h3><p>Participan profesionales de Información y Orientación Profesional, Emprendimiento y Calidad del CIFP Tony Gallardo, junto con representantes del Clúster Tecnológico de Canarias, el ITC y el entorno de Erasmus para Jóvenes Emprendedores.</p><p>Los equipos identificarán las competencias que necesita el tejido empresarial y cómo el alumnado de FP puede aportar valor a través de proyectos, experiencias prácticas, empleo y emprendimiento.</p></div>
+        <div id="d-radio" data-c="var(--mesa-3)"><p class="k">13:00 – 13:40 · Experiencias de impacto</p><h3>Radio Atlante conecta</h3><ul><li><strong>CIFP Las Indias:</strong> Embajadores Erasmus.</li><li><strong>CIFP Felo Monzón:</strong> internacionalización e innovación.</li><li><strong>PLOCAN:</strong> Escuelas Azules.</li><li>Identidad a través del deporte y los juegos tradicionales.</li></ul><p>Un espacio para conocer iniciativas reales, compartir aprendizajes y descubrir nuevas posibilidades de colaboración.</p></div>
+        <div id="d-final" data-c="var(--mesa-4)"><p class="k">13:30 – 13:50 · Actividad final</p><h3>La pieza que nos falta eres tú</h3><p>Conectamos talento y oportunidades: cada equipo identificará qué puede aportar, con quién puede colaborar y qué oportunidad podría desarrollar conjuntamente. Los participantes definirán una idea o propuesta y las personas o entidades implicadas.</p></div>
       </div>
+
+      <dialog class="tt-ficha" id="ttFicha" aria-labelledby="ttFichaTitulo">
+        <button type="button" class="tt-cerrar">Cerrar</button>
+        <div class="tt-ficha-cuerpo"></div>
+      </dialog>
     </div>
   </section>
 
