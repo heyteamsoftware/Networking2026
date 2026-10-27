@@ -290,7 +290,7 @@ pintarCabecera('Solicitudes', 'panel');
     <div class="tabla-caja">
       <table class="tabla">
         <thead>
-          <tr><th>Fecha</th><th>Empresa</th><th>Contacto</th><th>Modalidad</th><th>Mesas</th><th>Propuesta</th><th>Logo</th></tr>
+          <tr><th>Fecha</th><th>Empresa</th><th>Contacto</th><th>Propuesta</th><th>Logo</th></tr>
         </thead>
         <tbody>
         <?php foreach ($vistas as $r): $tel = preg_replace('/[^0-9+]/', '', $r['telefono']); ?>
@@ -301,12 +301,6 @@ pintarCabecera('Solicitudes', 'panel');
               <?= e($r['persona']) ?><?php if ($r['cargo'] !== ''): ?><span class="sub"><?= e($r['cargo']) ?></span><?php endif; ?>
               <?php if ($r['correo'] !== ''): ?><a class="sub" href="mailto:<?= e(rawurlencode($r['correo'])) ?>"><?= e($r['correo']) ?></a><?php endif; ?>
               <?php if ($r['telefono'] !== ''): ?><a class="sub" href="tel:<?= e($tel) ?>"><?= e($r['telefono']) ?></a><?php endif; ?>
-            </td>
-            <td data-col="Modalidad"><span class="pildora <?= e($claseMod[$r['modalidad']] ?? 'mod-0') ?>"><?= e($r['modalidad']) ?></span></td>
-            <td data-col="Mesas">
-              <?php $ns = $numMesas($r); if ($ns): foreach ($ns as $n): ?>
-                <span class="mesa-chip mesa-<?= $n ?>" title="<?= e($mesas[$n] ?? '') ?>"><?= $n ?></span>
-              <?php endforeach; else: ?><span class="sub">—</span><?php endif; ?>
             </td>
             <td data-col="Propuesta" class="propuesta"><?= $r['propuesta'] !== '' ? nl2br(e($r['propuesta'])) : '<span class="sub">—</span>' ?></td>
             <td data-col="Logo" class="logo"><?php if ($r['logo'] !== ''): ?><a href="?logo=<?= e(rawurlencode($r['logo'])) ?>" target="_blank" rel="noopener"><img src="?logo=<?= e(rawurlencode($r['logo'])) ?>" alt="Logo de <?= e($r['empresa']) ?>" loading="lazy"></a><?php else: ?><span class="sub">Sin logo</span><?php endif; ?></td>
