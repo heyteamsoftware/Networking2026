@@ -178,7 +178,9 @@ function capa(t) {
     s += grupo(vis(t, 11.2, 13.4, 0.35, 0.3), txt(G.OUTFIT_SB, "EL CIFP TONY GALLARDO ABRE SUS PUERTAS", 120, 655, 34, C.arena, { tracking: 4 }));
     // Logotipo: el tangram se monta y aparece el nombre
     const vl = vis(t, 13.4, 17.9, 0.3, 0.35);
-    if (vl > 0) s += grupo(vl, logotipo(t, 13.45, 960, 735, 1));
+    // El logotipo sube y, al decir «Juntos somos FP», aparece en grande debajo
+    const sube = eio(prog(t, 15.2, 15.65));
+    if (vl > 0) s += grupo(vl, logotipo(t, 13.45, 960, lerp(735, 520, sube), 1, true, null) + juntosGrande(t, 15.42, 900, 210));
   }
 
   // ---------- 17,9–22,4 · Empresas, talento y Formación Profesional ----------
@@ -320,9 +322,20 @@ function logotipo(t, a, cx, cy, escala, conTarjeta = true, juntos = 2.0) {
   const tx = x0 + lado + 50 * escala, et = eout(prog(t, a + 0.35, a + 0.85));
   s += grupo(et, txt(G.BEBAS, "NETWORKING", tx + (1 - et) * 40, y0 + lado * 0.62, size, C.arena, { tracking: 2 }) +
     txt(G.BEBAS, "2026", tx + ancho(G.BEBAS, "NETWORKING ", size, 2) + (1 - et) * 40, y0 + lado * 0.62, size, C.sol, { tracking: 2 }));
-  const ej = prog(t, a + juntos, a + juntos + 0.4);
-  s += grupo(ej, txt(G.OUTFIT_SB, "JUNTOS SOMOS FP", tx + 4, y0 + lado * 0.93, 40 * escala, SUAVE, { tracking: 12 * escala }));
+  if (juntos !== null) {
+    const ej = prog(t, a + juntos, a + juntos + 0.4);
+    s += grupo(ej, txt(G.OUTFIT_SB, "JUNTOS SOMOS FP", tx + 4, y0 + lado * 0.93, 40 * escala, SUAVE, { tracking: 12 * escala }));
+  }
   return s;
+}
+
+// «JUNTOS SOMOS FP» en grande, con «FP» en amarillo; entra con un pequeño salto en el instante a
+function juntosGrande(t, a, y, size) {
+  const e = prog(t, a, a + 0.5);
+  if (e <= 0) return "";
+  const sc = lerp(0.82, 1, eback(e));
+  const linea = P.tramos(G.BEBAS, [{ t: "JUNTOS SOMOS ", fill: C.arena }, { t: "FP", fill: C.sol }], 0, 0, size, { anchor: "middle", tracking: size * 0.02 });
+  return grupo(clamp(e * 2.5), linea, `translate(960 ${f2(y)}) scale(${f2(sc)})`);
 }
 
 // El cuadrado se abre en el archipiélago y aparece el hueco de La Graciosa
@@ -413,13 +426,14 @@ function escenaCierre(t) {
   }
   // Cierre: logo del CIFP en grande, su nombre debajo y el logotipo de Networking más pequeño
   if (t >= 72.2) {
-    const e = eback(prog(t, 72.3, 72.9)), d = 400, cx = 960, cy = 330;
+    const e = eback(prog(t, 72.3, 72.9)), d = 330, cx = 960, cy = 245;
     const logo = `<circle cx="0" cy="0" r="${d / 2}" fill="#ffffff"/><image href="${LOGO_CIFP}" x="${-d / 2}" y="${-d / 2}" width="${d}" height="${d}"/>`;
     s += grupo(clamp(prog(t, 72.3, 72.6)), logo, `translate(${cx} ${cy}) scale(${f2(lerp(0.7, 1, e))})`);
     const en = eout(prog(t, 72.7, 73.1));
-    s += grupo(en, txt(G.BEBAS, "CIFP TONY GALLARDO", 960, 640 + (1 - en) * 30, 110, C.arena, { anchor: "middle", tracking: 3 }));
-    s += grupo(prog(t, 73.0, 73.3), `<rect x="900" y="690" width="120" height="4" fill="${C.sol}"/>`);
-    s += logotipo(t, 73.2, 960, 850, 0.6, false, 0.3);
+    s += grupo(en, txt(G.BEBAS, "CIFP TONY GALLARDO", 960, 515 + (1 - en) * 30, 100, C.arena, { anchor: "middle", tracking: 3 }));
+    s += grupo(prog(t, 73.0, 73.3), `<rect x="900" y="555" width="120" height="4" fill="${C.sol}"/>`);
+    s += logotipo(t, 72.9, 960, 680, 0.6, false, null);
+    s += juntosGrande(t, 73.37, 950, 190); // con la voz: «Juntos somos FP»
   }
   // Fundido final
   s += `<rect width="${W}" height="${H}" fill="#000" opacity="${f2(prog(t, 76.2, 77.0))}"/>`;
