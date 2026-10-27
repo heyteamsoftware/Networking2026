@@ -483,7 +483,9 @@
         <button class="btn btn-primario" type="submit" id="formEnviar">Enviar solicitud</button>
       </form>
 
-      <div class="form-ok" id="formOk" role="status" hidden tabindex="-1">
+      <!-- Confirmación: ventana emergente al enviarse correctamente -->
+      <dialog class="ok-dialog" id="formOk" aria-labelledby="okTitulo">
+      <div class="form-ok">
         <svg viewBox="0 0 400 400" aria-hidden="true">
           <polygon class="m1" points="12.07,5 387.93,5 200,192.93"/>
           <polygon class="m2" points="5,12.07 192.93,200 5,387.93"/>
@@ -493,9 +495,11 @@
           <polygon class="m4" points="12.07,395 102.07,305 287.93,305 197.93,395"/>
           <polygon class="m4" points="395,212.07 395,395 212.07,395"/>
         </svg>
-        <h3>¡Ya tenemos tu pieza!</h3>
+        <h3 id="okTitulo">¡Ya tenemos tu pieza!</h3>
         <p>Hemos recibido tu solicitud. Te contactaremos en los próximos días para concretar tu participación en Networking 2026.</p>
+        <button type="button" class="btn btn-primario ok-cerrar" data-cerrar>Volver a la web</button>
       </div>
+      </dialog>
     </div>
   </section>
 

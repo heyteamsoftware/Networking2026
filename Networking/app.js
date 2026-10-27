@@ -378,11 +378,16 @@
     });
   });
 
+  // Confirmación en una ventana emergente; el formulario se vacía para la siguiente persona
   function mostrarOk() {
-    form.hidden = true;
-    formOk.hidden = false;
-    formOk.focus();
+    form.reset();
+    formError.hidden = true;
+    if (typeof formOk.showModal === "function") formOk.showModal();
+    else formOk.setAttribute("open", "");
   }
+  formOk.addEventListener("click", function (e) {
+    if (e.target === formOk || e.target.hasAttribute("data-cerrar")) formOk.close();
+  });
   // Sin JavaScript el formulario vuelve con ?enviado=1
   if (/[?&]enviado=1/.test(location.search)) mostrarOk();
 
@@ -405,8 +410,10 @@
     var acepto = document.getElementById("f-acepto");
     if (!acepto.checked) { error("Para enviar la solicitud necesitamos que aceptes el uso de tus datos para contactarte.", acepto); return; }
 
+    // Mientras se envía: tres piezas que saltan dentro del botón y el formulario se atenúa
     formEnviar.disabled = true;
-    formEnviar.textContent = "Enviando…";
+    formEnviar.innerHTML = '<span class="cargando" aria-hidden="true"><i></i><i></i><i></i></span>Enviando…';
+    form.classList.add("enviando");
     fetch(form.action, { method: "POST", body: new FormData(form), headers: { "Accept": "application/json" } })
       .then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
       .then(function (res) {
@@ -414,7 +421,11 @@
         error((res && res.error) || "No hemos podido guardar la solicitud. Inténtalo de nuevo en unos minutos.");
       })
       .catch(function () { error("No hay conexión con el servidor. Comprueba tu conexión e inténtalo de nuevo."); })
-      .then(function () { formEnviar.disabled = false; formEnviar.textContent = "Enviar solicitud"; });
+      .then(function () {
+        formEnviar.disabled = false;
+        formEnviar.textContent = "Enviar solicitud";
+        form.classList.remove("enviando");
+      });
   });
 
   /* ---------- Cuenta atrás (20 nov 2026, hora de Canarias = UTC+0) ---------- */
