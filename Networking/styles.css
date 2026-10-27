@@ -522,3 +522,8 @@ img { display: block; max-width: 100%; }
   .js .tt > .tt-b, .js .tt > .tt-banda { opacity: 1; transform: none; transition: none; }
   .tt-vivo::before, .tt-ficha[open] { animation: none; }
 }
+
+/* Logo de la empresa en el formulario */
+.form .f-archivo { padding: 12px 14px; border: 1px dashed #3a4766; border-radius: 4px; background: var(--noche-2); color: #c9ccd8; font: inherit; font-size: .95rem; cursor: pointer; }
+.form .f-archivo::file-selector-button { margin-right: 14px; padding: 8px 16px; border: 0; border-radius: 99px; background: var(--mesa-4); color: var(--noche); font: 600 14px var(--texto); cursor: pointer; }
+.form .f-ayuda { margin: 0; font-size: .85rem; color: #9aa0b4; line-height: 1.5; }

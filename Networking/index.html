@@ -538,7 +538,7 @@
         </ul>
       </div>
 
-      <form class="form reveal" id="formParticipa" action="participa.php" method="post" novalidate>
+      <form class="form reveal" id="formParticipa" action="participa.php" method="post" enctype="multipart/form-data" novalidate>
         <div class="campo-doble">
           <div class="campo">
             <label for="f-empresa">Empresa u organización *</label>
@@ -592,6 +592,15 @@
           <label for="f-propuesta">Tu propuesta de colaboración</label>
           <textarea id="f-propuesta" name="propuesta" rows="4" maxlength="1000" placeholder="Un reto, una experiencia que quieras contar, prácticas, una idea… (opcional)"></textarea>
         </div>
+        <div class="campo">
+          <label for="f-logo">Logo de tu empresa (opcional)</label>
+          <input id="f-logo" name="logo" type="file" accept="image/png,image/jpeg,image/webp" class="f-archivo">
+          <p class="f-ayuda">PNG, JPG o WEBP, de hasta 2 MB. Con fondo transparente, mejor en PNG. Sirve para darte el crédito en la web y en los materiales del encuentro.</p>
+        </div>
+        <label class="consentimiento" for="f-autoriza-logo">
+          <input id="f-autoriza-logo" name="autoriza_logo" type="checkbox" value="si">
+          <span>Si subo un logo, autorizo que se publique en la web y en los materiales de Networking 2026 para dar crédito a mi empresa. Puedo pedir que se retire en cualquier momento.</span>
+        </label>
         <!-- Campo trampa contra envíos automáticos: las personas no lo ven -->
         <div class="trampa" aria-hidden="true">
           <label for="f-web">No rellenes este campo</label>

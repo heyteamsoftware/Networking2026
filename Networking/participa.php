@@ -8,6 +8,8 @@ declare(strict_types=1);
 const DATOS = '/var/www/networking_data';
 const CSV = DATOS . '/solicitudes.csv';
 const LIMITES = DATOS . '/limites.json';
+const LOGOS = DATOS . '/logos'; // logos de empresa: privados, fuera de la web
+const LOGO_MAX = 2 * 1024 * 1024; // 2 MB
 const ESPERA = 30; // segundos mínimos entre dos envíos desde la misma conexión
 
 $quiereJson = str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json');
@@ -50,6 +52,7 @@ $telefono  = limpiar('telefono', 30);
 $modalidad = limpiar('modalidad', 20);
 $propuesta = limpiar('propuesta', 1000, true);
 $acepto    = ($_POST['acepto'] ?? '') === 'si';
+$autorizaLogo = ($_POST['autoriza_logo'] ?? '') === 'si';
 
 $mesas = array_values(array_intersect(['1', '2', '3', '4'], array_map('strval', (array)($_POST['mesas'] ?? []))));
 $modalidades = ['participante' => 'Participante', 'colaboradora' => 'Colaboradora', 'impulsora' => 'Impulsora', 'sin-decidir' => 'Sin decidir'];
@@ -61,6 +64,32 @@ if (!isset($modalidades[$modalidad])) responder(false, 'Elige cómo quieres part
 if (!$acepto) responder(false, 'Para enviar la solicitud necesitamos que aceptes el uso de tus datos para contactarte.', 422);
 
 if (!is_dir(DATOS) || !is_writable(DATOS)) responder(false, 'No hemos podido guardar la solicitud. Inténtalo más tarde.', 500);
+
+// Logo opcional. Se valida y se vuelve a codificar como PNG (así no viaja nada que no sea imagen),
+// y se guarda con un nombre aleatorio fuera de la web. Solo se guarda si la empresa autoriza su uso.
+function guardarLogo(bool $autoriza): string {
+  $f = $_FILES['logo'] ?? null;
+  if (!$f || ($f['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) return '';
+  $error = 'El logo debe ser una imagen PNG, JPG o WEBP de menos de 2 MB.';
+  if (($f['error'] ?? 1) !== UPLOAD_ERR_OK || $f['size'] > LOGO_MAX) responder(false, $error, 422);
+  if (!$autoriza) responder(false, 'Para usar tu logo en la web necesitamos que autorices su publicación.', 422);
+  $tipo = (new finfo(FILEINFO_MIME_TYPE))->file($f['tmp_name']);
+  $imagen = match ($tipo) {
+    'image/png' => @imagecreatefrompng($f['tmp_name']),
+    'image/jpeg' => @imagecreatefromjpeg($f['tmp_name']),
+    'image/webp' => @imagecreatefromwebp($f['tmp_name']),
+    default => false,
+  };
+  if (!$imagen) responder(false, $error, 422);
+  if (!is_dir(LOGOS) && !mkdir(LOGOS, 0750, true)) responder(false, 'No hemos podido guardar la solicitud. Inténtalo más tarde.', 500);
+  $nombre = date('Ymd-His') . '-' . bin2hex(random_bytes(6)) . '.png';
+  imagesavealpha($imagen, true);
+  $ok = imagepng($imagen, LOGOS . '/' . $nombre);
+  imagedestroy($imagen);
+  if (!$ok) responder(false, 'No hemos podido guardar la solicitud. Inténtalo más tarde.', 500);
+  return $nombre;
+}
+$logo = guardarLogo($autorizaLogo);
 
 // Límite de envíos: guardamos solo una huella de la conexión, nunca la IP
 $huella = hash('sha256', ($_SERVER['REMOTE_ADDR'] ?? '') . '|networking2026');
@@ -89,6 +118,7 @@ $fila = array_map('celda', [
   $modalidades[$modalidad],
   implode(', ', array_map(fn($m) => 'Mesa ' . $m, $mesas)),
   $propuesta,
+  $logo,
 ]);
 
 $nuevo = !file_exists(CSV);
@@ -96,7 +126,7 @@ $f = fopen(CSV, 'a');
 if (!$f || !flock($f, LOCK_EX)) responder(false, 'No hemos podido guardar la solicitud. Inténtalo más tarde.', 500);
 if ($nuevo) {
   fwrite($f, "\xEF\xBB\xBF"); // BOM para que Excel lea bien los acentos
-  fputcsv($f, ['Fecha', 'Empresa', 'Sector', 'Persona de contacto', 'Cargo', 'Correo', 'Teléfono', 'Modalidad', 'Mesas', 'Propuesta'], ';', '"', '');
+  fputcsv($f, ['Fecha', 'Empresa', 'Sector', 'Persona de contacto', 'Cargo', 'Correo', 'Teléfono', 'Modalidad', 'Mesas', 'Propuesta', 'Logo (archivo privado)'], ';', '"', '');
 }
 fputcsv($f, $fila, ';', '"', '');
 fflush($f);
