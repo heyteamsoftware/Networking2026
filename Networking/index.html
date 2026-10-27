@@ -322,115 +322,150 @@
   <!-- CRONOGRAMA -->
   <section class="cronograma" id="cronograma">
     <div class="wrap">
-      <p class="etiqueta reveal">Cronograma · 20 de noviembre</p>
-      <h2 class="reveal">Del aula a la realidad</h2>
-      <p class="entradilla reveal">Identidad · Territorio · Oportunidad. A través de retos colaborativos, las personas participantes trabajarán juntas para transformar las necesidades de nuestro territorio en ideas, proyectos y acciones concretas.</p>
+      <div class="crono-cabecera">
+        <div>
+          <p class="etiqueta reveal">Cronograma · 20 de noviembre</p>
+          <h2 class="reveal">Del aula<br>a la realidad</h2>
+          <p class="crono-capas reveal"><span style="--c:var(--mesa-1)">Identidad</span><span style="--c:var(--mesa-3)">Territorio</span><span style="--c:var(--mesa-4)">Oportunidad</span></p>
+        </div>
+        <p class="crono-intro reveal">Una mañana para transformar las necesidades de nuestro territorio en ideas, proyectos y acciones concretas. <strong>Cinco retos, dos escenarios y una pieza que solo puedes poner tú.</strong></p>
+      </div>
+
+      <!-- La mañana de un vistazo: cada tramo mide lo que dura -->
+      <div class="jornada reveal" aria-hidden="true">
+        <div class="jornada-barra">
+          <span style="--m:15; --c:var(--arena)" title="Recepción"></span>
+          <span style="--m:10; --c:#c9ccd8" title="Apertura"></span>
+          <span style="--m:30; --c:var(--mesa-1)" title="Reto 01"></span>
+          <span style="--m:30" class="doble" title="Retos 02 y 03"><i style="--c:var(--mesa-2)"></i><i style="--c:var(--mesa-4)"></i></span>
+          <span style="--m:20; --c:var(--mesa-3)" title="Reto 04"></span>
+          <span style="--m:30" class="doble" title="Reto 05 y Radio Atlante"><i style="--c:var(--mesa-1)"></i><i style="--c:var(--mesa-3)"></i></span>
+          <span style="--m:20" class="falta" title="La pieza que nos falta"></span>
+        </div>
+        <div class="jornada-horas"><span>11:15</span><span style="--x:35.5%">12:10</span><span style="--x:67.7%">13:00</span><span>13:50</span></div>
+      </div>
 
       <ol class="crono">
         <li class="reveal">
-          <p class="crono-hora">11:15 h</p>
-          <div class="crono-cuerpo">
+          <p class="crono-hora">11:15</p>
+          <span class="pieza tri" style="--c:var(--arena)"></span>
+          <div class="crono-card">
             <p class="crono-tag">Recepción y puntos de información</p>
             <h3>Bienvenida a las entidades participantes</h3>
             <p>Recepción de asistentes, acreditación, orientación y preparación de los equipos de trabajo.</p>
           </div>
         </li>
         <li class="reveal">
-          <p class="crono-hora">11:30 h</p>
-          <div class="crono-cuerpo">
+          <p class="crono-hora">11:30</p>
+          <span class="pieza cuad" style="--c:#c9ccd8"></span>
+          <div class="crono-card">
             <p class="crono-tag">Apertura institucional</p>
             <h3>Bienvenida al encuentro</h3>
-            <p class="crono-quien">Agar García, directora del CIFP Tony Gallardo.<br>Carolina de León, directora general de Formación Profesional.</p>
-            <p>Presentación del propósito del networking y de la importancia de conectar la Formación Profesional con las empresas, las instituciones y las necesidades reales del territorio.</p>
+            <ul class="crono-voces">
+              <li><strong>Agar García</strong> directora del CIFP Tony Gallardo</li>
+              <li><strong>Carolina de León</strong> directora general de Formación Profesional</li>
+            </ul>
+            <p>El propósito del networking: conectar la Formación Profesional con las empresas, las instituciones y las necesidades reales del territorio.</p>
           </div>
         </li>
-        <li class="reveal" style="--c:var(--mesa-1)">
-          <p class="crono-hora">11:40 h</p>
-          <div class="crono-cuerpo">
+        <li class="reveal">
+          <p class="crono-hora">11:40</p>
+          <span class="pieza tri" style="--c:var(--mesa-1)"></span>
+          <div class="crono-card reto" style="--c:var(--mesa-1); --t:#ff8a6b" data-n="01">
             <p class="crono-tag">Reto 01 · Identidad: lo que somos</p>
             <h3>¿Qué necesita Canarias para construir su futuro?</h3>
-            <p class="crono-quien">Responsable: Agar García.</p>
-            <p>Los equipos explorarán qué representa Canarias, qué hace únicas a nuestras islas y cómo aprovechar nuestras diferencias para construir un futuro común.</p>
+            <p class="crono-resp">Responsable · Agar García</p>
+            <p>Qué representa Canarias, qué hace únicas a nuestras islas y cómo aprovechar nuestras diferencias para construir un futuro común.</p>
           </div>
         </li>
         <li class="reveal">
-          <p class="crono-hora">12:10 h</p>
-          <div class="crono-cuerpo">
-            <p class="crono-tag">El aula como laboratorio de ideas</p>
-            <h3>Presentación de las áreas</h3>
-            <p class="crono-quien">Interviene: Sabina Santana, jefa de Estudios del CIFP Tony Gallardo.</p>
-            <p>«Las necesidades del alumnado, del entorno y el currículo como base del diseño». Una reflexión sobre cómo conectar las necesidades del entorno con la formación, las competencias profesionales y el diseño de nuevas oportunidades.</p>
+          <p class="crono-hora">12:10</p>
+          <span class="pieza para" style="--c:var(--mesa-2)"></span>
+          <div class="crono-grupo">
+            <div class="crono-card">
+              <p class="crono-tag">El aula como laboratorio de ideas</p>
+              <h3>Presentación de las áreas</h3>
+              <ul class="crono-voces"><li><strong>Sabina Santana</strong> jefa de Estudios del CIFP Tony Gallardo</li></ul>
+              <p>«Las necesidades del alumnado, del entorno y el currículo como base del diseño»: cómo conectar el entorno con la formación, las competencias y las nuevas oportunidades.</p>
+            </div>
+            <p class="crono-paralelo"><span>12:10 – 12:40</span> Dos retos a la vez · elige el tuyo</p>
+            <div class="crono-par">
+              <div class="crono-card reto" style="--c:var(--mesa-2); --t:#f3a35a" data-n="02">
+                <p class="crono-tag">Reto 02 · De la idea a la oportunidad</p>
+                <h3>Emprender</h3>
+                <p class="crono-resp">Responsable · Raquel Cabrera</p>
+                <p>Una necesidad de las empresas, la ciudadanía o el territorio se convierte en una iniciativa emprendedora, uniendo familias profesionales hasta llegar a una propuesta viable.</p>
+                <p class="crono-extra">Experiencia relacionada: Adelina De La Jara, «Las profesiones de una Escuela Azul como eje transversal de un proyecto para la ciudadanía».</p>
+              </div>
+              <div class="crono-card reto" style="--c:var(--mesa-4); --t:#ffcc00" data-n="03">
+                <p class="crono-tag">Reto 03 · Profesiones que reivindican una identidad</p>
+                <h3>Sostenibilidad</h3>
+                <p class="crono-resp">Responsable · Juanjo García</p>
+                <p>La sostenibilidad, los oficios tradicionales y el valor de los conocimientos vinculados al territorio.</p>
+              </div>
+            </div>
           </div>
         </li>
         <li class="reveal">
-          <p class="crono-hora">12:10–12:40 h<span>En paralelo</span></p>
-          <div class="crono-par">
-            <div class="crono-cuerpo" style="--c:var(--mesa-2)">
-              <p class="crono-tag">Reto 02 · De la idea a la oportunidad</p>
-              <h3>Emprender</h3>
-              <p class="crono-quien">Responsable: Raquel Cabrera.</p>
-              <p>Los equipos identificarán una necesidad de las empresas, la ciudadanía o el territorio y la transformarán en una posible iniciativa emprendedora. Se trabajará la colaboración entre familias profesionales y la capacidad de convertir una idea en una propuesta viable.</p>
-              <p class="crono-extra">Experiencia relacionada: Adelina De La Jara, «Las profesiones de una Escuela Azul como eje transversal de un proyecto para la ciudadanía».</p>
-            </div>
-            <div class="crono-cuerpo" style="--c:var(--mesa-4)">
-              <p class="crono-tag">Reto 03 · Profesiones que reivindican una identidad</p>
-              <h3>Sostenibilidad</h3>
-              <p class="crono-quien">Responsable: Juanjo García.</p>
-              <p>Un reto centrado en la sostenibilidad, los oficios tradicionales y el valor de los conocimientos vinculados al territorio.</p>
-            </div>
-          </div>
-        </li>
-        <li class="reveal" style="--c:var(--mesa-3)">
-          <p class="crono-hora">12:40–13:00 h</p>
-          <div class="crono-cuerpo">
-            <p class="crono-tag">Reto 04 · Internacionalización e innovación</p>
+          <p class="crono-hora">12:40</p>
+          <span class="pieza cuad" style="--c:var(--mesa-3)"></span>
+          <div class="crono-card reto" style="--c:var(--mesa-3); --t:#7fb2f0" data-n="04">
+            <p class="crono-tag">Reto 04 · 12:40 – 13:00</p>
             <h3>Internacionalización e innovación al servicio del alumnado</h3>
-            <p class="crono-quien">Participan profesionales de internacionalización e innovación del CIFP Tony Gallardo, el CIFP Las Indias —Centro Embajador Erasmus— y el CIFP Felo Monzón.</p>
-            <p>El reto invita a explorar cómo las ideas, los productos, los servicios y el talento desarrollado en Canarias pueden conectarse con otros territorios y generar oportunidades internacionales.</p>
+            <p class="crono-resp">CIFP Tony Gallardo · CIFP Las Indias, Centro Embajador Erasmus · CIFP Felo Monzón</p>
+            <p>Cómo las ideas, los productos, los servicios y el talento de Canarias pueden conectarse con otros territorios y abrir oportunidades internacionales.</p>
           </div>
         </li>
         <li class="reveal">
-          <p class="crono-hora">13:00 h<span>En paralelo</span></p>
-          <div class="crono-par">
-            <div class="crono-cuerpo" style="--c:var(--mesa-1)">
-              <p class="crono-tag">13:00–13:30 h · Reto 05 · El talento que crea futuro</p>
-              <h3>Alumnado competente y emprendimiento como oportunidad</h3>
-              <p class="crono-quien">Participan profesionales de Información y Orientación Profesional, Emprendimiento y Calidad del CIFP Tony Gallardo, con representantes del Clúster Tecnológico de Canarias, el ITC y Erasmus para Jóvenes Emprendedores.</p>
-              <p>Los equipos identificarán las competencias que necesita el tejido empresarial y cómo el alumnado de FP puede aportar valor a través de proyectos, experiencias prácticas, empleo y emprendimiento.</p>
-            </div>
-            <div class="crono-cuerpo" style="--c:var(--mesa-3)">
-              <p class="crono-tag">13:00–13:40 h · Radio Atlante conecta</p>
-              <h3>Experiencias de impacto</h3>
-              <ul class="crono-lista">
-                <li>CIFP Las Indias: Embajadores Erasmus.</li>
-                <li>CIFP Felo Monzón: internacionalización e innovación.</li>
-                <li>PLOCAN: Escuelas Azules.</li>
-                <li>Identidad a través del deporte y los juegos tradicionales.</li>
-              </ul>
-              <p>Un espacio para conocer iniciativas reales, compartir aprendizajes y descubrir nuevas posibilidades de colaboración.</p>
+          <p class="crono-hora">13:00</p>
+          <span class="pieza tri" style="--c:var(--mesa-3)"></span>
+          <div class="crono-grupo">
+            <p class="crono-paralelo"><span>13:00</span> Dos escenarios a la vez</p>
+            <div class="crono-par">
+              <div class="crono-card reto" style="--c:var(--mesa-1); --t:#ff8a6b" data-n="05">
+                <p class="crono-tag">Reto 05 · 13:00 – 13:30</p>
+                <h3>El talento que crea futuro</h3>
+                <p class="crono-sub">Alumnado competente y emprendimiento como oportunidad</p>
+                <p class="crono-resp">Orientación, Emprendimiento y Calidad del CIFP Tony Gallardo · Clúster Tecnológico de Canarias · ITC · Erasmus para Jóvenes Emprendedores</p>
+                <p>Qué competencias necesita el tejido empresarial y cómo el alumnado de FP aporta valor con proyectos, prácticas, empleo y emprendimiento.</p>
+              </div>
+              <div class="crono-card radio" style="--c:var(--mesa-3); --t:#7fb2f0">
+                <p class="crono-tag"><span class="en-directo">En antena</span> 13:00 – 13:40</p>
+                <h3>Radio Atlante conecta</h3>
+                <p class="crono-sub">Experiencias de impacto</p>
+                <ul class="crono-lista">
+                  <li><strong>CIFP Las Indias</strong> Embajadores Erasmus</li>
+                  <li><strong>CIFP Felo Monzón</strong> Internacionalización e innovación</li>
+                  <li><strong>PLOCAN</strong> Escuelas Azules</li>
+                  <li><strong>Deporte y juegos tradicionales</strong> Identidad en movimiento</li>
+                </ul>
+              </div>
             </div>
           </div>
         </li>
-        <li class="reveal crono-final" style="--c:var(--mesa-4)">
-          <p class="crono-hora">13:30–13:50 h</p>
-          <div class="crono-cuerpo">
-            <p class="crono-tag">La pieza que nos falta eres tú</p>
-            <h3>Conectamos talento y oportunidades</h3>
-            <p>Actividad colaborativa final en la que cada equipo identificará qué puede aportar, con quién puede colaborar y qué oportunidad podría desarrollar conjuntamente. Los participantes definirán una idea o propuesta y las personas o entidades implicadas.</p>
+        <li class="reveal crono-final">
+          <p class="crono-hora">13:30</p>
+          <span class="pieza tri falta"></span>
+          <div class="crono-card">
+            <p class="crono-tag">13:30 – 13:50 · Actividad final</p>
+            <h3>La pieza que nos falta eres tú</h3>
+            <p>Cada equipo descubre qué puede aportar, con quién puede colaborar y qué oportunidad podría desarrollar en conjunto. Se define una idea, las personas y entidades implicadas, y se encaja la última pieza.</p>
           </div>
         </li>
       </ol>
 
       <div class="legado reveal">
-        <p class="etiqueta">El legado · Del encuentro a la acción</p>
-        <p>El networking busca que las conversaciones se conviertan en colaboraciones con continuidad. Por ello, se invita a cada equipo a identificar:</p>
+        <div class="legado-intro">
+          <p class="etiqueta">El legado · Del encuentro a la acción</p>
+          <p class="legado-lema">El éxito no es reunirnos. Es lo que construimos después.</p>
+          <p>Para que las conversaciones se conviertan en colaboraciones con continuidad, cada equipo sale con cuatro piezas:</p>
+        </div>
         <ol class="legado-lista">
-          <li>Una necesidad o interés compartido.</li>
-          <li>Una acción que pueda iniciarse en los próximos 30 días.</li>
-          <li>Una persona de contacto por cada parte.</li>
-          <li>Una fecha para revisar los avances.</li>
+          <li><img src="img/mesa-1.svg" alt=""><span>Una necesidad o interés <strong>compartido</strong></span></li>
+          <li><img src="img/mesa-2.svg" alt=""><span>Una acción que empiece en los próximos <strong>30 días</strong></span></li>
+          <li><img src="img/mesa-3.svg" alt=""><span>Una persona de <strong>contacto</strong> por cada parte</span></li>
+          <li><img src="img/mesa-4.svg" alt=""><span>Una <strong>fecha</strong> para revisar los avances</span></li>
         </ol>
-        <p class="legado-lema">El éxito no es reunirnos. Es lo que construimos después.</p>
       </div>
     </div>
   </section>
