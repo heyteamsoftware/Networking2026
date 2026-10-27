@@ -163,8 +163,8 @@ function capa(t) {
   }
 
   // ---------- 9,7–17,9 · El 20 de noviembre · Networking 2026 ----------
-  if (t >= 9.6 && t < 18.0) {
-    s += grupo(vis(t, 9.7, 17.9, 0.4, 0.3), `<rect width="${W}" height="${H}" fill="url(#abajo)"/>`);
+  if (t >= 9.6 && t < 19.2) {
+    s += grupo(vis(t, 9.7, 19.09, 0.4, 0.3), `<rect width="${W}" height="${H}" fill="url(#abajo)"/>`);
     // Tarjeta de la fecha, como la de la web
     const en = eout(prog(t, 9.9, 10.5)), sal = prog(t, 13.0, 13.4);
     if (en > 0 && sal < 1) {
@@ -177,7 +177,7 @@ function capa(t) {
     }
     s += grupo(vis(t, 11.2, 13.4, 0.35, 0.3), txt(G.OUTFIT_SB, "EL CIFP TONY GALLARDO ABRE SUS PUERTAS", 120, 655, 34, C.arena, { tracking: 4 }));
     // Logotipo: el tangram se monta y aparece el nombre
-    const vl = vis(t, 13.4, 17.9, 0.3, 0.35);
+    const vl = vis(t, 13.4, 19.09, 0.3, 0.3); // el logotipo y «Juntos somos FP» se quedan hasta el segundo 19 del vídeo
     // El logotipo sube y, al decir «Juntos somos FP», aparece en grande debajo
     const sube = eio(prog(t, 15.2, 15.65));
     if (vl > 0) s += grupo(vl, logotipo(t, 13.45, 960, lerp(735, 520, sube), 1, true, null) + juntosGrande(t, 15.42, 900, 210));
@@ -186,8 +186,9 @@ function capa(t) {
   // ---------- 17,9–22,4 · Empresas, talento y Formación Profesional ----------
   if (t >= 17.8 && t < 22.5) {
     const v = vis(t, 17.9, 22.4, 0.3, 0.3);
-    s += grupo(v, `<rect width="${W}" height="${H}" fill="url(#abajo)"/>`);
-    s += grupo(v * prog(t, 17.95, 18.3), txt(G.OUTFIT_SB, "UN ENCUENTRO ENTRE", 120, 760, 34, C.sol, { tracking: 6 }));
+    // el degradado de esta escena entra cuando se va «Juntos somos FP», para no apagarlo
+    s += grupo(vis(t, 18.95, 22.4, 0.3, 0.3), `<rect width="${W}" height="${H}" fill="url(#abajo)"/>`);
+    s += grupo(v * prog(t, 19.04, 19.35), txt(G.OUTFIT_SB, "UN ENCUENTRO ENTRE", 120, 760, 34, C.sol, { tracking: 6 }));
     const CARTAS = [["EMPRESAS", 19.13, MESA[0]], ["TALENTO", 20.4, MESA[2]], ["FORMACIÓN PROFESIONAL", 21.0, MESA[1]]];
     let x = 120;
     for (const [w, a, col] of CARTAS) {
@@ -198,15 +199,17 @@ function capa(t) {
     }
   }
 
-  // ---------- 22,4–25,1 · No venimos a escuchar discursos ----------
-  if (t >= 22.3 && t < 25.3) {
-    const v = vis(t, 22.4, 25.15, 0.25, 0.3);
-    s += grupo(v * 0.6, `<rect width="${W}" height="${H}" fill="${C.noche}"/>`);
-    s += grupo(v, txt(G.BEBAS, "NO VENIMOS A", 960, 470, 120, C.arena, { anchor: "middle", tracking: 2 }));
+  // ---------- 22,4–28,4 · No venimos a escuchar discursos ----------
+  // Se queda hasta el segundo 28 del vídeo; cuando entra «Conectar», sube para dejarle sitio abajo.
+  if (t >= 22.3 && t < 28.5) {
+    const v = vis(t, 22.4, 28.41, 0.25, 0.3);
+    const sube = eio(prog(t, 25.08, 25.6)), dy = -230 * sube;
+    s += grupo(v * lerp(0.6, 0.3, sube), `<rect width="${W}" height="${H}" fill="${C.noche}"/>`);
+    s += grupo(v, txt(G.BEBAS, "NO VENIMOS A", 960, 470 + dy, 120, C.arena, { anchor: "middle", tracking: 2 }));
     const l2 = "ESCUCHAR DISCURSOS", w2 = ancho(G.BEBAS, l2, 150, 2);
-    s += grupo(v, txt(G.BEBAS, l2, 960, 630, 150, C.arena, { anchor: "middle", tracking: 2 }));
+    s += grupo(v, txt(G.BEBAS, l2, 960, 630 + dy, 150, C.arena, { anchor: "middle", tracking: 2 }));
     const tach = eio(prog(t, 23.94, 24.42)); // se tacha cuando la voz termina «discursos»
-    if (tach > 0) s += grupo(v, `<rect x="${960 - w2 / 2 - 20}" y="566" width="${(w2 + 40) * tach}" height="22" fill="${MESA[0]}"/>`);
+    if (tach > 0) s += grupo(v, `<rect x="${960 - w2 / 2 - 20}" y="${566 + dy}" width="${(w2 + 40) * tach}" height="22" fill="${MESA[0]}"/>`);
   }
 
   // ---------- 25,1–41,6 · Conectar · Descubrir · Activar ----------
