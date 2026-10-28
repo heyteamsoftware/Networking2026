@@ -55,7 +55,11 @@ Con la contraseña del equipo se ven todas las solicitudes (las más recientes p
 - descargar una hoja de Excel (**Descargar Excel**) con las solicitudes que se ven según los filtros;
 - imprimir esas mismas solicitudes o guardarlas en PDF (**Imprimir / PDF**: en el diálogo de impresión, elegir «Guardar como PDF»; en A4 horizontal);
 - descargar el CSV completo, sin filtros, con **Descargar CSV completo**;
-- consultar el resumen de cuántas hay por modalidad y por mesa.
+- consultar el resumen de cuántas hay por modalidad y por mesa;
+- **editar** una solicitud (**Editar**) para corregir un error: nombre, contacto, modalidad, mesas o propuesta. La fecha y el logo no se cambian;
+- **borrar** una solicitud (**Borrar**): no desaparece, va a la **papelera**, desde donde se puede **restaurar** en cualquier momento.
+
+Antes de cada cambio, el panel guarda una copia del CSV en `/var/www/networking_data/copias/`. La papelera no se vacía sola: para borrar de verdad una solicitud hay que hacerlo a mano en el servidor.
 
 Sin contraseña no se ve nada: el CSV solo se descarga con la sesión abierta. Seguridad:
 

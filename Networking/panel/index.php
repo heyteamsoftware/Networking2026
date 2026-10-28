@@ -1,15 +1,24 @@
 <?php
 // Networking 2026 — panel privado de solicitudes «Quiero participar como empresa».
-// Muestra y deja descargar el CSV que guarda participa.php. Solo con contraseña:
+// Muestra, edita y descarga las solicitudes que guarda participa.php. Lo que se borra
+// va a una papelera (papelera.csv) desde la que se puede restaurar. Solo con contraseña:
 // su hash vive en el servidor (panel-clave.txt), nunca en el repositorio.
 
 declare(strict_types=1);
 
 $datos = getenv('NETWORKING_DATA') ?: '/var/www/networking_data';
 define('CSV', $datos . '/solicitudes.csv');
+define('PAPELERA', $datos . '/papelera.csv');
 define('CLAVE', $datos . '/panel-clave.txt');
 define('INTENTOS', $datos . '/panel-intentos.json');
 define('LOGOS', $datos . '/logos');
+define('COPIAS', $datos . '/copias');        // copia del CSV antes de cada cambio
+define('CERROJO', $datos . '/panel.lock');   // se bloquea mientras se edita o se mueve una solicitud
+const CABECERA = ['Fecha', 'Empresa', 'Sector', 'Persona de contacto', 'Cargo', 'Correo', 'Teléfono', 'Modalidad', 'Mesas', 'Propuesta', 'Logo (archivo privado)'];
+const CABECERA_PAPELERA = ['Fecha', 'Empresa', 'Sector', 'Persona de contacto', 'Cargo', 'Correo', 'Teléfono', 'Modalidad', 'Mesas', 'Propuesta', 'Logo (archivo privado)', 'Borrada el'];
+const CLAVES = ['fecha', 'empresa', 'sector', 'persona', 'cargo', 'correo', 'telefono', 'modalidad', 'mesas', 'propuesta', 'logo'];
+const CLAVES_PAPELERA = ['fecha', 'empresa', 'sector', 'persona', 'cargo', 'correo', 'telefono', 'modalidad', 'mesas', 'propuesta', 'logo', 'borrada'];
+const MODALIDADES = ['Participante', 'Colaboradora', 'Impulsora', 'Sin decidir'];
 const MAX_FALLOS = 5;          // fallos seguidos permitidos desde una misma conexión…
 const BLOQUEO = 15 * 60;       // …antes de tener que esperar 15 minutos
 const INACTIVIDAD = 20 * 60;   // la sesión caduca tras 20 minutos sin uso (el servidor borra las de más de 24)
@@ -117,6 +126,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     }
     volver();
   }
+
+  if (in_array($accion, ['guardar', 'borrar', 'restaurar'], true) && $dentro) gestionarSolicitud($accion);
   volver();
 }
 
@@ -179,27 +190,31 @@ if (isset($_GET['descargar'])) {
   exit;
 }
 
-$columnas = ['fecha', 'empresa', 'sector', 'persona', 'cargo', 'correo', 'telefono', 'modalidad', 'mesas', 'propuesta', 'logo'];
-$filas = [];
-if (is_readable(CSV) && ($f = fopen(CSV, 'r'))) {
-  flock($f, LOCK_SH);
-  $cabecera = true;
-  while (($c = fgetcsv($f, 0, ';', '"', '')) !== false) {
-    if ($cabecera) { $cabecera = false; continue; }
-    if ($c === [null]) continue;
-    $c = array_pad(array_slice($c, 0, 11), 11, ''); // 11 columnas: la última es el logo (las solicitudes anteriores no lo tienen)
-    // participa.php antepone «'» a lo que empieza por = + - @ para que Excel no lo tome por fórmula
-    $c = array_map(fn($v) => preg_match("/^'[=+\-@\t\r]/", (string)$v) ? substr((string)$v, 1) : (string)$v, $c);
-    $filas[] = array_combine($columnas, $c);
-  }
-  flock($f, LOCK_UN);
-  fclose($f);
-}
-$filas = array_reverse($filas); // más recientes primero
+// Las solicitudes se identifican por su contenido (ver idsFilas), así que las dos listas se leen en crudo
+$solicitudes = parsear(leerTexto(CSV), count(CLAVES));
+$idsSolicitudes = idsFilas($solicitudes);
+$borradas = parsear(leerTexto(PAPELERA), count(CLAVES_PAPELERA));
+$idsBorradas = idsFilas($borradas);
 
-$modalidades = ['Participante', 'Colaboradora', 'Impulsora', 'Sin decidir'];
+$filas = [];
+foreach ($solicitudes as $i => $c) $filas[] = presentar($c, CLAVES) + ['id' => $idsSolicitudes[$i]];
+$filas = array_reverse($filas); // más recientes primero
+$papelera = [];
+foreach ($borradas as $i => $c) $papelera[] = presentar($c, CLAVES_PAPELERA) + ['id' => $idsBorradas[$i]];
+$papelera = array_reverse($papelera);
+
+$flash = $_SESSION['flash'] ?? null;
+unset($_SESSION['flash']);
+
+$modalidades = MODALIDADES;
 $mesas = [1 => 'El aula como laboratorio de ideas', 2 => 'Proyectos en acción', 3 => 'Radio Atlante conecta', 4 => 'TG Lab'];
 $numMesas = fn(array $fila) => array_map('intval', preg_match_all('/Mesa (\d)/', $fila['mesas'], $m) ? $m[1] : []);
+
+$enPapelera = isset($_GET['papelera']);
+$editar = null;
+if (isset($_GET['editar'])) {
+  foreach ($filas as $r) if ($r['id'] === $_GET['editar']) $editar = $r;
+}
 
 $fMod = in_array($_GET['modalidad'] ?? '', $modalidades, true) ? $_GET['modalidad'] : '';
 $fMesa = (int)($_GET['mesa'] ?? 0);
@@ -223,11 +238,11 @@ foreach ($filas as $r) {
 // Los mismos colores que las fichas de modalidad de la web
 $claseMod = ['Participante' => 'mod-3', 'Colaboradora' => 'mod-2', 'Impulsora' => 'mod-1', 'Sin decidir' => 'mod-0'];
 
-pintarCabecera('Solicitudes', 'panel');
+pintarCabecera($enPapelera ? 'Papelera' : ($editar ? 'Editar solicitud' : 'Solicitudes'), 'panel');
 ?>
   <header class="barra">
     <a class="marca" href="./"><img src="../img/isotipo.svg" alt="" width="30" height="30"><span>Networking <b>2026</b></span></a>
-    <span class="barra-titulo">Panel de solicitudes</span>
+    <span class="barra-titulo"><?= $enPapelera ? 'Papelera' : 'Panel de solicitudes' ?></span>
     <form method="post" action="./" class="salir">
       <input type="hidden" name="accion" value="salir">
       <input type="hidden" name="csrf" value="<?= e($_SESSION['csrf']) ?>">
@@ -236,6 +251,88 @@ pintarCabecera('Solicitudes', 'panel');
   </header>
 
   <main class="wrap">
+    <?php if ($flash): ?>
+      <p class="aviso <?= $flash['tipo'] === 'error' ? 'aviso-error' : '' ?>" role="status"><?= e($flash['texto']) ?></p>
+    <?php endif; ?>
+
+    <?php if ($editar): ?>
+    <section class="editar">
+      <p class="etiqueta">Editar solicitud · <?= e($editar['fecha']) ?></p>
+      <h1><?= e($editar['empresa']) ?></h1>
+      <form class="form-editar" method="post" action="./">
+        <input type="hidden" name="accion" value="guardar">
+        <input type="hidden" name="csrf" value="<?= e($_SESSION['csrf']) ?>">
+        <input type="hidden" name="id" value="<?= e($editar['id']) ?>">
+        <label>Empresa u organización <input name="empresa" required maxlength="120" value="<?= e($editar['empresa']) ?>"></label>
+        <label>Sector <input name="sector" maxlength="80" value="<?= e($editar['sector']) ?>"></label>
+        <label>Persona de contacto <input name="persona" required maxlength="100" value="<?= e($editar['persona']) ?>"></label>
+        <label>Cargo <input name="cargo" maxlength="80" value="<?= e($editar['cargo']) ?>"></label>
+        <label>Correo <input name="correo" type="email" required maxlength="120" value="<?= e($editar['correo']) ?>"></label>
+        <label>Teléfono <input name="telefono" maxlength="30" value="<?= e($editar['telefono']) ?>"></label>
+        <label>Modalidad
+          <select name="modalidad" required>
+            <?php foreach ($modalidades as $m): ?>
+              <option value="<?= e($m) ?>" <?= $editar['modalidad'] === $m ? 'selected' : '' ?>><?= e($m) ?></option>
+            <?php endforeach; ?>
+          </select>
+        </label>
+        <fieldset>
+          <legend>Mesas</legend>
+          <?php foreach ($mesas as $n => $titulo): ?>
+            <label><input type="checkbox" name="mesas[]" value="<?= $n ?>" <?= in_array($n, $numMesas($editar), true) ? 'checked' : '' ?>> Mesa <?= $n ?> · <?= e($titulo) ?></label>
+          <?php endforeach; ?>
+        </fieldset>
+        <label>Propuesta <textarea name="propuesta" rows="5" maxlength="1000"><?= e($editar['propuesta']) ?></textarea></label>
+        <div class="acciones">
+          <button class="btn btn-primario" type="submit">Guardar cambios</button>
+          <a class="btn btn-borde" href="./">Cancelar</a>
+        </div>
+      </form>
+      <p class="nota">El logo y la fecha de envío no se cambian desde aquí.</p>
+    </section>
+
+    <?php elseif ($enPapelera): ?>
+    <section class="cabeza">
+      <div>
+        <p class="etiqueta">Papelera</p>
+        <h1><?= count($papelera) ?> <?= count($papelera) === 1 ? 'borrada' : 'borradas' ?></h1>
+        <p class="nota">Las solicitudes borradas se guardan aquí hasta que las restaures.</p>
+      </div>
+      <a class="btn btn-borde" href="./">Volver a solicitudes</a>
+    </section>
+
+    <?php if ($papelera): ?>
+    <div class="tabla-caja">
+      <table class="tabla">
+        <thead>
+          <tr><th>Fecha</th><th>Empresa</th><th>Contacto</th><th>Propuesta</th><th>Borrada el</th><th>Acciones</th></tr>
+        </thead>
+        <tbody>
+        <?php foreach ($papelera as $r): ?>
+          <tr>
+            <td data-col="Fecha" class="fecha"><?= e($r['fecha']) ?></td>
+            <td data-col="Empresa"><strong><?= e($r['empresa']) ?></strong></td>
+            <td data-col="Contacto"><?= e($r['persona']) ?><?php if ($r['correo'] !== ''): ?><span class="sub"><?= e($r['correo']) ?></span><?php endif; ?></td>
+            <td data-col="Propuesta" class="propuesta"><?= $r['propuesta'] !== '' ? nl2br(e($r['propuesta'])) : '<span class="sub">—</span>' ?></td>
+            <td data-col="Borrada el" class="fecha"><?= e($r['borrada']) ?></td>
+            <td data-col="Acciones" class="acciones-fila">
+              <form method="post" action="./" class="en-linea">
+                <input type="hidden" name="accion" value="restaurar">
+                <input type="hidden" name="csrf" value="<?= e($_SESSION['csrf']) ?>">
+                <input type="hidden" name="id" value="<?= e($r['id']) ?>">
+                <button class="btn btn-borde btn-pequeno" type="submit">Restaurar</button>
+              </form>
+            </td>
+          </tr>
+        <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
+    <?php else: ?>
+      <p class="vacio">La papelera está vacía.</p>
+    <?php endif; ?>
+
+    <?php else: ?>
     <p class="solo-imprimir">Networking 2026 · Solicitudes de empresas · <?= e($etiquetaFiltro) ?> · <?= date('d/m/Y') ?></p>
     <section class="cabeza">
       <div>
@@ -250,6 +347,7 @@ pintarCabecera('Solicitudes', 'panel');
         </div>
       <?php endif; ?>
     </section>
+    <p class="enlace-papelera"><a href="?papelera=1">Ver la papelera (<?= count($papelera) ?>)</a></p>
 
     <?php if ($filas): ?>
     <section class="resumen" aria-label="Resumen">
@@ -290,7 +388,7 @@ pintarCabecera('Solicitudes', 'panel');
     <div class="tabla-caja">
       <table class="tabla">
         <thead>
-          <tr><th>Fecha</th><th>Empresa</th><th>Contacto</th><th>Propuesta</th><th>Logo</th></tr>
+          <tr><th>Fecha</th><th>Empresa</th><th>Contacto</th><th>Propuesta</th><th>Logo</th><th>Acciones</th></tr>
         </thead>
         <tbody>
         <?php foreach ($vistas as $r): $tel = preg_replace('/[^0-9+]/', '', $r['telefono']); ?>
@@ -304,6 +402,15 @@ pintarCabecera('Solicitudes', 'panel');
             </td>
             <td data-col="Propuesta" class="propuesta"><?= $r['propuesta'] !== '' ? nl2br(e($r['propuesta'])) : '<span class="sub">—</span>' ?></td>
             <td data-col="Logo" class="logo"><?php if ($r['logo'] !== ''): ?><a href="?logo=<?= e(rawurlencode($r['logo'])) ?>" target="_blank" rel="noopener"><img src="?logo=<?= e(rawurlencode($r['logo'])) ?>" alt="Logo de <?= e($r['empresa']) ?>" loading="lazy"></a><?php else: ?><span class="sub">Sin logo</span><?php endif; ?></td>
+            <td data-col="Acciones" class="acciones-fila">
+              <a class="btn btn-borde btn-pequeno" href="?editar=<?= e(rawurlencode($r['id'])) ?>">Editar</a>
+              <form method="post" action="./" class="en-linea" data-confirmar="<?= e('¿Mover a la papelera la solicitud de ' . $r['empresa'] . '? Podrás restaurarla desde la papelera.') ?>">
+                <input type="hidden" name="accion" value="borrar">
+                <input type="hidden" name="csrf" value="<?= e($_SESSION['csrf']) ?>">
+                <input type="hidden" name="id" value="<?= e($r['id']) ?>">
+                <button class="btn-peligro btn-pequeno" type="submit">Borrar</button>
+              </form>
+            </td>
           </tr>
         <?php endforeach; ?>
         </tbody>
@@ -316,10 +423,202 @@ pintarCabecera('Solicitudes', 'panel');
     <?php else: ?>
       <p class="vacio">Todavía no ha llegado ninguna solicitud. Aparecerán aquí en cuanto una empresa rellene el formulario de la web.</p>
     <?php endif; ?>
+    <?php endif; ?>
   </main>
   <script src="panel.js"></script>
 </body></html>
 <?php
+
+// ---------- Cambios sobre las solicitudes ----------
+
+/** Aplica una acción de los formularios (editar, borrar o restaurar) y vuelve a la lista con un aviso. */
+function gestionarSolicitud(string $accion): never {
+  $id = (string)($_POST['id'] ?? '');
+  $destino = '';
+  $error = null;
+  $ok = '';
+
+  if (!preg_match('/^[0-9a-f]{64}-\d+$/', $id)) {
+    $error = 'La solicitud no es válida.';
+  } elseif ($accion === 'guardar') {
+    $destino = '?editar=' . rawurlencode($id);
+    [$datos, $error] = datosDelFormulario();
+    if (!$error) $error = conCerrojo(fn() => editarFila($id, $datos));
+    if (!$error) { $ok = 'Solicitud actualizada.'; $destino = ''; }
+  } elseif ($accion === 'borrar') {
+    $error = conCerrojo(fn() => moverFila(CSV, CABECERA, PAPELERA, CABECERA_PAPELERA, $id,
+      fn(array $fila) => [...$fila, date('Y-m-d H:i')]));
+    $ok = 'Solicitud movida a la papelera. Puedes restaurarla desde la papelera.';
+  } else { // restaurar
+    $destino = '?papelera=1';
+    $error = conCerrojo(fn() => moverFila(PAPELERA, CABECERA_PAPELERA, CSV, CABECERA, $id,
+      fn(array $fila) => array_slice($fila, 0, count(CABECERA))));
+    $ok = 'Solicitud restaurada.';
+  }
+
+  $_SESSION['flash'] = $error ? ['tipo' => 'error', 'texto' => $error] : ['tipo' => 'ok', 'texto' => $ok];
+  volver($destino);
+}
+
+/** Valida los campos del formulario de edición. Devuelve [datos, error]. */
+function datosDelFormulario(): array {
+  $texto = function (string $clave, int $max, bool $multilinea = false): string {
+    $v = (string)($_POST[$clave] ?? '');
+    $v = $multilinea ? preg_replace('/[^\P{C}\n]/u', '', $v) : preg_replace('/\p{C}/u', '', $v);
+    return mb_substr(trim((string)$v), 0, $max);
+  };
+  $datos = [
+    'empresa' => $texto('empresa', 120), 'sector' => $texto('sector', 80), 'persona' => $texto('persona', 100),
+    'cargo' => $texto('cargo', 80), 'correo' => $texto('correo', 120), 'telefono' => $texto('telefono', 30),
+    'modalidad' => $texto('modalidad', 20), 'propuesta' => $texto('propuesta', 1000, true),
+  ];
+  $mesas = array_values(array_intersect(['1', '2', '3', '4'], array_map('strval', (array)($_POST['mesas'] ?? []))));
+  $datos['mesas'] = implode(', ', array_map(fn($m) => "Mesa $m", $mesas));
+
+  if ($datos['empresa'] === '') return [null, 'Escribe el nombre de la empresa.'];
+  if ($datos['persona'] === '') return [null, 'Escribe el nombre de la persona de contacto.'];
+  if (!filter_var($datos['correo'], FILTER_VALIDATE_EMAIL)) return [null, 'Escribe un correo electrónico válido.'];
+  if (!in_array($datos['modalidad'], MODALIDADES, true)) return [null, 'Elige una modalidad.'];
+  return [$datos, null];
+}
+
+/** Cambia los campos de una solicitud. La fecha y el logo se conservan tal cual. */
+function editarFila(string $id, array $datos): ?string {
+  $b = bloquearCsv(CSV, CABECERA);
+  if (!$b) return 'No se ha podido abrir la lista de solicitudes.';
+  $pos = array_search($id, idsFilas($b['filas']), true);
+  if ($pos === false) { soltarCsv($b); return 'Esa solicitud ya no existe. Recarga la página.'; }
+
+  $actual = $b['filas'][$pos];
+  $b['filas'][$pos] = [
+    $actual[0], celda($datos['empresa']), celda($datos['sector']), celda($datos['persona']),
+    celda($datos['cargo']), celda($datos['correo']), celda($datos['telefono']), celda($datos['modalidad']),
+    celda($datos['mesas']), celda($datos['propuesta']), $actual[10],
+  ];
+  guardarCsv($b, $b['filas']);
+  soltarCsv($b);
+  return null;
+}
+
+/** Mueve una fila de un CSV a otro (con $transformar para ajustar sus columnas). Primero escribe en destino y luego quita del origen. */
+function moverFila(string $desde, array $cabeceraDesde, string $hasta, array $cabeceraHasta, string $id, callable $transformar): ?string {
+  $origen = bloquearCsv($desde, $cabeceraDesde);
+  if (!$origen) return 'No se ha podido abrir la lista de solicitudes.';
+  $destino = bloquearCsv($hasta, $cabeceraHasta);
+  if (!$destino) { soltarCsv($origen); return 'No se ha podido abrir la papelera.'; }
+
+  $pos = array_search($id, idsFilas($origen['filas']), true);
+  if ($pos === false) { soltarCsv($destino); soltarCsv($origen); return 'Esa solicitud ya no existe. Recarga la página.'; }
+
+  $destino['filas'][] = $transformar($origen['filas'][$pos]);
+  guardarCsv($destino, $destino['filas']);
+  unset($origen['filas'][$pos]);
+  guardarCsv($origen, array_values($origen['filas']));
+  soltarCsv($destino);
+  soltarCsv($origen);
+  return null;
+}
+
+/** Bloquea el panel mientras se edita o se mueve una solicitud, para que dos cambios no se pisen. */
+function conCerrojo(callable $trabajo): mixed {
+  $cerrojo = fopen(CERROJO, 'c');
+  flock($cerrojo, LOCK_EX);
+  try {
+    return $trabajo();
+  } finally {
+    flock($cerrojo, LOCK_UN);
+    fclose($cerrojo);
+  }
+}
+
+// ---------- CSV ----------
+
+/** Contenido de un archivo compartido con participa.php, leído con bloqueo de lectura. */
+function leerTexto(string $ruta): string {
+  if (!is_readable($ruta)) return '';
+  $f = fopen($ruta, 'r');
+  if (!$f) return '';
+  flock($f, LOCK_SH);
+  $texto = (string)stream_get_contents($f);
+  flock($f, LOCK_UN);
+  fclose($f);
+  return $texto;
+}
+
+/** Filas de un CSV sin cabecera ni BOM, cada una con exactamente $columnas campos. */
+function parsear(string $texto, int $columnas): array {
+  $texto = preg_replace('/^\xEF\xBB\xBF/', '', $texto);
+  if (trim($texto) === '') return [];
+  $m = fopen('php://memory', 'w+');
+  fwrite($m, $texto);
+  rewind($m);
+  $filas = [];
+  $primera = true;
+  while (($c = fgetcsv($m, 0, ';', '"', '')) !== false) {
+    if ($primera) { $primera = false; continue; }
+    if ($c === [null]) continue;
+    $filas[] = array_pad(array_slice($c, 0, $columnas), $columnas, '');
+  }
+  fclose($m);
+  return $filas;
+}
+
+/**
+ * Identificador de cada fila: su contenido y cuántas veces aparece igual antes.
+ * Así una solicitud sigue encontrándose aunque se añadan otras, y no se confunde con una idéntica.
+ */
+function idsFilas(array $filas): array {
+  $vistas = [];
+  $ids = [];
+  foreach ($filas as $i => $c) {
+    $base = hash('sha256', json_encode($c, JSON_UNESCAPED_UNICODE));
+    $vistas[$base] = ($vistas[$base] ?? -1) + 1;
+    $ids[$i] = $base . '-' . $vistas[$base];
+  }
+  return $ids;
+}
+
+/** Texto para mostrar: quita la «'» que participa.php antepone a lo que empieza por = + - @ */
+function presentar(array $c, array $claves): array {
+  $c = array_map(fn($v) => preg_match("/^'[=+\-@\t\r]/", (string)$v) ? substr((string)$v, 1) : (string)$v, $c);
+  return array_combine($claves, $c);
+}
+
+/** Evita que una celda se interprete como fórmula al abrir el CSV en una hoja de cálculo (igual que participa.php). */
+function celda(string $v): string {
+  return preg_match('/^[=+\-@\t\r]/', $v) ? "'" . $v : $v;
+}
+
+/** Abre un CSV con bloqueo exclusivo para leerlo y reescribirlo. Devuelve null si no se puede. */
+function bloquearCsv(string $ruta, array $cabecera): ?array {
+  $f = fopen($ruta, 'c+');
+  if (!$f) return null;
+  if (!flock($f, LOCK_EX)) { fclose($f); return null; }
+  $texto = (string)stream_get_contents($f);
+  return ['f' => $f, 'ruta' => $ruta, 'texto' => $texto, 'cabecera' => $cabecera, 'filas' => parsear($texto, count($cabecera))];
+}
+
+/** Escribe las filas en el CSV bloqueado. Antes guarda una copia del contenido anterior en copias/. */
+function guardarCsv(array $bloqueo, array $filas): void {
+  if (trim($bloqueo['texto']) !== '') {
+    if (!is_dir(COPIAS)) mkdir(COPIAS, 0750, true);
+    $copia = COPIAS . '/' . basename($bloqueo['ruta'], '.csv') . '-' . date('Ymd-His') . '-' . bin2hex(random_bytes(3)) . '.csv';
+    file_put_contents($copia, $bloqueo['texto']);
+    chmod($copia, 0600);
+  }
+  $f = $bloqueo['f'];
+  ftruncate($f, 0);
+  rewind($f);
+  fwrite($f, "\xEF\xBB\xBF");
+  fputcsv($f, $bloqueo['cabecera'], ';', '"', '');
+  foreach ($filas as $c) fputcsv($f, $c, ';', '"', '');
+  fflush($f);
+}
+
+function soltarCsv(array $bloqueo): void {
+  flock($bloqueo['f'], LOCK_UN);
+  fclose($bloqueo['f']);
+}
 
 /**
  * Descarga las solicitudes como .xlsx. Sin librerías externas: un .xlsx es un zip de XML

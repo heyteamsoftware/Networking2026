@@ -156,3 +156,27 @@ body.acceso { background: var(--noche); color: var(--arena); }
 .tabla td.logo { width: 84px; }
 .tabla td.logo a { display: inline-block; padding: 4px; background: #fff; border: 1px solid var(--linea); border-radius: 4px; }
 .tabla td.logo img { display: block; width: auto; height: auto; max-width: 64px; max-height: 40px; object-fit: contain; }
+
+/* ---------- Acciones por fila, papelera y edición ---------- */
+.acciones-fila { white-space: nowrap; }
+.acciones-fila .btn { margin: 0 6px 6px 0; }
+.en-linea { display: inline; margin: 0; }
+.btn-pequeno { min-height: 36px; padding: 6px 14px; font-size: .9rem; }
+.btn-peligro { min-height: 36px; padding: 6px 14px; border: 2px solid #b03a22; border-radius: 999px; background: transparent; color: #b03a22; font: 600 .9rem var(--texto); cursor: pointer; }
+.btn-peligro:hover { background: #b03a22; color: #fff; }
+.enlace-papelera { margin: 12px 0 0; font-size: 14px; }
+.enlace-papelera a { font-weight: 600; }
+.editar { max-width: 760px; }
+.form-editar { display: grid; gap: 14px; margin-top: 24px; padding: 24px; background: var(--superficie); border: 1px solid var(--linea); border-radius: 4px; }
+.form-editar label { display: grid; gap: 6px; font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--tinta-suave); }
+.form-editar input:not([type=checkbox]), .form-editar select, .form-editar textarea { width: 100%; min-height: 44px; padding: 8px 12px; border: 1.5px solid var(--linea); border-radius: 4px; background: #fff; color: var(--tinta); font: 1rem var(--texto); text-transform: none; letter-spacing: 0; }
+.form-editar textarea { min-height: 120px; resize: vertical; }
+.form-editar fieldset { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 0; padding: 10px 14px; border: 1.5px solid var(--linea); border-radius: 4px; }
+.form-editar legend { padding: 0 6px; font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--tinta-suave); }
+.form-editar fieldset label { display: flex; align-items: center; gap: 6px; font-size: 1rem; font-weight: 500; letter-spacing: 0; text-transform: none; color: var(--tinta); }
+.form-editar input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--mesa-4); }
+.form-editar .acciones { margin-top: 6px; }
+.form-editar .nota { margin-top: -4px; }
+@media print {
+  .tabla th:last-child, .tabla td[data-col="Acciones"], .enlace-papelera { display: none !important; }
+}
