@@ -578,6 +578,11 @@ img { display: block; max-width: 100%; }
 .media-item img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
 .media-item-titulo { padding: 0 14px; font-family: var(--display); font-size: 1.4rem; line-height: 1; }
 .media-item .media-tipo { margin-left: 14px; }
+/* Imagen (cartel): entera, sobre blanco, con la misma esquina doblada */
+.media-imagen { position: relative; display: block; background: #ffffff; clip-path: polygon(0 0, calc(100% - 56px) 0, 100% 56px, 100% 100%, 0 100%); }
+.media-imagen::after { content: ""; position: absolute; right: 0; top: 0; width: 56px; height: 56px; background: var(--mesa-4); clip-path: polygon(0 0, 100% 100%, 0 100%); pointer-events: none; }
+.media-imagen img { display: block; width: 100%; max-height: 760px; object-fit: contain; margin: 0 auto; }
+.media-imagen:focus-visible { outline: 3px solid var(--mesa-4); outline-offset: 4px; }
 @media (max-width: 600px) {
   .media-play span { width: 84px; height: 84px; }
   .media-play span::before { left: 32px; top: 25px; width: 28px; height: 34px; }

@@ -370,6 +370,20 @@
   function pintarDestacado(m) {
     mediaDest.textContent = "";
     var fig = el("figure", "media-player");
+    if (!m.video) {
+      // Imagen (cartel, foto): se ve entera y se abre a tamaño completo al pulsarla
+      var enlace = el("a", "media-imagen");
+      enlace.href = m.imagen;
+      enlace.target = "_blank";
+      enlace.rel = "noopener";
+      enlace.setAttribute("aria-label", "Ver a tamaño completo: " + m.titulo);
+      var foto = el("img");
+      foto.src = m.imagen;
+      foto.alt = m.titulo;
+      foto.loading = "lazy";
+      enlace.appendChild(foto);
+      fig.appendChild(enlace);
+    } else {
     var marco = el("div", "media-marco");
     var v = el("video");
     v.src = m.video;
@@ -389,6 +403,7 @@
     marco.appendChild(v);
     marco.appendChild(play);
     fig.appendChild(marco);
+    }
     var pie = el("figcaption", "media-pie");
     var datos = [m.tipo, m.duracion].filter(Boolean).join(" · ");
     if (datos) pie.appendChild(el("span", "media-tipo", datos));
@@ -399,14 +414,15 @@
     mediaDest.appendChild(fig);
   }
   cargar("media.json", function (lista) {
-    lista = lista.filter(function (m) { return m && m.titulo && m.video; });
+    lista = lista.filter(function (m) { return m && m.titulo && (m.video || m.imagen); });
     if (!lista.length) return;
     pintarDestacado(lista[0]);
     lista.slice(1).forEach(function (m) {
       var li = el("li");
       var b = el("button", "media-item");
       b.type = "button";
-      if (m.portada) { var img = el("img"); img.src = m.portada; img.alt = ""; img.loading = "lazy"; b.appendChild(img); }
+      var miniatura = m.portada || m.imagen;
+      if (miniatura) { var img = el("img"); img.src = miniatura; img.alt = ""; img.loading = "lazy"; b.appendChild(img); }
       b.appendChild(el("span", "media-item-titulo", m.titulo));
       if (m.tipo || m.duracion) b.appendChild(el("span", "media-tipo", [m.tipo, m.duracion].filter(Boolean).join(" · ")));
       b.addEventListener("click", function () {

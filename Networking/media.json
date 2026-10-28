@@ -7,5 +7,13 @@
     "duracion": "1:18",
     "video": "media/networking2026.mp4",
     "portada": "media/networking2026-portada.webp"
+  },
+  {
+    "tipo": "Cartel",
+    "titulo": "Networking 2026 · Del aula a la realidad",
+    "descripcion": "Cartel del encuentro: 20 de noviembre en el CIFP Tony Gallardo.",
+    "fecha": "Octubre de 2026",
+    "imagen": "media/cartel-networking2026.webp",
+    "portada": "media/cartel-networking2026-mini.webp"
   }
 ]
