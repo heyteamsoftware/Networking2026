@@ -206,12 +206,12 @@
     </div>
   </section>
 
-  <!-- CRONOGRAMA: horario tipo festival. Cada fila de la rejilla es un minuto desde las 11:15 -->
+  <!-- CRONOGRAMA: horario tipo festival. Cada fila de la rejilla es un minuto desde las 10:45 -->
   <section class="cronograma" id="cronograma" aria-labelledby="crono-titulo">
     <div class="wrap">
       <div class="tt-cabecera">
         <div>
-          <p class="etiqueta">Cronograma · 20 de noviembre</p>
+          <p class="etiqueta">Cronograma · 20 de noviembre · 10:45 – 14:15</p>
           <h2 id="crono-titulo">El horario de la mañana</h2>
         </div>
         <ul class="tt-leyenda" aria-label="Tipos de actividad">
@@ -225,69 +225,66 @@
 
       <div class="tt" id="tt">
         <!-- Eje de horas -->
-        <span class="tt-linea" style="--m:0">11:15</span>
-        <span class="tt-linea" style="--m:15">11:30</span>
-        <span class="tt-linea" style="--m:45">12:00</span>
-        <span class="tt-linea" style="--m:75">12:30</span>
-        <span class="tt-linea" style="--m:105">13:00</span>
-        <span class="tt-linea" style="--m:135">13:30</span>
-        <span class="tt-linea fin" style="--m:155">13:50</span>
+        <span class="tt-linea" style="--m:0">10:45</span>
+        <span class="tt-linea" style="--m:15">11:00</span>
+        <span class="tt-linea" style="--m:45">11:30</span>
+        <span class="tt-linea" style="--m:75">12:00</span>
+        <span class="tt-linea" style="--m:105">12:30</span>
+        <span class="tt-linea" style="--m:135">13:00</span>
+        <span class="tt-linea" style="--m:165">13:30</span>
+        <span class="tt-linea" style="--m:195">14:00</span>
+        <span class="tt-linea fin" style="--m:210">14:15</span>
 
-        <button type="button" class="tt-b t-noche corto" style="--a:0; --z:15; --i:0" data-det="d-recepcion">
-          <span class="tt-h">11:15 – 11:30</span>
-          <span class="tt-t">Recepción y acreditación</span>
+        <button type="button" class="tt-b t-noche" style="--a:0; --z:30; --i:0" data-det="d-recepcion">
+          <span class="tt-h">10:45 – 11:15 <em>30'</em></span>
+          <span class="tt-t">Recepción y puntos de información</span>
+          <span class="tt-p">Bienvenida a las entidades participantes</span>
         </button>
-        <button type="button" class="tt-b t-noche corto" style="--a:15; --z:25; --i:1" data-det="d-apertura">
-          <span class="tt-h">11:30</span>
+        <button type="button" class="tt-b t-noche corto" style="--a:35; --z:45; --i:1" data-det="d-apertura">
+          <span class="tt-h">11:20</span>
           <span class="tt-t">Apertura institucional</span>
         </button>
-        <button type="button" class="tt-b t-rojo" style="--a:25; --z:55; --i:2" data-det="d-reto1">
-          <span class="tt-h">11:40 – 12:10 <em>30'</em></span>
-          <span class="tt-k">Reto 01 · Identidad</span>
+        <button type="button" class="tt-b t-rojo" style="--a:45; --z:65; --i:2" data-det="d-reto1">
+          <span class="tt-h">11:30 – 11:50 <em>20'</em><span class="tt-k">Reto 01 · Identidad</span></span>
           <span class="tt-t">¿Qué necesita Canarias para construir su futuro?</span>
           <span class="tt-p">Agar García</span>
         </button>
-
-        <!-- 12:10: arranque común y dos retos en paralelo -->
-        <div class="tt-banda" style="--a:55; --z:85; --i:3">
-          <button type="button" class="tt-b t-arena tt-arranque" data-det="d-aula">
-            <span class="tt-h">12:10</span>
-            <span class="tt-t">El aula como laboratorio de ideas</span>
-            <span class="tt-p">Sabina Santana</span>
-          </button>
-          <button type="button" class="tt-b t-naranja" data-det="d-reto2">
-            <span class="tt-h">12:10 – 12:40 <em>30'</em></span>
-            <span class="tt-k">Reto 02</span>
-            <span class="tt-t">Emprender</span>
-            <span class="tt-p">Raquel Cabrera</span>
-          </button>
-          <button type="button" class="tt-b t-amarillo" data-det="d-reto3">
-            <span class="tt-h">12:10 – 12:40 <em>30'</em></span>
-            <span class="tt-k">Reto 03</span>
-            <span class="tt-t">Sostenibilidad</span>
-            <span class="tt-p">Juanjo García</span>
-          </button>
-        </div>
-
-        <button type="button" class="tt-b t-azul" style="--a:85; --z:105; --i:4" data-det="d-reto4">
-          <span class="tt-h">12:40 – 13:00 <em>20'</em></span>
-          <span class="tt-k">Reto 04</span>
-          <span class="tt-t">Internacionalización e innovación</span>
+        <button type="button" class="tt-b t-arena" style="--a:65; --z:85; --i:3" data-det="d-aula">
+          <span class="tt-h">11:50 – 12:10 <em>20'</em><span class="tt-k">El aula como laboratorio de ideas</span></span>
+          <span class="tt-t">Presentación de las áreas</span>
+          <span class="tt-p">Sabina Santana</span>
         </button>
-        <button type="button" class="tt-b t-rojo col1" style="--a:105; --z:135; --i:5" data-det="d-reto5">
-          <span class="tt-h">13:00 – 13:30 <em>30'</em></span>
-          <span class="tt-k">Reto 05</span>
-          <span class="tt-t">El talento que crea futuro</span>
+        <button type="button" class="tt-b t-naranja" style="--a:85; --z:110; --i:4" data-det="d-reto2">
+          <span class="tt-h">12:10 – 12:35 <em>25'</em><span class="tt-k">Reto 02</span></span>
+          <span class="tt-t">De la idea a la oportunidad</span>
+          <span class="tt-p">Raquel Cabrera</span>
         </button>
-        <button type="button" class="tt-b t-radio col2" style="--a:105; --z:145; --i:6" data-det="d-radio">
-          <span class="tt-h">13:00 – 13:40 <em>40'</em></span>
-          <span class="tt-k"><b class="tt-vivo">En antena</b></span>
+        <button type="button" class="tt-b t-amarillo" style="--a:110; --z:135; --i:5" data-det="d-reto3">
+          <span class="tt-h">12:35 – 13:00 <em>25'</em><span class="tt-k">Reto 03 · Sostenibilidad</span></span>
+          <span class="tt-t">Profesiones que reivindican una identidad</span>
+          <span class="tt-p">Juanjo García</span>
+        </button>
+        <button type="button" class="tt-b t-azul col1" style="--a:135; --z:165; --i:6" data-det="d-reto4">
+          <span class="tt-h">13:00 – 13:30 <em>30'</em><span class="tt-k">Reto 04</span></span>
+          <span class="tt-t">Internacionalización e innovación al servicio del alumnado</span>
+        </button>
+        <button type="button" class="tt-b t-radio col2" style="--a:135; --z:165; --i:7" data-det="d-radio">
+          <span class="tt-h">13:00 – 13:30 <em>30'</em><span class="tt-k"><b class="tt-vivo">En antena</b></span></span>
           <span class="tt-t">Radio Atlante conecta</span>
           <span class="tt-p">Las Indias · Felo Monzón · PLOCAN</span>
         </button>
-        <button type="button" class="tt-b t-final col1" style="--a:135; --z:155; --i:7" data-det="d-final">
-          <span class="tt-h">13:30 – 13:50 <em>20'</em></span>
+        <button type="button" class="tt-b t-rojo" style="--a:165; --z:185; --i:8" data-det="d-reto5">
+          <span class="tt-h">13:30 – 13:50 <em>20'</em><span class="tt-k">Reto 05</span></span>
+          <span class="tt-t">El talento que crea futuro</span>
+          <span class="tt-p">Alumnado competente y emprendimiento</span>
+        </button>
+        <button type="button" class="tt-b t-final corto" style="--a:185; --z:195; --i:9" data-det="d-final">
+          <span class="tt-h">13:50 – 14:00</span>
           <span class="tt-t">La pieza que nos falta eres tú</span>
+        </button>
+        <button type="button" class="tt-b t-noche corto" style="--a:195; --z:210; --i:10" data-det="d-cierre">
+          <span class="tt-h">14:00 – 14:15</span>
+          <span class="tt-t">Cierre</span>
         </button>
       </div>
 
@@ -304,16 +301,17 @@
 
       <!-- Detalle de cada bloque (se abre en una ficha) -->
       <div class="tt-detalles" hidden>
-        <div id="d-recepcion" data-c="var(--noche)"><p class="k">11:15 – 11:30 · Recepción y puntos de información</p><h3>Bienvenida a las entidades participantes</h3><p>Recepción de asistentes, acreditación, orientación y preparación de los equipos de trabajo.</p></div>
-        <div id="d-apertura" data-c="var(--noche)"><p class="k">11:30 · Apertura institucional</p><h3>Bienvenida al encuentro</h3><ul><li><strong>Agar García</strong>, directora del CIFP Tony Gallardo.</li><li><strong>Carolina de León</strong>, directora general de Formación Profesional.</li></ul><p>Presentación del propósito del networking y de la importancia de conectar la Formación Profesional con las empresas, las instituciones y las necesidades reales del territorio.</p></div>
-        <div id="d-reto1" data-c="var(--mesa-1)"><p class="k">11:40 – 12:10 · Reto 01 · Identidad: lo que somos</p><h3>¿Qué necesita Canarias para construir su futuro?</h3><p><strong>Responsable:</strong> Agar García.</p><p>Los equipos explorarán qué representa Canarias, qué hace únicas a nuestras islas y cómo aprovechar nuestras diferencias para construir un futuro común.</p></div>
-        <div id="d-aula" data-c="var(--mesa-4)"><p class="k">12:10 · El aula como laboratorio de ideas</p><h3>Presentación de las áreas</h3><p><strong>Interviene:</strong> Sabina Santana, jefa de Estudios del CIFP Tony Gallardo.</p><p>«Las necesidades del alumnado, del entorno y el currículo como base del diseño». Una reflexión sobre cómo conectar las necesidades del entorno con la formación, las competencias profesionales y el diseño de nuevas oportunidades.</p></div>
-        <div id="d-reto2" data-c="var(--mesa-2)"><p class="k">12:10 – 12:40 · Reto 02 · De la idea a la oportunidad</p><h3>Emprender</h3><p><strong>Responsable:</strong> Raquel Cabrera.</p><p>Los equipos identificarán una necesidad de las empresas, la ciudadanía o el territorio y la transformarán en una posible iniciativa emprendedora. Se trabajará la colaboración entre familias profesionales y la capacidad de convertir una idea en una propuesta viable.</p><p><strong>Experiencia relacionada:</strong> Adelina De La Jara, «Las profesiones de una Escuela Azul como eje transversal de un proyecto para la ciudadanía».</p></div>
-        <div id="d-reto3" data-c="var(--mesa-4)"><p class="k">12:10 – 12:40 · Reto 03 · Profesiones que reivindican una identidad</p><h3>Sostenibilidad</h3><p><strong>Responsable:</strong> Juanjo García.</p><p>Un reto centrado en la sostenibilidad, los oficios tradicionales y el valor de los conocimientos vinculados al territorio.</p></div>
-        <div id="d-reto4" data-c="var(--mesa-3)"><p class="k">12:40 – 13:00 · Reto 04</p><h3>Internacionalización e innovación al servicio del alumnado</h3><p>Participan profesionales de internacionalización e innovación del CIFP Tony Gallardo, el CIFP Las Indias —Centro Embajador Erasmus— y el CIFP Felo Monzón.</p><p>El reto invita a explorar cómo las ideas, los productos, los servicios y el talento desarrollado en Canarias pueden conectarse con otros territorios y generar oportunidades internacionales.</p></div>
-        <div id="d-reto5" data-c="var(--mesa-1)"><p class="k">13:00 – 13:30 · Reto 05 · El talento que crea futuro</p><h3>Alumnado competente y emprendimiento como oportunidad</h3><p>Participan profesionales de Información y Orientación Profesional, Emprendimiento y Calidad del CIFP Tony Gallardo, junto con representantes del Clúster Tecnológico de Canarias, el ITC y el entorno de Erasmus para Jóvenes Emprendedores.</p><p>Los equipos identificarán las competencias que necesita el tejido empresarial y cómo el alumnado de FP puede aportar valor a través de proyectos, experiencias prácticas, empleo y emprendimiento.</p></div>
-        <div id="d-radio" data-c="var(--mesa-3)"><p class="k">13:00 – 13:40 · Experiencias de impacto</p><h3>Radio Atlante conecta</h3><ul><li><strong>CIFP Las Indias:</strong> Embajadores Erasmus.</li><li><strong>CIFP Felo Monzón:</strong> internacionalización e innovación.</li><li><strong>PLOCAN:</strong> Escuelas Azules.</li><li>Identidad a través del deporte y los juegos tradicionales.</li></ul><p>Un espacio para conocer iniciativas reales, compartir aprendizajes y descubrir nuevas posibilidades de colaboración.</p></div>
-        <div id="d-final" data-c="var(--mesa-4)"><p class="k">13:30 – 13:50 · Actividad final</p><h3>La pieza que nos falta eres tú</h3><p>Conectamos talento y oportunidades: cada equipo identificará qué puede aportar, con quién puede colaborar y qué oportunidad podría desarrollar conjuntamente. Los participantes definirán una idea o propuesta y las personas o entidades implicadas.</p></div>
+        <div id="d-recepcion" data-c="var(--arena)"><p class="k">10:45 – 11:15 · Recepción y puntos de información</p><h3>Bienvenida a las entidades participantes</h3><p>Recepción de asistentes, acreditación, orientación y preparación de los equipos de trabajo.</p></div>
+        <div id="d-apertura" data-c="var(--arena)"><p class="k">11:20 · Apertura institucional</p><h3>Bienvenida al encuentro</h3><p>Presentación del propósito del networking y de la importancia de conectar la Formación Profesional con las empresas, las instituciones y las necesidades reales del territorio.</p></div>
+        <div id="d-reto1" data-c="var(--mesa-1)"><p class="k">11:30 – 11:50 · Reto 01 · Identidad: lo que somos</p><h3>¿Qué necesita Canarias para construir su futuro?</h3><p><strong>Responsable:</strong> Agar García.</p><p>Los equipos explorarán qué representa Canarias, qué hace únicas a nuestras islas y cómo aprovechar nuestras diferencias para construir un futuro común.</p></div>
+        <div id="d-aula" data-c="var(--mesa-4)"><p class="k">11:50 – 12:10 · El aula como laboratorio de ideas</p><h3>Presentación de las áreas</h3><p><strong>Interviene:</strong> Sabina Santana, jefa de Estudios del CIFP Tony Gallardo.</p><p>Presentación: «Las necesidades del alumnado, del entorno y el currículo como base del diseño».</p></div>
+        <div id="d-reto2" data-c="var(--mesa-2)"><p class="k">12:10 – 12:35 · Reto 02</p><h3>De la idea a la oportunidad</h3><p><strong>Responsable:</strong> Raquel Cabrera, jefa de Estudios del CIFP Tony Gallardo.</p><p>Los equipos identificarán una necesidad de las empresas, la ciudadanía o el territorio y la transformarán en una posible iniciativa emprendedora.</p></div>
+        <div id="d-reto3" data-c="var(--mesa-4)"><p class="k">12:35 – 13:00 · Reto 03</p><h3>Profesiones que reivindican una identidad</h3><p><strong>Responsable:</strong> Juanjo García, coordinador de la Familia profesional de Carpintería y Mueble y coordinador de Innovación del CIFP Tony Gallardo.</p><p>Un reto centrado en la sostenibilidad, los oficios tradicionales y el valor de los conocimientos vinculados al territorio.</p></div>
+        <div id="d-reto4" data-c="var(--mesa-3)"><p class="k">13:00 – 13:30 · Reto 04</p><h3>Internacionalización e innovación al servicio del alumnado</h3><p>Cómo las ideas, los productos, los servicios y el talento desarrollado en Canarias pueden conectarse con otros territorios y generar oportunidades internacionales.</p></div>
+        <div id="d-radio" data-c="var(--mesa-3)"><p class="k">13:00 – 13:30 · Experiencias de impacto</p><h3>Radio Atlante conecta</h3><p>Espacio para compartir experiencias y proyectos inspiradores relacionados con:</p><ul><li><strong>CIFP Las Indias:</strong> Embajadores Erasmus.</li><li><strong>CIFP Felo Monzón:</strong> internacionalización e innovación.</li><li><strong>PLOCAN:</strong> Escuelas Azules.</li><li>Identidad a través del deporte y los juegos tradicionales.</li></ul><p>Un espacio para conocer iniciativas reales, compartir aprendizajes y descubrir nuevas posibilidades de colaboración.</p></div>
+        <div id="d-reto5" data-c="var(--mesa-1)"><p class="k">13:30 – 13:50 · Reto 05</p><h3>El talento que crea futuro</h3><p>Alumnado competente y emprendimiento como oportunidad.</p></div>
+        <div id="d-final" data-c="var(--mesa-4)"><p class="k">13:50 – 14:00 · Actividad final</p><h3>La pieza que nos falta eres tú</h3><p>Conectamos talento y oportunidades: cada equipo identificará qué puede aportar, con quién puede colaborar y qué oportunidad podría desarrollar conjuntamente.</p></div>
+        <div id="d-cierre" data-c="var(--arena)"><p class="k">14:00 – 14:15</p><h3>Cierre</h3><p>Cierre del encuentro.</p></div>
       </div>
 
       <dialog class="tt-ficha" id="ttFicha" aria-labelledby="ttFichaTitulo">

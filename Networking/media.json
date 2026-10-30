@@ -9,6 +9,15 @@
     "portada": "media/networking2026-portada.webp"
   },
   {
+    "tipo": "Programa · PDF",
+    "titulo": "Programa de Networking 2026",
+    "descripcion": "El documento del encuentro, con el cronograma de actividades: horarios, retos, responsables y experiencias de la mañana del 20 de noviembre.",
+    "fecha": "Octubre de 2026",
+    "pdf": "media/networking2026-programa.pdf",
+    "portada": "media/networking2026-programa-portada.webp",
+    "peso": "1,5 MB"
+  },
+  {
     "tipo": "Cartel",
     "titulo": "Networking 2026 · Del aula a la realidad",
     "descripcion": "Cartel del encuentro: 20 de noviembre en el CIFP Tony Gallardo.",

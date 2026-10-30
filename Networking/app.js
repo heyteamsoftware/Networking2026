@@ -371,14 +371,14 @@
     mediaDest.textContent = "";
     var fig = el("figure", "media-player");
     if (!m.video) {
-      // Imagen (cartel, foto): se ve entera y se abre a tamaño completo al pulsarla
-      var enlace = el("a", "media-imagen");
-      enlace.href = m.imagen;
+      // Imagen (cartel, foto) o documento PDF: se ve su imagen y, al pulsarla, se abre a tamaño completo
+      var enlace = el("a", "media-imagen" + (m.pdf ? " es-pdf" : ""));
+      enlace.href = m.pdf || m.imagen;
       enlace.target = "_blank";
       enlace.rel = "noopener";
-      enlace.setAttribute("aria-label", "Ver a tamaño completo: " + m.titulo);
+      enlace.setAttribute("aria-label", (m.pdf ? "Abrir el PDF: " : "Ver a tamaño completo: ") + m.titulo);
       var foto = el("img");
-      foto.src = m.imagen;
+      foto.src = m.pdf ? (m.portada || "") : m.imagen;
       foto.alt = m.titulo;
       foto.loading = "lazy";
       enlace.appendChild(foto);
@@ -410,14 +410,25 @@
     pie.appendChild(el("h3", "", m.titulo));
     if (m.descripcion) pie.appendChild(el("p", "", m.descripcion));
     if (m.fecha) pie.appendChild(el("p", "media-fecha", m.fecha));
+    if (m.pdf) {
+      var acciones = el("p", "media-acciones");
+      var ver = el("a", "btn btn-primario", "Ver el PDF");
+      ver.href = m.pdf; ver.target = "_blank"; ver.rel = "noopener";
+      var bajar = el("a", "btn btn-secundario", "Descargar" + (m.peso ? " (" + m.peso + ")" : ""));
+      bajar.href = m.pdf; bajar.setAttribute("download", "");
+      acciones.appendChild(ver);
+      acciones.appendChild(bajar);
+      pie.appendChild(acciones);
+    }
     fig.appendChild(pie);
     mediaDest.appendChild(fig);
   }
   cargar("media.json", function (lista) {
-    lista = lista.filter(function (m) { return m && m.titulo && (m.video || m.imagen); });
+    lista = lista.filter(function (m) { return m && m.titulo && (m.video || m.imagen || m.pdf); });
     if (!lista.length) return;
     pintarDestacado(lista[0]);
-    lista.slice(1).forEach(function (m) {
+    // Con más de un contenido, la lista los muestra todos y marca el que se está viendo
+    if (lista.length > 1) lista.forEach(function (m, i) {
       var li = el("li");
       var b = el("button", "media-item");
       b.type = "button";
@@ -425,7 +436,9 @@
       if (miniatura) { var img = el("img"); img.src = miniatura; img.alt = ""; img.loading = "lazy"; b.appendChild(img); }
       b.appendChild(el("span", "media-item-titulo", m.titulo));
       if (m.tipo || m.duracion) b.appendChild(el("span", "media-tipo", [m.tipo, m.duracion].filter(Boolean).join(" · ")));
+      if (i === 0) b.classList.add("activo");
       b.addEventListener("click", function () {
+        Array.prototype.forEach.call(mediaLista.querySelectorAll(".media-item"), function (x) { x.classList.toggle("activo", x === b); });
         pintarDestacado(m);
         mediaDest.scrollIntoView({ behavior: "smooth", block: "center" });
       });
