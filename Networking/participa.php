@@ -96,9 +96,10 @@ function reducirLogo($imagen) {
 
 // Logo opcional. Se valida y se vuelve a codificar como PNG (así no viaja nada que no sea imagen),
 // y se guarda con un nombre aleatorio fuera de la web. Solo se guarda si la empresa autoriza su uso.
-function guardarLogo(bool $autoriza): string {
+// Primero se valida y se prepara (sin escribir nada): así un logo que no vale no cuenta como envío.
+function prepararLogo(bool $autoriza) {
   $f = $_FILES['logo'] ?? null;
-  if (!$f || ($f['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) return '';
+  if (!$f || ($f['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) return null;
   $error = 'El logo debe ser una imagen PNG, JPG o WEBP de hasta 100 MB.';
   if (($f['error'] ?? 1) !== UPLOAD_ERR_OK || $f['size'] > LOGO_MAX) responder(false, $error, 422);
   if (!$autoriza) responder(false, 'Para usar tu logo en la web necesitamos que autorices su publicación.', 422);
@@ -110,7 +111,12 @@ function guardarLogo(bool $autoriza): string {
     default => false,
   };
   if (!$imagen) responder(false, $error, 422);
-  $imagen = reducirLogo($imagen);
+  return reducirLogo($imagen);
+}
+
+// Después, ya superado el límite de envíos, se escribe en disco
+function guardarLogo($imagen): string {
+  if (!$imagen) return '';
   if (!is_dir(LOGOS) && !mkdir(LOGOS, 0750, true)) responder(false, 'No hemos podido guardar la solicitud. Inténtalo más tarde.', 500);
   $nombre = date('Ymd-His') . '-' . bin2hex(random_bytes(6)) . '.png';
   imagesavealpha($imagen, true);
@@ -119,7 +125,8 @@ function guardarLogo(bool $autoriza): string {
   if (!$ok) responder(false, 'No hemos podido guardar la solicitud. Inténtalo más tarde.', 500);
   return $nombre;
 }
-$logo = guardarLogo($autorizaLogo);
+
+$imagenLogo = prepararLogo($autorizaLogo);
 
 // Límite de envíos: guardamos solo una huella de la conexión, nunca la IP
 $huella = hash('sha256', ($_SERVER['REMOTE_ADDR'] ?? '') . '|networking2026');
@@ -136,6 +143,9 @@ if ($fl && flock($fl, LOCK_EX)) {
   ftruncate($fl, 0); rewind($fl); fwrite($fl, json_encode($lim));
   flock($fl, LOCK_UN); fclose($fl);
 }
+
+// El logo se guarda después del límite de envíos: así un envío rechazado no deja un logo huérfano
+$logo = guardarLogo($imagenLogo);
 
 // Evita que una celda se interprete como fórmula al abrir el CSV en una hoja de cálculo
 function celda(string $v): string {
