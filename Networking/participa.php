@@ -5,11 +5,14 @@
 
 declare(strict_types=1);
 
+ini_set('memory_limit', '768M'); // abrir logos grandes necesita memoria
+
 const DATOS = '/var/www/networking_data';
 const CSV = DATOS . '/solicitudes.csv';
 const LIMITES = DATOS . '/limites.json';
 const LOGOS = DATOS . '/logos'; // logos de empresa: privados, fuera de la web
-const LOGO_MAX = 2 * 1024 * 1024; // 2 MB
+const LOGO_MAX = 100 * 1024 * 1024; // 100 MB (el navegador ya lo reduce antes de enviarlo)
+const LOGO_W = 600, LOGO_H = 300;     // todos los logos se guardan en un lienzo de este tamaño
 const ESPERA = 30; // segundos mínimos entre dos envíos desde la misma conexión
 
 $quiereJson = str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json');
@@ -32,12 +35,18 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
   exit;
 }
 
+// Si el envío supera el máximo, PHP descarta todos los campos (llegarían vacíos): avisamos del motivo real
+if (empty($_POST) && (int)($_SERVER['CONTENT_LENGTH'] ?? 0) > 0) {
+  responder(false, 'El logo pesa demasiado: el máximo es 100 MB. Prueba con una versión más ligera.', 413);
+}
+
 // Campo trampa: si viene relleno, es un envío automático. Fingimos que todo ha ido bien.
 if (trim((string)($_POST['web'] ?? '')) !== '') responder(true);
 
 // Limpia un texto: sin caracteres de control, recortado y con longitud máxima
 function limpiar(string $clave, int $max, bool $multilinea = false): string {
   $v = (string)($_POST[$clave] ?? '');
+  if (!mb_check_encoding($v, 'UTF-8')) $v = mb_convert_encoding($v, 'UTF-8', 'Windows-1252');
   $v = $multilinea ? preg_replace('/[^\P{C}\n]/u', '', $v) : preg_replace('/\p{C}/u', '', $v);
   $v = trim((string)$v);
   return mb_substr($v, 0, $max);
@@ -65,21 +74,24 @@ if (!$acepto) responder(false, 'Para enviar la solicitud necesitamos que aceptes
 
 if (!is_dir(DATOS) || !is_writable(DATOS)) responder(false, 'No hemos podido guardar la solicitud. Inténtalo más tarde.', 500);
 
-// Reduce el logo para que su lado mayor no pase de $max píxeles (basta para verlo pequeño en el panel y en la web)
-function reducirLogo($imagen, int $max = 400) {
+// Todos los logos se guardan igual: centrados en un lienzo transparente de LOGO_W × LOGO_H,
+// con un pequeño margen y sin deformarlos (así se ven homogéneos en el panel y en la web)
+function reducirLogo($imagen) {
   $w = imagesx($imagen);
   $h = imagesy($imagen);
-  $k = min(1, $max / max($w, $h));
-  if ($k >= 1) return $imagen;
+  $margen = 20;
+  $k = min((LOGO_W - 2 * $margen) / $w, (LOGO_H - 2 * $margen) / $h);
   $nw = max(1, (int)round($w * $k));
   $nh = max(1, (int)round($h * $k));
-  $nueva = imagecreatetruecolor($nw, $nh);
-  imagealphablending($nueva, false);
-  imagesavealpha($nueva, true);
-  imagefill($nueva, 0, 0, imagecolorallocatealpha($nueva, 0, 0, 0, 127));
-  imagecopyresampled($nueva, $imagen, 0, 0, 0, 0, $nw, $nh, $w, $h);
+  $lienzo = imagecreatetruecolor(LOGO_W, LOGO_H);
+  imagealphablending($lienzo, false);
+  imagesavealpha($lienzo, true);
+  imagefill($lienzo, 0, 0, imagecolorallocatealpha($lienzo, 0, 0, 0, 127));
+  imagealphablending($lienzo, true);
+  imagecopyresampled($lienzo, $imagen, (int)((LOGO_W - $nw) / 2), (int)((LOGO_H - $nh) / 2), 0, 0, $nw, $nh, $w, $h);
+  imagealphablending($lienzo, false);
   imagedestroy($imagen);
-  return $nueva;
+  return $lienzo;
 }
 
 // Logo opcional. Se valida y se vuelve a codificar como PNG (así no viaja nada que no sea imagen),
@@ -87,7 +99,7 @@ function reducirLogo($imagen, int $max = 400) {
 function guardarLogo(bool $autoriza): string {
   $f = $_FILES['logo'] ?? null;
   if (!$f || ($f['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) return '';
-  $error = 'El logo debe ser una imagen PNG, JPG o WEBP de menos de 2 MB.';
+  $error = 'El logo debe ser una imagen PNG, JPG o WEBP de hasta 100 MB.';
   if (($f['error'] ?? 1) !== UPLOAD_ERR_OK || $f['size'] > LOGO_MAX) responder(false, $error, 422);
   if (!$autoriza) responder(false, 'Para usar tu logo en la web necesitamos que autorices su publicación.', 422);
   $tipo = (new finfo(FILEINFO_MIME_TYPE))->file($f['tmp_name']);

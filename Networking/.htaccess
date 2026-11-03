@@ -1,0 +1,9 @@
+# Formulario «Quiero participar»: admite logos de hasta 100 MB. Solo afecta a participa.php.
+<IfModule mod_php.c>
+  <Files "participa.php">
+    php_value upload_max_filesize 100M
+    php_value post_max_size 105M
+    php_value memory_limit 768M
+    php_value max_input_time 300
+  </Files>
+</IfModule>

@@ -45,6 +45,8 @@ El formulario «Quiero participar como empresa» guarda cada solicitud en un CSV
 
 Se abre directamente con Excel (separador `;`, UTF-8). El servidor no envía correos: hay que revisar las solicitudes en el panel. Las fórmulas que alguien escriba en el formulario se guardan como texto, para que Excel no las ejecute.
 
+La empresa puede adjuntar su logo, de hasta 100 MB. El navegador lo reduce antes de enviarlo, y el servidor lo guarda siempre en el mismo formato: un PNG de 600 × 300 píxeles con fondo transparente y el logo centrado. Se guarda en `/var/www/networking_data/logos/`, fuera de la web, y solo si la empresa autoriza su publicación. El límite de 100 MB está en `Networking/.htaccess` y solo afecta a `participa.php`.
+
 ### Panel de solicitudes (equipo del centro)
 
 https://myappsserver.duckdns.org/Networking/panel/

@@ -503,19 +503,47 @@
     formEnviar.disabled = true;
     formEnviar.innerHTML = '<span class="cargando" aria-hidden="true"><i></i><i></i><i></i></span>Enviando…';
     form.classList.add("enviando");
-    fetch(form.action, { method: "POST", body: new FormData(form), headers: { "Accept": "application/json" } })
+    prepararDatos()
+      .then(function (datos) { return fetch(form.action, { method: "POST", body: datos, headers: { "Accept": "application/json" } }); })
       .then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
       .then(function (res) {
         if (res && res.ok) { mostrarOk(); return; }
         error((res && res.error) || "No hemos podido guardar la solicitud. Inténtalo de nuevo en unos minutos.");
       })
-      .catch(function () { error("No hay conexión con el servidor. Comprueba tu conexión e inténtalo de nuevo."); })
+      .catch(function (e) {
+        if (e && e.message === "grande") error("El logo pesa demasiado: el máximo es 100 MB.", document.getElementById("f-logo"));
+        else error("No hay conexión con el servidor. Comprueba tu conexión e inténtalo de nuevo.");
+      })
       .then(function () {
         formEnviar.disabled = false;
         formEnviar.textContent = "Enviar solicitud";
         form.classList.remove("enviando");
       });
   });
+
+  /* Datos del formulario. Si hay logo, se reduce en el navegador (lado mayor de 1200 px, PNG)
+     antes de enviarlo: así un logo de muchos megas sube en segundos. El servidor lo deja
+     después en su tamaño final. Si el navegador no puede abrir la imagen, se envía tal cual. */
+  var LOGO_MAX = 100 * 1024 * 1024;
+  function prepararDatos() {
+    var datos = new FormData(form);
+    var campo = document.getElementById("f-logo");
+    var archivo = campo && campo.files && campo.files[0];
+    if (!archivo) return Promise.resolve(datos);
+    if (archivo.size > LOGO_MAX) return Promise.reject(new Error("grande"));
+    if (!window.createImageBitmap || !HTMLCanvasElement.prototype.toBlob) return Promise.resolve(datos);
+    return createImageBitmap(archivo).then(function (bmp) {
+      var k = Math.min(1, 1200 / Math.max(bmp.width, bmp.height));
+      var c = document.createElement("canvas");
+      c.width = Math.max(1, Math.round(bmp.width * k));
+      c.height = Math.max(1, Math.round(bmp.height * k));
+      c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+      return new Promise(function (ok) { c.toBlob(ok, "image/png"); });
+    }).then(function (blob) {
+      if (blob) datos.set("logo", blob, "logo.png");
+      return datos;
+    }, function () { return datos; });
+  }
 
   /* ---------- Cuenta atrás (20 nov 2026, hora de Canarias = UTC+0) ---------- */
   var target = Date.UTC(2026, 10, 20, 0, 0, 0);
