@@ -70,8 +70,7 @@ const polyPath = (pts, k = 1, ox = 0, oy = 0) => "M" + pts.map(([x, y]) => `${(o
 const forma = (id, v) => (SEMI.has(id) ? semiPoly(v) : v);
 
 // =========================================================================================
-// Las 15 figuras. Cada una usa las 8 piezas, sin montarlas unas sobre otras.
-// Algunas piezas forman la figura y otras, su escena (rayos, olas, nubes, suelo): son figuras simbólicas.
+// Las 15 figuras. Cada una usa solo las piezas que necesita, sin montarlas unas sobre otras.
 // =========================================================================================
 const FIGURAS = [
   { id: "canarias", nombre: "Canarias", nivel: 3, pista: "Cada pieza es una isla. Los dos semicírculos son las islas redondas: Gran Canaria y La Gomera.",
@@ -85,114 +84,93 @@ const FIGURAS = [
       F: colocar("barra", 12.6, 1.4, -55),       // Lanzarote
       D: colocar("pequeno", 13.6, -0.3, 45),     // La Graciosa
     } },
-  { id: "casa", nombre: "Casa", nivel: 1, pista: "Los dos triángulos grandes hacen las paredes; los pequeños, el tejado.",
+  { id: "casa", nombre: "Casa", nivel: 1, pista: "Los dos triángulos grandes forman las paredes; los dos pequeños, el tejado.",
     piezas: {
       A: tri([0, 0], [1, 0], [0, 1], 2), B: tri([2, 2], [-1, 0], [0, -1], 2),
       C: tri([1, 0], [-1, 0], [0, -1], 1), D: tri([1, 0], [1, 0], [0, -1], 1),
-      E: rect(2.1, 1, 1, 1), F: rect(-2.1, 1, 2, 1),
-      G: semi(-1.6, -0.9, -90), H: semi(4.2, 2, -90),
     } },
-  { id: "sol", nombre: "Sol", nivel: 1, pista: "Une los dos semicírculos: ese es el sol. Las demás piezas son sus rayos y las montañas.",
+  { id: "sol", nombre: "Sol", nivel: 1, pista: "Un amanecer: el semicírculo sale sobre la barra y tres piezas pequeñas son los rayos.",
     piezas: {
-      G: semi(0, 0, -90), H: semi(0, 0, 90),
-      C: tri([0, -1.857], [R, R], [-R, R], 1), D: tri([0, 1.857], [R, -R], [-R, -R], 1),
-      E: rombo(-1.857, 0, 1), F: rect(1.15, -0.5, 2, 1),
-      A: tri([-1.45, 2.6], [R, R], [-R, R], 2), B: tri([1.45, 2.6], [R, R], [-R, R], 2),
+      F: rect(-1, 0, 2, 1), G: semi(0, 0, -90),
+      E: rombo(0, -1.85, 1), C: tri([-1.55, -1.55], [1, 0], [0, 1], 1), D: tri([1.55, -1.55], [-1, 0], [0, 1], 1),
     } },
   { id: "llave", nombre: "Llave", nivel: 2, pista: "El círculo es el ojo de la llave; la barra y el cuadrado, la caña; los triángulos pequeños, los dientes.",
     piezas: {
       G: semi(0, 0, 180), H: semi(0, 0, 0),
-      F: rect(1.1, -0.5, 2, 1), E: rect(3.1, -0.5, 1, 1),
-      C: tri([3.1, 0.5], [1, 0], [0, 1], 1), D: tri([2.1, 0.5], [1, 0], [0, 1], 1),
-      A: tri([-2.514, -1.414], [R, R], [-R, R], 2), B: tri([-2.514, 1.414], [R, -R], [-R, -R], 2),
+      F: rect(1.05, -0.5, 2, 1), E: rect(3.05, -0.5, 1, 1),
+      C: tri([3.05, 0.5], [1, 0], [0, 1], 1), D: tri([2.05, 0.5], [1, 0], [0, 1], 1),
     } },
   { id: "barco", nombre: "Barco", nivel: 1, pista: "Las velas son los triángulos grandes; el casco, la barra con un triángulo pequeño a cada lado.",
     piezas: {
       F: rect(-1, 2, 2, 1), C: tri([-1, 2], [-1, 0], [0, 1], 1), D: tri([1, 2], [1, 0], [0, 1], 1),
-      A: tri([0.1, 1.9], [0, -1], [1, 0], 2), B: tri([-0.1, 1.9], [0, -1], [-1, 0], 2),
-      E: rect(-0.5, -1.25, 1, 1),
-      G: semi(1.05, 4.2, -90), H: semi(-1.05, 4.2, -90),
+      A: tri([0.05, 1.95], [0, -1], [1, 0], 2), B: tri([-0.05, 1.95], [0, -1], [-1, 0], 2),
     } },
-  { id: "bombilla", nombre: "Bombilla", nivel: 2, pista: "El círculo es el cristal; debajo, el casquillo. Los triángulos grandes son la luz.",
+  { id: "bombilla", nombre: "Bombilla", nivel: 1, pista: "El círculo es el cristal; el cuadrado, el casquillo; un triángulo pequeño, la punta.",
     piezas: {
       G: semi(0, 0, -90), H: semi(0, 0, 90),
-      E: rect(-0.5, 1.05, 1, 1), C: tri([0, 2.757], [R, -R], [-R, -R], 1),
-      F: rect(-0.5, -3.25, 1, 2),
-      A: tri([-1.25, 0], [-R, -R], [-R, R], 2), B: tri([1.25, 0], [R, -R], [R, R], 2),
-      D: tri([1.6, -1.6], [1, 0], [0, -1], 1),
+      E: rect(-0.5, 1, 1, 1), C: tri([0, 2.707], [R, -R], [-R, -R], 1),
     } },
   { id: "semaforo", nombre: "Semáforo", nivel: 2, pista: "Arriba y abajo, los semicírculos; en medio, el cuadrado que forman los dos triángulos grandes.",
     piezas: {
       G: semi(0, 0, -90), A: tri([-1, 0], [1, 0], [0, 1], 2), B: tri([1, 2], [-1, 0], [0, -1], 2), H: semi(0, 2, 90),
-      F: rect(-0.5, 3.05, 1, 2), E: rect(-0.5, 5.05, 1, 1),
-      C: tri([0, 7.1], [-1, 0], [0, -1], 1), D: tri([0, 7.1], [1, 0], [0, -1], 1),
+      F: rect(-0.5, 3, 1, 2), E: rect(-0.5, 5, 1, 1),
+      C: tri([0, 7], [-1, 0], [0, -1], 1), D: tri([0, 7], [1, 0], [0, -1], 1),
     } },
-  { id: "arbol", nombre: "Árbol", nivel: 1, pista: "La copa es el círculo; el tronco, la barra. Los triángulos grandes son la montaña.",
+  { id: "arbol", nombre: "Árbol", nivel: 1, pista: "La copa es el círculo; el tronco, la barra; las raíces, los triángulos pequeños.",
     piezas: {
-      G: semi(0, 0, -90), H: semi(0, 0, 90), F: rect(-0.5, 1.05, 1, 2),
-      C: tri([-0.5, 3.05], [-1, 0], [0, -1], 1), D: tri([0.5, 3.05], [1, 0], [0, -1], 1),
-      A: tri([0, 5.1], [-1, 0], [0, -1], 2), B: tri([0, 5.1], [1, 0], [0, -1], 2),
-      E: rombo(2.4, -1.4, 1),
+      G: semi(0, 0, -90), H: semi(0, 0, 90), F: rect(-0.5, 1, 1, 2),
+      C: tri([-0.5, 3], [-1, 0], [0, -1], 1), D: tri([0.5, 3], [1, 0], [0, -1], 1),
     } },
-  { id: "hoja", nombre: "Hoja", nivel: 2, pista: "Los dos semicírculos forman el centro de la hoja; los triángulos pequeños, sus puntas; la barra, el tallo.",
-    piezas: Object.assign(
-      girar({ G: semi(0, 0, -90), H: semi(0, 0, 90), C: tri([-1.75, 0], [R, -R], [R, R], 1), D: tri([1.75, 0], [-R, -R], [-R, R], 1), F: rect(-3.95, -0.5, 2, 1) }, 0, 0, -35),
-      { A: tri([-0.6, 5.4], [-1, 0], [0, -1], 2), B: tri([-0.6, 5.4], [1, 0], [0, -1], 2), E: rombo(2.6, 1.6, 1) }) },
-  { id: "pez", nombre: "Pez", nivel: 2, pista: "El cuerpo es el rombo de los triángulos grandes; la cola, los dos pequeños.",
+  { id: "hoja", nombre: "Hoja", nivel: 2, pista: "El semicírculo es la base redondeada; el triángulo grande, la punta; un triángulo pequeño, el rabito.",
+    piezas: girar({ G: semi(1, 0, -90), A: tri([0, 0], [1, 0], [0, 1], 2), C: tri([1, -1.75], [R, R], [-R, R], 1) }, 0.8, 0.4, 210) },
+  { id: "pez", nombre: "Pez", nivel: 2, pista: "El cuerpo es el rombo de los triángulos grandes; la cola, los dos pequeños; la aleta, el cuadrado.",
     piezas: {
       A: tri([0, -1.414], [R, R], [-R, R], 2), B: tri([0, 1.414], [R, -R], [-R, -R], 2),
-      C: tri([-2.5, 0], [1, 0], [0, -1], 1), D: tri([-2.5, 0], [1, 0], [0, 1], 1),
+      C: tri([-2.414, 0], [1, 0], [0, -1], 1), D: tri([-2.414, 0], [1, 0], [0, 1], 1),
       E: [[-0.707, -0.707], [0, -1.414], [-0.707, -2.121], [-1.414, -1.414]],
-      G: semi(2.6, -1.9, -90), H: semi(2.6, -1.9, 90), F: rect(2.2, 0.8, 1, 2),
     } },
-  { id: "flor", nombre: "Flor", nivel: 2, pista: "El círculo es el centro; tres piezas pequeñas, los pétalos; los triángulos grandes, las hojas.",
+  { id: "flor", nombre: "Flor", nivel: 2, pista: "Un tulipán: el semicírculo es la copa y tres piezas pequeñas, los pétalos; la barra, el tallo; un triángulo grande, la hoja.",
     piezas: {
-      G: semi(0, 0, -90), H: semi(0, 0, 90),
-      C: tri([0, -1.857], [R, R], [-R, R], 1), E: rombo(-1.857, 0, 1), D: tri([1.857, 0], [-R, -R], [-R, R], 1),
-      F: rect(-0.5, 1.05, 1, 2),
-      A: tri([-0.55, 3.05], [-1, 0], [0, -1], 2), B: tri([0.55, 3.05], [1, 0], [0, -1], 2),
+      G: semi(0, 0, 90), C: tri([-1, 0], [1, 0], [0, -1], 1), E: rombo(0, -0.707, 1), D: tri([1, 0], [-1, 0], [0, -1], 1),
+      F: rect(-0.5, 1, 1, 2), A: tri([-0.5, 3], [-1, 0], [0, -1], 2),
     } },
-  { id: "avion", nombre: "Avión", nivel: 3, pista: "El fuselaje es la barra con el cuadrado; las alas, los triángulos grandes; los motores, los semicírculos.",
+  { id: "avion", nombre: "Avión", nivel: 2, pista: "La barra y el cuadrado son el fuselaje; los triángulos grandes, las alas; los pequeños, el morro y la cola.",
     piezas: {
-      F: rect(-0.5, -1, 1, 2), E: rect(-0.5, 1, 1, 1), C: tri([0, -1.757], [R, R], [-R, R], 1),
-      A: tri([-0.55, 1.2], [0, -1], [-1, 0], 2), B: tri([0.55, 1.2], [0, -1], [1, 0], 2),
-      G: semi(-1.6, 1.3, 90), H: semi(1.6, 1.3, 90), D: tri([0, 2.05], [R, R], [-R, R], 1),
+      F: rect(-0.5, -1, 1, 2), E: rect(-0.5, 1, 1, 1), C: tri([0, -1.707], [R, R], [-R, R], 1),
+      A: tri([-0.5, 1.2], [0, -1], [-1, 0], 2), B: tri([0.5, 1.2], [0, -1], [1, 0], 2),
+      D: tri([0, 2], [R, R], [-R, R], 1),
     } },
-  { id: "cohete", nombre: "Cohete", nivel: 2, pista: "Barra y cuadrado forman el cuerpo; los triángulos grandes, las aletas; los semicírculos, el humo.",
+  { id: "cohete", nombre: "Cohete", nivel: 2, pista: "Los triángulos grandes y la barra forman el cuerpo; el semicírculo, la punta; los pequeños, las aletas; el cuadrado, la llama.",
     piezas: {
-      F: rect(-0.5, -1, 1, 2), E: rect(-0.5, 1, 1, 1), D: tri([0, -1.757], [R, R], [-R, R], 1),
-      A: tri([-0.55, 2], [0, -1], [-1, 0], 2), B: tri([0.55, 2], [0, -1], [1, 0], 2),
-      C: tri([0, 2.757], [R, -R], [-R, -R], 1),
-      G: semi(-1.05, 4, -90), H: semi(1.05, 4, -90),
+      G: semi(0, 0, -90), A: tri([-1, 0], [1, 0], [0, 1], 2), B: tri([1, 2], [-1, 0], [0, -1], 2), F: rect(-1, 2, 2, 1),
+      C: tri([-1, 3], [0, -1], [-1, 0], 1), D: tri([1, 3], [0, -1], [1, 0], 1), E: rombo(0, 3.85, 1),
     } },
-  { id: "globo", nombre: "Globo", nivel: 2, pista: "Un semicírculo encima de los dos triángulos pequeños forma el globo; el cuadrado es la cesta.",
+  { id: "globo", nombre: "Globo", nivel: 1, pista: "Un semicírculo encima de los dos triángulos pequeños forma el globo; el cuadrado es la cesta.",
     piezas: {
       G: semi(0, 0, -90), C: tri([0, 0], [-1, 0], [0, 1], 1), D: tri([0, 0], [1, 0], [0, 1], 1),
-      E: rect(-0.5, 1.6, 1, 1), H: semi(2.7, -0.4, -90), F: rect(-3.6, -1.3, 2, 1),
-      A: tri([-1.5, 3.2], [R, R], [-R, R], 2), B: tri([1.3, 3.4], [R, R], [-R, R], 2),
+      E: rect(-0.5, 1.5, 1, 1),
     } },
-  { id: "pintadera", nombre: "Pintadera", nivel: 3, pista: "El rombo central lo forman los triángulos grandes; a sus lados, los semicírculos y los pequeños. El asa va arriba.",
+  { id: "pintadera", nombre: "Pintadera", nivel: 2, pista: "El sello visto de lado: el semicírculo es el asa; la barra, la placa; los triángulos pequeños, el dibujo en relieve.",
     piezas: {
-      A: tri([0, -1.414], [R, R], [-R, R], 2), B: tri([0, 1.414], [R, -R], [-R, -R], 2),
-      G: semi(-0.707, -0.707, -135), H: semi(0.707, 0.707, 45),
-      C: tri([1.207, -1.207], [-1, 0], [0, 1], 1), D: tri([-1.207, 1.207], [1, 0], [0, -1], 1),
-      E: rect(-0.2, -2.65, 1, 1), F: rect(-0.7, -3.7, 2, 1),
+      G: semi(0, 0, -90), F: rect(-1, 0, 2, 1),
+      C: tri([-1, 1], [1, 0], [0, 1], 1), D: tri([0, 1], [1, 0], [0, 1], 1),
     } },
 ];
 
 // ---------- Comprobaciones ----------
 const lados = (p) => p.map((a, i) => Math.hypot(p[(i + 1) % p.length][0] - a[0], p[(i + 1) % p.length][1] - a[1])).map((l) => +l.toFixed(2)).sort((x, y) => x - y).join(",");
 const ESPERADO = { A: "2,2,2.83", B: "2,2,2.83", C: "1,1,1.41", D: "1,1,1.41", E: "1,1,1,1", F: "1,1,2,2" };
+const usadas = (fig) => IDS.filter((id) => fig.piezas[id]);
 function caja(fig) {
-  const todos = IDS.flatMap((id) => forma(id, fig.piezas[id]));
+  const todos = usadas(fig).flatMap((id) => forma(id, fig.piezas[id]));
   const xs = todos.map((p) => p[0]), ys = todos.map((p) => p[1]);
   return { x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys) };
 }
 async function comprobar(fig) {
   const err = [];
-  for (const id of IDS) {
+  if (usadas(fig).length < 3) err.push("usa menos de 3 piezas");
+  for (const id of usadas(fig)) {
     const v = fig.piezas[id];
-    if (!v) { err.push("falta la pieza " + id); continue; }
     if (SEMI.has(id)) { if (!v.c) err.push(id + " no es un semicírculo"); }
     else if (lados(v) !== ESPERADO[id]) err.push(`${id} no tiene su forma (${lados(v)})`);
   }
@@ -201,7 +179,7 @@ async function comprobar(fig) {
   const k = 40, b = caja(fig), W = Math.ceil((b.x1 - b.x0) * k) + 4, H = Math.ceil((b.y1 - b.y0) * k) + 4;
   const ox = -b.x0 * k + 2, oy = -b.y0 * k + 2;
   const capas = [];
-  for (const id of IDS) {
+  for (const id of usadas(fig)) {
     const d = SEMI.has(id) ? semiPath(fig.piezas[id], k, ox, oy) : polyPath(fig.piezas[id], k, ox, oy);
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}"><rect width="${W}" height="${H}"/><path d="${d}" fill="#fff"/></svg>`;
     capas.push({ id, px: await sharp(Buffer.from(svg)).greyscale().raw().toBuffer() });
@@ -221,14 +199,14 @@ function dibujarFigura(fig, x, y, w, h, modo, { color = TINTA, numeros = true } 
   const b = caja(fig), k = Math.min(w / (b.x1 - b.x0), h / (b.y1 - b.y0));
   const ox = x + (w - (b.x1 - b.x0) * k) / 2 - b.x0 * k, oy = y + (h - (b.y1 - b.y0) * k) / 2 - b.y0 * k;
   let s = "";
-  for (const id of IDS) {
+  for (const id of usadas(fig)) {
     const v = fig.piezas[id];
     const d = SEMI.has(id) ? semiPath(v, k, ox, oy) : polyPath(v, k, ox, oy);
     if (modo === "silueta") s += `<path d="${d}" fill="${color}" stroke="${color}" stroke-width="${(k * 0.02).toFixed(2)}" stroke-linejoin="round"/>`;
     else s += `<path d="${d}" fill="${PIEZA[id].color}" stroke="#ffffff" stroke-width="${(k * 0.05).toFixed(2)}" stroke-linejoin="round"/>`;
   }
   if (modo === "solucion" && numeros) {
-    for (const id of IDS) {
+    for (const id of usadas(fig)) {
       const pts = forma(id, fig.piezas[id]);
       const c = SEMI.has(id) ? [fig.piezas[id].c[0] + Math.cos((fig.piezas[id].dir * Math.PI) / 180) * 0.42, fig.piezas[id].c[1] + Math.sin((fig.piezas[id].dir * Math.PI) / 180) * 0.42] : G.centroide(pts);
       const cx = ox + c[0] * k, cy = oy + c[1] * k, r = Math.min(k * 0.19, 5.2);
@@ -325,10 +303,10 @@ function reglas() {
   let s = txt(G.OUTFIT_SB, "TANGRAM 8 · CÓMO SE JUEGA", m, 22, 4.4, GRIS, { tracking: 0.6 });
   s += txt(G.BEBAS, "LAS REGLAS", m, 40, 22, TINTA, { tracking: 0.4 });
   const REGLAS = [
-    ["Usa las 8 piezas", "Cada figura se construye con las ocho piezas, todas a la vez."],
+    ["Usa las piezas que necesites", "Cada ficha indica qué piezas forman la figura. Las demás se quedan en la caja."],
     ["Mueve, gira y da la vuelta", "Las piezas se pueden girar y voltear. Son simétricas, así que no importa por qué cara caigan."],
     ["Sin montar piezas", "Ninguna pieza puede quedar encima de otra. Se pueden tocar por un lado o solo por un punto."],
-    ["Figuras simbólicas", "Algunas piezas forman la figura y otras completan la escena: rayos, olas, nubes, montañas. Lo importante es que se reconozca."],
+    ["Figuras simbólicas", "Con pocas piezas se construye una idea: lo importante es que la figura se reconozca."],
     ["Mira la silueta", "Cada ficha muestra la sombra de la figura, sin las líneas entre piezas: ese es el reto. La solución está aparte."],
   ];
   let y = 54;
@@ -345,7 +323,7 @@ function reglas() {
     ["En solitario", "Elige una ficha y constrúyela. Empieza por las de nivel fácil (una estrella)."],
     ["En parejas", "Una persona describe la silueta sin enseñarla y la otra la construye."],
     ["Contrarreloj", "Equipos de 3 o 4: ¿cuántas figuras construís en 10 minutos?"],
-    ["Inventa la tuya", "Crea una figura nueva con las 8 piezas, ponle nombre y dibuja su silueta para que otro equipo la resuelva."],
+    ["Inventa la tuya", "Crea una figura nueva, ponle nombre y dibuja su silueta para que otro equipo la resuelva. El gran reto: usar las 8 piezas."],
   ];
   MODOS.forEach(([t, d], i) => {
     const x = m + (i % 2) * 88, yy = y + Math.floor(i / 2) * 30;
@@ -367,7 +345,6 @@ function indice() {
   FIGURAS.forEach((f, i) => {
     const x = m + (i % 3) * cw, y = 50 + Math.floor(i / 3) * ch;
     s += `<rect x="${x + 2}" y="${y}" width="${cw - 4}" height="${ch - 4}" rx="3" fill="#ffffff" stroke="#e4e0d6" stroke-width="0.3"/>`;
-    s += dibujarFigura(f, x + 7, y + 4, cw - 14, ch - 18, "silueta");
     s += txt(G.OUTFIT_SB, `${i + 1}. ${f.nombre}`, x + 6, y + ch - 8, 3.8, TINTA);
     s += estrellas(f.nivel, x + cw - 6 - anchoEstrellas(3.4), y + ch - 11, 3.4);
   });
@@ -383,11 +360,12 @@ function ficha(f, i) {
   s += estrellas(f.nivel, W - m - ancho(G.OUTFIT_SB, NIVEL[f.nivel], 5) - 4 - anchoEstrellas(5), 19.6, 5);
   s += dibujarFigura(f, m, 50, W - 2 * m, 120, "silueta");
   // Las 8 piezas que se usan
-  s += txt(G.OUTFIT_SB, "Usa las 8 piezas:", m, 186, 3.6, TINTA);
+  const u = usadas(f);
+  s += txt(G.OUTFIT_SB, `Piezas: ${u.length}`, m, 186, 3.6, TINTA);
   IDS.forEach((id, j) => {
-    const x = m + 34 + j * 11;
-    s += `<rect x="${x}" y="${181}" width="7" height="7" rx="1.5" fill="${PIEZA[id].color}"/>`;
-    s += txt(G.OUTFIT_SB, String(PIEZA[id].n), x + 3.5, 186.2, 3.6, "#ffffff", { anchor: "middle" });
+    const x = m + 22 + j * 11, si = u.includes(id);
+    s += `<rect x="${x}" y="${181}" width="7" height="7" rx="1.5" fill="${si ? PIEZA[id].color : "#e7e3d8"}"/>`;
+    s += txt(G.OUTFIT_SB, String(PIEZA[id].n), x + 3.5, 186.2, 3.6, si ? "#ffffff" : "#b9b4a6", { anchor: "middle" });
   });
   // Pista, boca abajo para no leerla sin querer
   s += `<g transform="rotate(180 ${W - m - 60} 192)">${parrafo(G.OUTFIT, "Pista: " + f.pista, W - m - 120, 190, 3.2, 120, GRIS).svg}</g>`;
