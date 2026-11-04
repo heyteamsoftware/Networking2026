@@ -6,3 +6,6 @@ node_modules/
 
 # Vídeos de la sección Media: se suben al servidor aparte (pesan demasiado para el repositorio)
 Networking/media/*.mp4
+
+# Vistas PNG de Tangram 8 (se regeneran con identidad/tangram8.js)
+tangram8/vistas/
