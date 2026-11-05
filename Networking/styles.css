@@ -660,3 +660,9 @@ body.pagina-legado { background: var(--noche); color: var(--arena); }
 .lg-barra .brand { white-space: nowrap; }
 .lg-ir { margin-top: 24px; }
 .lg-form { scroll-margin-top: calc(var(--topbar) + 16px); }
+/* Legado: sin iconos de pieza; el QR es el acceso (se puede pulsar) */
+.legado-qr { justify-items: center; text-align: center; }
+.legado-qr-codigo { width: 240px; height: 240px; transition: transform .25s cubic-bezier(.2, .8, .2, 1.4), box-shadow .25s ease; }
+.legado-qr-codigo:hover, .legado-qr-codigo:focus-visible { transform: scale(1.04); box-shadow: 0 0 0 4px var(--mesa-4); }
+.legado-qr-codigo:focus-visible { outline: none; }
+.legado-pasos li, .lg-pasos li { min-height: 64px; }

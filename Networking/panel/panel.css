@@ -199,3 +199,10 @@ body.acceso { background: var(--noche); color: var(--arena); }
 .revision.vencida { color: var(--mesa-1-texto); }
 .revision.vencida::before { content: "● "; color: var(--mesa-1); }
 @media print { .tabla-legado td.propuesta { min-width: 0; } }
+/* Pestañas como botones bien visibles */
+.barra { height: 68px; }
+.barra-nav { gap: 8px; margin-left: 8px; padding-left: 16px; }
+.barra-nav a { display: inline-flex; align-items: center; min-height: 42px; padding: 8px 20px; border: 2px solid rgba(245,239,228,.7); border-radius: 999px; color: var(--arena); font-size: 1rem; font-weight: 700; letter-spacing: .02em; }
+.barra-nav a:hover { border-color: var(--mesa-4); background: rgba(255,204,0,.14); color: var(--arena); }
+.barra-nav a[aria-current="page"] { border-color: var(--mesa-4); background: var(--mesa-4); color: var(--noche); box-shadow: 0 4px 14px -4px rgba(255,204,0,.55); }
+@media (max-width: 520px) { .barra-nav { gap: 6px; padding-left: 10px; margin-left: 0; } .barra-nav a { min-height: 40px; padding: 6px 14px; font-size: .95rem; } }

@@ -854,7 +854,7 @@ function pintarCabecera(string $titulo, string $clase): void { ?>
   <title><?= e($titulo) ?> — Networking 2026</title>
   <meta name="theme-color" content="#14213d">
   <link rel="icon" href="../img/isotipo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="panel.css">
+  <link rel="stylesheet" href="panel.css?v=20261105b">
 </head>
 <body class="<?= e($clase) ?>">
 <?php }

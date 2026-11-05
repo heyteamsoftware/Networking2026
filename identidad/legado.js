@@ -67,7 +67,6 @@ li img { flex: none; width: 9mm; height: 9mm; }
       <h2>Registrad vuestro legado</h2>
       <p>Escanead el código con el móvil y dejad por escrito vuestro compromiso.</p>
       <p>Dos minutos: datos de la empresa, contacto y los cuatro puntos.</p>
-      <p class="url">${URL_TXT}</p>
     </div>
   </div>
   <p class="lema">El éxito no es reunirnos. <em>Es lo que construimos después.</em></p>
