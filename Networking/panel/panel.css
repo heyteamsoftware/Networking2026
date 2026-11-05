@@ -180,3 +180,22 @@ body.acceso { background: var(--noche); color: var(--arena); }
 @media print {
   .tabla th:last-child, .tabla td[data-col="Acciones"], .enlace-papelera { display: none !important; }
 }
+
+/* ---------- Pestañas: Solicitudes · Legado ---------- */
+.barra-nav { display: flex; gap: 4px; margin-left: 4px; padding-left: 14px; border-left: 1px solid #34446b; }
+.barra-nav a { padding: 6px 14px; border-radius: 999px; color: #c9ccd8; font-size: .9rem; font-weight: 600; text-decoration: none; }
+.barra-nav a:hover { background: rgba(245,239,228,.1); color: var(--arena); }
+.barra-nav a[aria-current="page"] { background: var(--mesa-4); color: var(--noche); }
+@media (max-width: 520px) { .marca span { display: none; } .barra-nav { padding-left: 10px; } .barra-nav a { padding: 6px 10px; } }
+
+/* ---------- Legado ---------- */
+@media (min-width: 1100px) { .resumen-legado { grid-template-columns: repeat(4, 1fr); } }
+.tabla-legado .contactos { min-width: 180px; }
+.tabla-legado .contactos .sub:first-child { margin-top: 0; }
+.tabla-legado .contactos .sub { margin-top: 6px; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+.revision { font-weight: 600; color: var(--tinta); }
+.revision.proxima { color: var(--mesa-4-texto); }
+.revision.proxima::before { content: "● "; color: var(--mesa-4); }
+.revision.vencida { color: var(--mesa-1-texto); }
+.revision.vencida::before { content: "● "; color: var(--mesa-1); }
+@media print { .tabla-legado td.propuesta { min-width: 0; } }

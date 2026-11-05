@@ -1,6 +1,7 @@
 <?php
 // Networking 2026 — panel privado de solicitudes «Quiero participar como empresa».
-// Muestra, edita y descarga las solicitudes que guarda participa.php. Lo que se borra
+// Muestra, edita y descarga las solicitudes que guarda participa.php, y en la sección Legado
+// los compromisos «Del encuentro a la acción» que guarda legado/guardar.php. Lo que se borra
 // va a una papelera (papelera.csv) desde la que se puede restaurar. Solo con contraseña:
 // su hash vive en el servidor (panel-clave.txt), nunca en el repositorio.
 
@@ -18,6 +19,24 @@ const CABECERA = ['Fecha', 'Empresa', 'Sector', 'Persona de contacto', 'Cargo', 
 const CABECERA_PAPELERA = ['Fecha', 'Empresa', 'Sector', 'Persona de contacto', 'Cargo', 'Correo', 'Teléfono', 'Modalidad', 'Mesas', 'Propuesta', 'Logo (archivo privado)', 'Borrada el'];
 const CLAVES = ['fecha', 'empresa', 'sector', 'persona', 'cargo', 'correo', 'telefono', 'modalidad', 'mesas', 'propuesta', 'logo'];
 const CLAVES_PAPELERA = ['fecha', 'empresa', 'sector', 'persona', 'cargo', 'correo', 'telefono', 'modalidad', 'mesas', 'propuesta', 'logo', 'borrada'];
+define('LEGADO', $datos . '/legado.csv');
+define('LEGADO_PAPELERA', $datos . '/legado-papelera.csv'); // lo borrado del legado se guarda aquí, por si acaso
+const CABECERA_LEGADO = ['Fecha', 'Empresa', 'Sector', 'Persona de contacto', 'Cargo', 'Correo', 'Teléfono',
+  'Necesidad o interés compartido', 'Acción en los próximos 30 días', 'Contacto por la empresa', 'Contacto por la otra parte', 'Fecha de revisión'];
+const CABECERA_LEGADO_PAPELERA = [...CABECERA_LEGADO, 'Borrada el'];
+const CLAVES_LEGADO = ['fecha', 'empresa', 'sector', 'persona', 'cargo', 'correo', 'telefono', 'necesidad', 'accion', 'contacto_empresa', 'contacto_otra', 'revision'];
+// Columnas de cada Excel: [título, clave, ancho]
+const COLUMNAS_SOLICITUDES = [
+  ['Fecha', 'fecha', 17], ['Empresa', 'empresa', 32], ['Sector', 'sector', 22], ['Persona de contacto', 'persona', 24],
+  ['Cargo', 'cargo', 24], ['Correo', 'correo', 30], ['Teléfono', 'telefono', 16], ['Modalidad', 'modalidad', 14],
+  ['Mesas', 'mesas', 18], ['Propuesta', 'propuesta', 70],
+];
+const COLUMNAS_LEGADO = [
+  ['Fecha', 'fecha', 17], ['Empresa', 'empresa', 32], ['Sector', 'sector', 22], ['Persona de contacto', 'persona', 24],
+  ['Cargo', 'cargo', 24], ['Correo', 'correo', 30], ['Teléfono', 'telefono', 16], ['Necesidad o interés compartido', 'necesidad', 60],
+  ['Acción en los próximos 30 días', 'accion', 60], ['Contacto por la empresa', 'contacto_empresa', 28],
+  ['Contacto por la otra parte', 'contacto_otra', 32], ['Fecha de revisión', 'revision_txt', 16],
+];
 const MODALIDADES = ['Participante', 'Colaboradora', 'Impulsora', 'Sin decidir'];
 const MAX_FALLOS = 5;          // fallos seguidos permitidos desde una misma conexión…
 const BLOQUEO = 15 * 60;       // …antes de tener que esperar 15 minutos
@@ -127,7 +146,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     volver();
   }
 
-  if (in_array($accion, ['guardar', 'borrar', 'restaurar'], true) && $dentro) gestionarSolicitud($accion);
+  if (in_array($accion, ['guardar', 'borrar', 'restaurar', 'borrar-legado'], true) && $dentro) gestionarSolicitud($accion);
   volver();
 }
 
@@ -190,6 +209,20 @@ if (isset($_GET['descargar'])) {
   exit;
 }
 
+// ---------- Con sesión: sección Legado ----------
+if (isset($_GET['legado'])) {
+  if (isset($_GET['descargar'])) {
+    if (!is_readable(LEGADO)) volver('?legado=1');
+    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Disposition: attachment; filename="legado-networking2026-' . date('Y-m-d') . '.csv"');
+    header('Content-Length: ' . filesize(LEGADO));
+    readfile(LEGADO);
+    exit;
+  }
+  pintarLegado();
+  exit;
+}
+
 // Las solicitudes se identifican por su contenido (ver idsFilas), así que las dos listas se leen en crudo
 $solicitudes = parsear(leerTexto(CSV), count(CLAVES));
 $idsSolicitudes = idsFilas($solicitudes);
@@ -226,7 +259,7 @@ $vistas = array_values(array_filter($filas, fn($r) =>
 $enlaceXlsx = '?' . http_build_query(array_filter(['exportar' => 'xlsx', 'modalidad' => $fMod, 'mesa' => $fMesa ?: ''], fn($v) => $v !== ''));
 $partesFiltro = array_filter([$fMod !== '' ? "Modalidad: $fMod" : '', $fMesa ? "Mesa $fMesa" : '']);
 $etiquetaFiltro = $partesFiltro ? implode(' · ', $partesFiltro) : 'Todas las solicitudes';
-if (($_GET['exportar'] ?? '') === 'xlsx') descargarXlsx($vistas, 'solicitudes-networking2026-' . date('Y-m-d') . '.xlsx');
+if (($_GET['exportar'] ?? '') === 'xlsx') descargarXlsx($vistas, 'solicitudes-networking2026-' . date('Y-m-d') . '.xlsx', COLUMNAS_SOLICITUDES, 'Solicitudes');
 
 $porModalidad = array_fill_keys($modalidades, 0);
 $porMesa = array_fill_keys(array_keys($mesas), 0);
@@ -240,15 +273,7 @@ $claseMod = ['Participante' => 'mod-3', 'Colaboradora' => 'mod-2', 'Impulsora' =
 
 pintarCabecera($enPapelera ? 'Papelera' : ($editar ? 'Editar solicitud' : 'Solicitudes'), 'panel');
 ?>
-  <header class="barra">
-    <a class="marca" href="./"><img src="../img/isotipo.svg" alt="" width="30" height="30"><span>Networking <b>2026</b></span></a>
-    <span class="barra-titulo"><?= $enPapelera ? 'Papelera' : 'Panel de solicitudes' ?></span>
-    <form method="post" action="./" class="salir">
-      <input type="hidden" name="accion" value="salir">
-      <input type="hidden" name="csrf" value="<?= e($_SESSION['csrf']) ?>">
-      <button type="submit" class="btn-salir">Salir</button>
-    </form>
-  </header>
+  <?php pintarBarra('solicitudes'); ?>
 
   <main class="wrap">
     <?php if ($flash): ?>
@@ -449,6 +474,11 @@ function gestionarSolicitud(string $accion): never {
     $error = conCerrojo(fn() => moverFila(CSV, CABECERA, PAPELERA, CABECERA_PAPELERA, $id,
       fn(array $fila) => [...$fila, date('Y-m-d H:i')]));
     $ok = 'Solicitud movida a la papelera. Puedes restaurarla desde la papelera.';
+  } elseif ($accion === 'borrar-legado') {
+    $destino = '?legado=1';
+    $error = conCerrojo(fn() => moverFila(LEGADO, CABECERA_LEGADO, LEGADO_PAPELERA, CABECERA_LEGADO_PAPELERA, $id,
+      fn(array $fila) => [...$fila, date('Y-m-d H:i')]));
+    $ok = 'Compromiso borrado. Queda una copia en el servidor (legado-papelera.csv).';
   } else { // restaurar
     $destino = '?papelera=1';
     $error = conCerrojo(fn() => moverFila(PAPELERA, CABECERA_PAPELERA, CSV, CABECERA, $id,
@@ -624,12 +654,7 @@ function soltarCsv(array $bloqueo): void {
  * Descarga las solicitudes como .xlsx. Sin librerías externas: un .xlsx es un zip de XML
  * y PHP trae ZipArchive. Las celdas son texto (inlineStr), así que Excel no ejecuta fórmulas.
  */
-function descargarXlsx(array $filas, string $nombre): never {
-  $columnas = [ // [título, clave en $filas, ancho]
-    ['Fecha', 'fecha', 17], ['Empresa', 'empresa', 32], ['Sector', 'sector', 22], ['Persona de contacto', 'persona', 24],
-    ['Cargo', 'cargo', 24], ['Correo', 'correo', 30], ['Teléfono', 'telefono', 16], ['Modalidad', 'modalidad', 14],
-    ['Mesas', 'mesas', 18], ['Propuesta', 'propuesta', 70],
-  ];
+function descargarXlsx(array $filas, string $nombre, array $columnas, string $hoja): never {
   $celda = fn(string $ref, string $texto, int $estilo = 0) => sprintf(
     '<c r="%s" s="%d" t="inlineStr"><is><t xml:space="preserve">%s</t></is></c>',
     $ref, $estilo, htmlspecialchars($texto, ENT_QUOTES | ENT_XML1, 'UTF-8'));
@@ -663,7 +688,7 @@ function descargarXlsx(array $filas, string $nombre): never {
       . '</Relationships>',
     'xl/workbook.xml' => $cabeceraXml
       . '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
-      . '<sheets><sheet name="Solicitudes" sheetId="1" r:id="rId1"/></sheets></workbook>',
+      . '<sheets><sheet name="' . e($hoja) . '" sheetId="1" r:id="rId1"/></sheets></workbook>',
     'xl/_rels/workbook.xml.rels' => $cabeceraXml
       . '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
       . '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>'
@@ -697,6 +722,126 @@ function descargarXlsx(array $filas, string $nombre): never {
   readfile($tmp);
   unlink($tmp);
   exit;
+}
+
+/** Barra superior con las dos secciones del panel y el botón de salir. */
+function pintarBarra(string $actual): void { ?>
+  <header class="barra">
+    <a class="marca" href="./"><img src="../img/isotipo.svg" alt="" width="30" height="30"><span>Networking <b>2026</b></span></a>
+    <nav class="barra-nav" aria-label="Secciones del panel">
+      <a href="./" <?= $actual === 'solicitudes' ? 'aria-current="page"' : '' ?>>Solicitudes</a>
+      <a href="?legado=1" <?= $actual === 'legado' ? 'aria-current="page"' : '' ?>>Legado</a>
+    </nav>
+    <form method="post" action="./" class="salir">
+      <input type="hidden" name="accion" value="salir">
+      <input type="hidden" name="csrf" value="<?= e($_SESSION['csrf']) ?>">
+      <button type="submit" class="btn-salir">Salir</button>
+    </form>
+  </header>
+<?php }
+
+/** Fecha AAAA-MM-DD como DD/MM/AAAA. */
+function fechaCorta(string $iso): string {
+  return preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $iso, $m) ? "$m[3]/$m[2]/$m[1]" : $iso;
+}
+
+/** Sección Legado: los compromisos «Del encuentro a la acción» que llegan desde legado/. */
+function pintarLegado(): void {
+  $crudo = parsear(leerTexto(LEGADO), count(CLAVES_LEGADO));
+  $ids = idsFilas($crudo);
+  $filas = [];
+  foreach ($crudo as $i => $c) {
+    $r = presentar($c, CLAVES_LEGADO) + ['id' => $ids[$i]];
+    $r['revision_txt'] = fechaCorta($r['revision']);
+    $filas[] = $r;
+  }
+  $filas = array_reverse($filas); // más recientes primero
+  if (($_GET['exportar'] ?? '') === 'xlsx') descargarXlsx($filas, 'legado-networking2026-' . date('Y-m-d') . '.xlsx', COLUMNAS_LEGADO, 'Legado');
+
+  $flash = $_SESSION['flash'] ?? null;
+  unset($_SESSION['flash']);
+  $hoy = date('Y-m-d');
+  $en30 = date('Y-m-d', strtotime('+30 days'));
+  $estado = fn(array $r) => $r['revision'] === '' ? '' : ($r['revision'] < $hoy ? 'vencida' : ($r['revision'] <= $en30 ? 'proxima' : ''));
+  $empresas = count(array_unique(array_map(fn($r) => mb_strtolower(trim($r['empresa'])), $filas)));
+  $proximas = count(array_filter($filas, fn($r) => $estado($r) === 'proxima'));
+  $vencidas = count(array_filter($filas, fn($r) => $estado($r) === 'vencida'));
+
+  pintarCabecera('Legado', 'panel');
+  pintarBarra('legado');
+  ?>
+  <main class="wrap">
+    <?php if ($flash): ?>
+      <p class="aviso <?= $flash['tipo'] === 'error' ? 'aviso-error' : '' ?>" role="status"><?= e($flash['texto']) ?></p>
+    <?php endif; ?>
+    <p class="solo-imprimir">Networking 2026 · El legado · Del encuentro a la acción · <?= date('d/m/Y') ?></p>
+    <section class="cabeza">
+      <div>
+        <p class="etiqueta">El legado · Del encuentro a la acción</p>
+        <h1><?= count($filas) ?> <?= count($filas) === 1 ? 'compromiso' : 'compromisos' ?></h1>
+      </div>
+      <div class="acciones">
+        <a class="btn btn-borde" href="../legado/legado-qr.pdf" target="_blank" rel="noopener">Cartel con QR</a>
+        <a class="btn btn-borde" href="../legado/" target="_blank" rel="noopener">Abrir el formulario</a>
+        <?php if ($filas): ?>
+          <button type="button" class="btn btn-borde" data-imprimir>Imprimir / PDF</button>
+          <a class="btn btn-borde" href="?legado=1&amp;exportar=xlsx" download>Descargar Excel</a>
+          <a class="btn btn-primario" href="?legado=1&amp;descargar=1" download>Descargar CSV</a>
+        <?php endif; ?>
+      </div>
+    </section>
+
+    <?php if ($filas): ?>
+    <section class="resumen resumen-legado" aria-label="Resumen">
+      <div class="dato mesa-1"><b><?= count($filas) ?></b><span>Compromisos</span></div>
+      <div class="dato mesa-2"><b><?= $empresas ?></b><span><?= $empresas === 1 ? 'Empresa' : 'Empresas' ?></span></div>
+      <div class="dato mesa-4"><b><?= $proximas ?></b><span>Revisiones en 30 días</span></div>
+      <div class="dato mesa-3"><b><?= $vencidas ?></b><span>Revisiones pasadas</span></div>
+    </section>
+    <p class="cuenta" role="status">Los más recientes, primero. La fecha de revisión sale en amarillo si llega en los próximos 30 días y en rojo si ya ha pasado.</p>
+
+    <div class="tabla-caja">
+      <table class="tabla tabla-legado">
+        <thead>
+          <tr><th>Fecha</th><th>Empresa</th><th>Contacto</th><th>Necesidad compartida</th><th>Acción en 30 días</th><th>Contactos</th><th>Revisión</th><th>Acciones</th></tr>
+        </thead>
+        <tbody>
+        <?php foreach ($filas as $r): $tel = preg_replace('/[^0-9+]/', '', $r['telefono']); $est = $estado($r); ?>
+          <tr>
+            <td data-col="Fecha" class="fecha"><?= e($r['fecha']) ?></td>
+            <td data-col="Empresa"><strong><?= e($r['empresa']) ?></strong><?php if ($r['sector'] !== ''): ?><span class="sub"><?= e($r['sector']) ?></span><?php endif; ?></td>
+            <td data-col="Contacto">
+              <?= e($r['persona']) ?><?php if ($r['cargo'] !== ''): ?><span class="sub"><?= e($r['cargo']) ?></span><?php endif; ?>
+              <?php if ($r['correo'] !== ''): ?><a class="sub" href="mailto:<?= e(rawurlencode($r['correo'])) ?>"><?= e($r['correo']) ?></a><?php endif; ?>
+              <?php if ($r['telefono'] !== ''): ?><a class="sub" href="tel:<?= e($tel) ?>"><?= e($r['telefono']) ?></a><?php endif; ?>
+            </td>
+            <td data-col="Necesidad compartida" class="propuesta"><?= nl2br(e($r['necesidad'])) ?></td>
+            <td data-col="Acción en 30 días" class="propuesta"><?= nl2br(e($r['accion'])) ?></td>
+            <td data-col="Contactos" class="contactos">
+              <span class="sub">Por la empresa</span><?= e($r['contacto_empresa']) ?>
+              <span class="sub">Por la otra parte</span><?= e($r['contacto_otra']) ?>
+            </td>
+            <td data-col="Revisión" class="fecha revision <?= e($est) ?>"><?= e($r['revision_txt']) ?></td>
+            <td data-col="Acciones" class="acciones-fila">
+              <form method="post" action="./" class="en-linea" data-confirmar="<?= e('¿Borrar el compromiso de ' . $r['empresa'] . '? Quedará una copia en el servidor.') ?>">
+                <input type="hidden" name="accion" value="borrar-legado">
+                <input type="hidden" name="csrf" value="<?= e($_SESSION['csrf']) ?>">
+                <input type="hidden" name="id" value="<?= e($r['id']) ?>">
+                <button class="btn-peligro btn-pequeno" type="submit">Borrar</button>
+              </form>
+            </td>
+          </tr>
+        <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
+    <?php else: ?>
+      <p class="vacio">Todavía no hay ningún compromiso. Aparecerán aquí en cuanto un equipo rellene el formulario del legado (en la web, sección «Legado», o con el QR del cartel).</p>
+    <?php endif; ?>
+  </main>
+  <script src="panel.js"></script>
+</body></html>
+<?php
 }
 
 function pintarCabecera(string $titulo, string $clase): void { ?>

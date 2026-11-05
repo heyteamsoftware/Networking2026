@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>El legado · Del encuentro a la acción — Networking 2026</title>
+  <meta name="description" content="Networking 2026 · El legado. Registrad la colaboración que nace del encuentro: una necesidad compartida, una acción en los próximos 30 días, un contacto por cada parte y una fecha para revisar los avances.">
+  <meta property="og:title" content="El legado · Del encuentro a la acción">
+  <meta property="og:description" content="El éxito no es reunirnos. Es lo que construimos después. Networking 2026 · CIFP Tony Gallardo.">
+  <meta name="theme-color" content="#14213d">
+  <link rel="icon" href="../img/isotipo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="pagina-legado">
+
+  <header class="lg-barra">
+    <a class="brand" href="../" aria-label="Networking 2026, volver a la web">
+      <img src="../img/isotipo.svg" alt="" width="30" height="30">
+      <span>Networking <b>2026</b></span>
+    </a>
+    <a class="lg-volver" href="../#cronograma">Ver el programa</a>
+  </header>
+
+  <main>
+    <section class="lg-hero">
+      <div class="wrap lg-hero-grid">
+        <div>
+          <p class="etiqueta">El legado</p>
+          <h1>Del encuentro <em>a la acción</em></h1>
+          <p class="entradilla">El networking busca que las conversaciones se conviertan en colaboraciones con continuidad. Por ello, se invita a cada equipo a identificar:</p>
+          <a class="btn btn-primario lg-ir" href="#formLegado">Ir al registro</a>
+        </div>
+        <ol class="lg-pasos">
+          <li style="--c: var(--mesa-1)"><img src="../img/mesa-1.svg" alt=""><span>Una necesidad o interés compartido.</span></li>
+          <li style="--c: var(--mesa-2)"><img src="../img/mesa-2.svg" alt=""><span>Una acción que pueda iniciarse en los próximos 30 días.</span></li>
+          <li style="--c: var(--mesa-3)"><img src="../img/mesa-3.svg" alt=""><span>Una persona de contacto por cada parte.</span></li>
+          <li style="--c: var(--mesa-4)"><img src="../img/mesa-4.svg" alt=""><span>Una fecha para revisar los avances.</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="lg-registro" aria-labelledby="lgRegistroTitulo">
+      <div class="wrap">
+        <p class="lg-lema">El éxito no es reunirnos. <em>Es lo que construimos después.</em></p>
+
+        <form class="form lg-form" id="formLegado" action="guardar.php" method="post" novalidate>
+          <h2 class="lg-form-titulo" id="lgRegistroTitulo">Registrad vuestro legado</h2>
+          <p class="f-ayuda">Un registro por equipo o colaboración. Los campos con * son obligatorios.</p>
+
+          <fieldset class="lg-bloque">
+            <legend><b>1</b> La empresa</legend>
+            <div class="campo-doble">
+              <div class="campo">
+                <label for="l-empresa">Empresa u organización *</label>
+                <input id="l-empresa" name="empresa" type="text" required maxlength="120" autocomplete="organization">
+              </div>
+              <div class="campo">
+                <label for="l-sector">Sector</label>
+                <input id="l-sector" name="sector" type="text" maxlength="80" placeholder="Ej.: energía, turismo, madera">
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="lg-bloque">
+            <legend><b>2</b> Contacto</legend>
+            <div class="campo-doble">
+              <div class="campo">
+                <label for="l-persona">Persona de contacto *</label>
+                <input id="l-persona" name="persona" type="text" required maxlength="100" autocomplete="name">
+              </div>
+              <div class="campo">
+                <label for="l-cargo">Cargo</label>
+                <input id="l-cargo" name="cargo" type="text" maxlength="80" autocomplete="organization-title">
+              </div>
+            </div>
+            <div class="campo-doble">
+              <div class="campo">
+                <label for="l-email">Correo electrónico *</label>
+                <input id="l-email" name="email" type="email" required maxlength="120" autocomplete="email">
+              </div>
+              <div class="campo">
+                <label for="l-telefono">Teléfono</label>
+                <input id="l-telefono" name="telefono" type="tel" maxlength="30" autocomplete="tel">
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="lg-bloque">
+            <legend><b>3</b> Del encuentro a la acción</legend>
+            <div class="campo lg-campo" style="--c: var(--mesa-1)">
+              <label for="l-necesidad">Una necesidad o interés compartido *</label>
+              <textarea id="l-necesidad" name="necesidad" rows="3" required maxlength="800" placeholder="¿Qué os une? Ej.: formar perfiles en energías renovables que hoy no encontramos"></textarea>
+            </div>
+            <div class="campo lg-campo" style="--c: var(--mesa-2)">
+              <label for="l-accion">Una acción que pueda iniciarse en los próximos 30 días *</label>
+              <textarea id="l-accion" name="accion" rows="3" required maxlength="800" placeholder="Algo concreto y pequeño para empezar. Ej.: una visita del alumnado a la empresa"></textarea>
+            </div>
+            <div class="campo lg-campo" style="--c: var(--mesa-3)">
+              <span class="lg-etiqueta" id="l-contactos">Una persona de contacto por cada parte *</span>
+              <div class="campo-doble" role="group" aria-labelledby="l-contactos">
+                <div class="campo">
+                  <label class="lg-sub" for="l-contacto-empresa">Por la empresa</label>
+                  <input id="l-contacto-empresa" name="contacto_empresa" type="text" required maxlength="120" placeholder="Nombre y apellidos">
+                </div>
+                <div class="campo">
+                  <label class="lg-sub" for="l-contacto-otra">Por la otra parte</label>
+                  <input id="l-contacto-otra" name="contacto_otra" type="text" required maxlength="160" placeholder="Nombre y entidad">
+                </div>
+              </div>
+            </div>
+            <div class="campo lg-campo" style="--c: var(--mesa-4)">
+              <label for="l-revision">Una fecha para revisar los avances *</label>
+              <input id="l-revision" name="revision" type="date" required min="2026-11-20" max="2028-12-31" class="lg-fecha">
+              <p class="f-ayuda">Ese día os escribiremos para ver cómo va la colaboración.</p>
+            </div>
+          </fieldset>
+
+          <!-- Campo trampa contra envíos automáticos: las personas no lo ven -->
+          <div class="trampa" aria-hidden="true">
+            <label for="l-web">No rellenes este campo</label>
+            <input id="l-web" name="web" type="text" tabindex="-1" autocomplete="off">
+          </div>
+          <label class="consentimiento" for="l-acepto">
+            <input id="l-acepto" name="acepto" type="checkbox" value="si" required>
+            <span>Acepto que el CIFP Tony Gallardo use estos datos solo para hacer el seguimiento de esta colaboración de Networking 2026. No se cederán a terceros. Más información en <a href="../privacidad.html" target="_blank" rel="noopener">la política de privacidad</a>. *</span>
+          </label>
+          <p class="form-error" id="legadoError" role="alert" hidden></p>
+          <button class="btn btn-primario" type="submit" id="legadoEnviar">Registrar el legado</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Confirmación: ventana emergente al enviarse correctamente -->
+    <dialog class="ok-dialog" id="legadoOk" aria-labelledby="lgOkTitulo">
+      <div class="form-ok">
+        <svg viewBox="0 0 400 400" aria-hidden="true">
+          <polygon class="m1" points="12.07,5 387.93,5 200,192.93"/>
+          <polygon class="m2" points="5,12.07 192.93,200 5,387.93"/>
+          <polygon class="m3" points="395,12.07 395,187.93 307.07,100"/>
+          <polygon class="m3" points="207.07,200 300,107.07 392.93,200 300,292.93"/>
+          <polygon class="m3" points="200,207.07 287.93,295 112.07,295"/>
+          <polygon class="m4" points="12.07,395 102.07,305 287.93,305 197.93,395"/>
+          <polygon class="m4" points="395,212.07 395,395 212.07,395"/>
+        </svg>
+        <h3 id="lgOkTitulo">¡Legado registrado!</h3>
+        <p id="legadoOkTexto">Gracias. Hemos guardado vuestro compromiso y os escribiremos en la fecha de revisión para ver los avances.</p>
+        <button type="button" class="btn btn-primario ok-cerrar" data-cerrar>Registrar otro</button>
+        <a class="lg-ok-web" href="../">Volver a la web</a>
+      </div>
+    </dialog>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-grid">
+      <img class="f-logo" src="../img/logo-horizontal-negativo.svg" alt="Networking 2026 · Juntos somos FP · CIFP Tony Gallardo · 20 NOV 2026" width="345" height="90">
+      <p class="f-nota">20 de noviembre de 2026 · CIFP Tony Gallardo · <a href="../">Networking 2026</a> · <a href="../privacidad.html">Privacidad y cookies</a></p>
+    </div>
+  </footer>
+
+  <script src="legado.js"></script>
+</body>
+</html>
