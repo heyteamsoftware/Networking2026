@@ -189,15 +189,10 @@ body.acceso { background: var(--noche); color: var(--arena); }
 @media (max-width: 520px) { .marca span { display: none; } .barra-nav { padding-left: 10px; } .barra-nav a { padding: 6px 10px; } }
 
 /* ---------- Legado ---------- */
-@media (min-width: 1100px) { .resumen-legado { grid-template-columns: repeat(4, 1fr); } }
+.resumen-legado { grid-template-columns: repeat(2, minmax(0, 220px)); }
 .tabla-legado .contactos { min-width: 180px; }
 .tabla-legado .contactos .sub:first-child { margin-top: 0; }
 .tabla-legado .contactos .sub { margin-top: 6px; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
-.revision { font-weight: 600; color: var(--tinta); }
-.revision.proxima { color: var(--mesa-4-texto); }
-.revision.proxima::before { content: "● "; color: var(--mesa-4); }
-.revision.vencida { color: var(--mesa-1-texto); }
-.revision.vencida::before { content: "● "; color: var(--mesa-1); }
 @media print { .tabla-legado td.propuesta { min-width: 0; } }
 /* Pestañas como botones bien visibles */
 .barra { height: 68px; }

@@ -22,9 +22,9 @@ const CLAVES_PAPELERA = ['fecha', 'empresa', 'sector', 'persona', 'cargo', 'corr
 define('LEGADO', $datos . '/legado.csv');
 define('LEGADO_PAPELERA', $datos . '/legado-papelera.csv'); // lo borrado del legado se guarda aquí, por si acaso
 const CABECERA_LEGADO = ['Fecha', 'Empresa', 'Sector', 'Persona de contacto', 'Cargo', 'Correo', 'Teléfono',
-  'Necesidad o interés compartido', 'Acción en los próximos 30 días', 'Contacto por la empresa', 'Contacto por la otra parte', 'Fecha de revisión'];
+  'Necesidad o interés compartido', 'Acción en los próximos 30 días', 'Contacto por la empresa', 'Contacto por la otra parte'];
 const CABECERA_LEGADO_PAPELERA = [...CABECERA_LEGADO, 'Borrada el'];
-const CLAVES_LEGADO = ['fecha', 'empresa', 'sector', 'persona', 'cargo', 'correo', 'telefono', 'necesidad', 'accion', 'contacto_empresa', 'contacto_otra', 'revision'];
+const CLAVES_LEGADO = ['fecha', 'empresa', 'sector', 'persona', 'cargo', 'correo', 'telefono', 'necesidad', 'accion', 'contacto_empresa', 'contacto_otra'];
 // Columnas de cada Excel: [título, clave, ancho]
 const COLUMNAS_SOLICITUDES = [
   ['Fecha', 'fecha', 17], ['Empresa', 'empresa', 32], ['Sector', 'sector', 22], ['Persona de contacto', 'persona', 24],
@@ -35,7 +35,7 @@ const COLUMNAS_LEGADO = [
   ['Fecha', 'fecha', 17], ['Empresa', 'empresa', 32], ['Sector', 'sector', 22], ['Persona de contacto', 'persona', 24],
   ['Cargo', 'cargo', 24], ['Correo', 'correo', 30], ['Teléfono', 'telefono', 16], ['Necesidad o interés compartido', 'necesidad', 60],
   ['Acción en los próximos 30 días', 'accion', 60], ['Contacto por la empresa', 'contacto_empresa', 28],
-  ['Contacto por la otra parte', 'contacto_otra', 32], ['Fecha de revisión', 'revision_txt', 16],
+  ['Contacto por la otra parte', 'contacto_otra', 32],
 ];
 const MODALIDADES = ['Participante', 'Colaboradora', 'Impulsora', 'Sin decidir'];
 const MAX_FALLOS = 5;          // fallos seguidos permitidos desde una misma conexión…
@@ -740,32 +740,18 @@ function pintarBarra(string $actual): void { ?>
   </header>
 <?php }
 
-/** Fecha AAAA-MM-DD como DD/MM/AAAA. */
-function fechaCorta(string $iso): string {
-  return preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $iso, $m) ? "$m[3]/$m[2]/$m[1]" : $iso;
-}
-
 /** Sección Legado: los compromisos «Del encuentro a la acción» que llegan desde legado/. */
 function pintarLegado(): void {
   $crudo = parsear(leerTexto(LEGADO), count(CLAVES_LEGADO));
   $ids = idsFilas($crudo);
   $filas = [];
-  foreach ($crudo as $i => $c) {
-    $r = presentar($c, CLAVES_LEGADO) + ['id' => $ids[$i]];
-    $r['revision_txt'] = fechaCorta($r['revision']);
-    $filas[] = $r;
-  }
+  foreach ($crudo as $i => $c) $filas[] = presentar($c, CLAVES_LEGADO) + ['id' => $ids[$i]];
   $filas = array_reverse($filas); // más recientes primero
   if (($_GET['exportar'] ?? '') === 'xlsx') descargarXlsx($filas, 'legado-networking2026-' . date('Y-m-d') . '.xlsx', COLUMNAS_LEGADO, 'Legado');
 
   $flash = $_SESSION['flash'] ?? null;
   unset($_SESSION['flash']);
-  $hoy = date('Y-m-d');
-  $en30 = date('Y-m-d', strtotime('+30 days'));
-  $estado = fn(array $r) => $r['revision'] === '' ? '' : ($r['revision'] < $hoy ? 'vencida' : ($r['revision'] <= $en30 ? 'proxima' : ''));
   $empresas = count(array_unique(array_map(fn($r) => mb_strtolower(trim($r['empresa'])), $filas)));
-  $proximas = count(array_filter($filas, fn($r) => $estado($r) === 'proxima'));
-  $vencidas = count(array_filter($filas, fn($r) => $estado($r) === 'vencida'));
 
   pintarCabecera('Legado', 'panel');
   pintarBarra('legado');
@@ -795,18 +781,16 @@ function pintarLegado(): void {
     <section class="resumen resumen-legado" aria-label="Resumen">
       <div class="dato mesa-1"><b><?= count($filas) ?></b><span>Compromisos</span></div>
       <div class="dato mesa-2"><b><?= $empresas ?></b><span><?= $empresas === 1 ? 'Empresa' : 'Empresas' ?></span></div>
-      <div class="dato mesa-4"><b><?= $proximas ?></b><span>Revisiones en 30 días</span></div>
-      <div class="dato mesa-3"><b><?= $vencidas ?></b><span>Revisiones pasadas</span></div>
     </section>
-    <p class="cuenta" role="status">Los más recientes, primero. La fecha de revisión sale en amarillo si llega en los próximos 30 días y en rojo si ya ha pasado.</p>
+    <p class="cuenta" role="status">Los más recientes, primero.</p>
 
     <div class="tabla-caja">
       <table class="tabla tabla-legado">
         <thead>
-          <tr><th>Fecha</th><th>Empresa</th><th>Contacto</th><th>Necesidad compartida</th><th>Acción en 30 días</th><th>Contactos</th><th>Revisión</th><th>Acciones</th></tr>
+          <tr><th>Fecha</th><th>Empresa</th><th>Contacto</th><th>Necesidad compartida</th><th>Acción en 30 días</th><th>Contactos</th><th>Acciones</th></tr>
         </thead>
         <tbody>
-        <?php foreach ($filas as $r): $tel = preg_replace('/[^0-9+]/', '', $r['telefono']); $est = $estado($r); ?>
+        <?php foreach ($filas as $r): $tel = preg_replace('/[^0-9+]/', '', $r['telefono']); ?>
           <tr>
             <td data-col="Fecha" class="fecha"><?= e($r['fecha']) ?></td>
             <td data-col="Empresa"><strong><?= e($r['empresa']) ?></strong><?php if ($r['sector'] !== ''): ?><span class="sub"><?= e($r['sector']) ?></span><?php endif; ?></td>
@@ -821,7 +805,6 @@ function pintarLegado(): void {
               <span class="sub">Por la empresa</span><?= e($r['contacto_empresa']) ?>
               <span class="sub">Por la otra parte</span><?= e($r['contacto_otra']) ?>
             </td>
-            <td data-col="Revisión" class="fecha revision <?= e($est) ?>"><?= e($r['revision_txt']) ?></td>
             <td data-col="Acciones" class="acciones-fila">
               <form method="post" action="./" class="en-linea" data-confirmar="<?= e('¿Borrar el compromiso de ' . $r['empresa'] . '? Quedará una copia en el servidor.') ?>">
                 <input type="hidden" name="accion" value="borrar-legado">
@@ -854,7 +837,7 @@ function pintarCabecera(string $titulo, string $clase): void { ?>
   <title><?= e($titulo) ?> — Networking 2026</title>
   <meta name="theme-color" content="#14213d">
   <link rel="icon" href="../img/isotipo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="panel.css?v=20261105b">
+  <link rel="stylesheet" href="panel.css?v=20261105c">
 </head>
 <body class="<?= e($clase) ?>">
 <?php }

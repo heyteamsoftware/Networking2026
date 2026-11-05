@@ -15,7 +15,7 @@ const VENTANA = 10 * 60;    // …en 10 minutos desde la misma conexión
 const ESPERA = 3;           // y al menos 3 s entre dos envíos
 const CABECERA = ['Fecha', 'Empresa', 'Sector', 'Persona de contacto', 'Cargo', 'Correo', 'Teléfono',
   'Necesidad o interés compartido', 'Acción en los próximos 30 días', 'Contacto por la empresa',
-  'Contacto por la otra parte', 'Fecha de revisión'];
+  'Contacto por la otra parte'];
 
 $quiereJson = str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json');
 
@@ -59,12 +59,7 @@ $necesidad = limpiar('necesidad', 800, true);
 $accion    = limpiar('accion', 800, true);
 $contactoEmpresa = limpiar('contacto_empresa', 120);
 $contactoOtra    = limpiar('contacto_otra', 160);
-$revision  = limpiar('revision', 10);
 $acepto    = ($_POST['acepto'] ?? '') === 'si';
-
-// La fecha llega como AAAA-MM-DD (campo de fecha del navegador) y debe ser un día real y razonable
-$fecha = DateTimeImmutable::createFromFormat('!Y-m-d', $revision);
-$fechaOk = $fecha && $fecha->format('Y-m-d') === $revision && $revision >= '2026-11-01' && $revision <= '2028-12-31';
 
 if ($empresa === '') responder(false, 'Escribe el nombre de la empresa u organización.', 422);
 if ($persona === '') responder(false, 'Escribe el nombre de la persona de contacto.', 422);
@@ -72,7 +67,6 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) responder(false, 'Escribe un cor
 if ($necesidad === '') responder(false, 'Cuéntanos la necesidad o el interés que compartís.', 422);
 if ($accion === '') responder(false, 'Escribe una acción que podáis empezar en los próximos 30 días.', 422);
 if ($contactoEmpresa === '' || $contactoOtra === '') responder(false, 'Indica una persona de contacto por cada parte.', 422);
-if (!$fechaOk) responder(false, 'Elige una fecha válida para revisar los avances.', 422);
 if (!$acepto) responder(false, 'Para registrar el legado necesitamos que aceptes el uso de estos datos para el seguimiento.', 422);
 
 if (!is_dir(DATOS) || !is_writable(DATOS)) responder(false, 'No hemos podido guardar el legado. Inténtalo más tarde.', 500);
@@ -106,7 +100,7 @@ function celda(string $v): string {
 $fila = array_map('celda', [
   date('Y-m-d H:i'),
   $empresa, $sector, $persona, $cargo, $email, $telefono,
-  $necesidad, $accion, $contactoEmpresa, $contactoOtra, $revision,
+  $necesidad, $accion, $contactoEmpresa, $contactoOtra,
 ]);
 
 $nuevo = !file_exists(CSV);

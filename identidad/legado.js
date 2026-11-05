@@ -22,7 +22,6 @@ const pasos = [
   ["mesa-1", "#c8452b", "Una necesidad o interés compartido."],
   ["mesa-2", "#e8862a", "Una acción que pueda iniciarse en los próximos 30 días."],
   ["mesa-3", "#2370c4", "Una persona de contacto por cada parte."],
-  ["mesa-4", "#ffcc00", "Una fecha para revisar los avances."],
 ];
 const html = `<!doctype html><html lang="es"><head><meta charset="utf-8"><title>El legado · Cartel con QR — Networking 2026</title><style>
 @font-face { font-family: "Bebas Neue"; src: url("${archivo("fonts/BebasNeue-Regular.woff2")}") format("woff2"); }
@@ -41,7 +40,7 @@ body { width: 210mm; background: #14213d; color: #f5efe4; font-family: Outfit, s
 h1 { margin: 0; font-family: "Bebas Neue"; font-weight: 400; font-size: 25mm; line-height: .86; }
 h1 em { display: block; font-style: normal; color: #ffcc00; }
 .intro { margin: 7mm 0 6mm; max-width: 160mm; font-size: 5mm; line-height: 1.45; color: #c9ccd8; }
-ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 2.5mm; }
+ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2.5mm; }
 li { display: flex; align-items: center; gap: 3.5mm; padding: 4mm 4.5mm; background: #1c2b4d; border-left: 2mm solid var(--c); font-size: 4.2mm; font-weight: 500; line-height: 1.3; }
 li img { flex: none; width: 9mm; height: 9mm; }
 .acceso { margin-top: 8mm; display: flex; align-items: center; gap: 9mm; }
@@ -66,7 +65,7 @@ li img { flex: none; width: 9mm; height: 9mm; }
     <div>
       <h2>Registrad vuestro legado</h2>
       <p>Escanead el código con el móvil y dejad por escrito vuestro compromiso.</p>
-      <p>Dos minutos: datos de la empresa, contacto y los cuatro puntos.</p>
+      <p>Dos minutos: datos de la empresa, contacto y los tres puntos.</p>
     </div>
   </div>
   <p class="lema">El éxito no es reunirnos. <em>Es lo que construimos después.</em></p>

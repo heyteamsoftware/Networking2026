@@ -490,7 +490,7 @@ img { display: block; max-width: 100%; }
 .tt-legado::after { content: ""; position: absolute; right: 0; top: 0; width: 48px; height: 48px; background: var(--mesa-4); clip-path: polygon(0 0, 100% 100%, 0 100%); }
 .tt-lema { margin: 0; max-width: 15em; font-family: var(--display); font-size: clamp(1.9rem, 3.8vw, 2.7rem); line-height: 1; color: var(--arena); }
 .tt-lema em { font-style: normal; color: var(--mesa-4); }
-.tt-legado ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.tt-legado ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, auto); gap: 8px; }
 .tt-legado li { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--noche-2); font-size: 15px; font-weight: 500; color: var(--arena); }
 .tt-legado img { width: 28px; height: 28px; object-fit: contain; }
 
@@ -596,7 +596,7 @@ img { display: block; max-width: 100%; }
 .media-item.activo .media-item-titulo { color: var(--mesa-4); }
 
 /* ---------- El legado · Del encuentro a la acción ---------- */
-/* Sección en la web: texto, los cuatro pasos y acceso rápido con QR */
+/* Sección en la web: texto, los tres pasos y acceso rápido con QR */
 .legado { padding: 96px 0; background: var(--fondo-2); scroll-margin-top: 40px; }
 .legado-grid { display: grid; gap: 40px; align-items: center; }
 @media (min-width: 900px) { .legado-grid { grid-template-columns: 1.35fr 1fr; gap: 64px; } }
@@ -604,7 +604,7 @@ img { display: block; max-width: 100%; }
 .legado h2 { margin: 0 0 16px; font-family: var(--display); font-weight: 400; font-size: clamp(2.4rem, 5vw, 3.9rem); line-height: .98; color: var(--tinta); text-wrap: balance; }
 .legado .entradilla { margin: 0 0 22px; }
 .legado-pasos { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-@media (min-width: 640px) { .legado-pasos { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 640px) { .legado-pasos li { padding: 16px 20px; } }
 .legado-pasos li { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: var(--superficie); border-left: 6px solid var(--c); font-weight: 500; line-height: 1.35; }
 .legado-pasos img { flex: none; width: 30px; height: 30px; object-fit: contain; }
 .legado-lema { margin: 28px 0 0; max-width: 16em; font-family: var(--display); font-size: clamp(1.9rem, 3.8vw, 2.7rem); line-height: 1; color: var(--tinta); }

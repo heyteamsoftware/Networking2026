@@ -88,12 +88,12 @@ ssh -i <ruta>/servidor-apps.key ubuntu@129.151.249.242 "sudo cat /var/www/networ
 
 ## El legado · Del encuentro a la acción
 
-Después del encuentro, cada equipo registra su compromiso de colaboración: datos de la empresa, contacto, una necesidad o interés compartido, una acción para los próximos 30 días, una persona de contacto por cada parte y una fecha para revisar los avances.
+Después del encuentro, cada equipo registra su compromiso de colaboración: datos de la empresa, contacto, una necesidad o interés compartido, una acción para los próximos 30 días y una persona de contacto por cada parte.
 
 - **Enlace corto:** https://myappsserver.duckdns.org/Networking/legado
 - **QR:** `Networking/img/qr-legado.svg` (sale en la sección «Legado» de la web) y el cartel A4 para las mesas, `Networking/legado/legado-qr.pdf`. Se regeneran con `cd identidad && node legado.js`.
 - **Datos:** `legado/guardar.php` los guarda en `/var/www/networking_data/legado.csv`, fuera de la web, con las mismas protecciones que «Quiero participar» (campo trampa, fórmulas como texto, sin guardar IPs). Como el día del encuentro muchos equipos envían desde la misma wifi, el límite es de 20 envíos cada 10 minutos por conexión.
-- **Panel:** pestaña «Legado» (`panel/?legado=1`), con resumen, tabla, impresión, Excel y CSV. Las fechas de revisión se marcan en amarillo si llegan en los próximos 30 días y en rojo si ya han pasado. Lo que se borra pasa a `legado-papelera.csv` en el servidor.
+- **Panel:** pestaña «Legado» (`panel/?legado=1`), con resumen, tabla, impresión, Excel y CSV. Lo que se borra pasa a `legado-papelera.csv` en el servidor.
 
 ## Escaparate de empresas participantes
 
