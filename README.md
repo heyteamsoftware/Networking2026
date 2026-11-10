@@ -19,12 +19,14 @@ Networking/                 # la web que se publica
 ├── styles.css              # estilos con los colores y fuentes de la identidad
 ├── app.js                  # montaje del tangram, despiece con el scroll, cuenta atrás
 ├── participa.php           # recibe el formulario «Quiero participar como empresa»
+├── dafo/                   # «Análisis DAFO»: formulario de cada mesa (QR), respuestas cerradas en opciones.php
 ├── legado/                 # «El legado · Del encuentro a la acción»: formulario (QR) y guardar.php
-├── panel/                  # panel privado: solicitudes y legado (con contraseña)
+├── panel/                  # panel privado: solicitudes, legado y análisis DAFO (con contraseña)
 └── img/                    # isotipo, logo en negativo, símbolos de mesa (generados) y logo del CIFP
 
 identidad/
 ├── generar.js              # genera todos los SVG a partir de la geometría del tangram
+├── dafo.js                 # QR de las 10 mesas del DAFO (img/qr-dafo-N.svg) y carteles A4 (dafo/dafo-qr-mesas.pdf)
 ├── legado.js               # QR del legado (img/qr-legado.svg) y cartel A4 (legado/legado-qr.pdf)
 ├── fuentes/                # Bebas Neue y Outfit (OFL), TTF y WOFF2
 └── project/                # manual de identidad
@@ -94,6 +96,17 @@ Después del encuentro, cada equipo registra su compromiso de colaboración: dat
 - **QR:** `Networking/img/qr-legado.svg` (sale en la sección «Legado» de la web) y el cartel A4 para las mesas, `Networking/legado/legado-qr.pdf`. Se regeneran con `cd identidad && node legado.js`.
 - **Datos:** `legado/guardar.php` los guarda en `/var/www/networking_data/legado.csv`, fuera de la web, con las mismas protecciones que «Quiero participar» (campo trampa, fórmulas como texto, sin guardar IPs). Como el día del encuentro muchos equipos envían desde la misma wifi, el límite es de 20 envíos cada 10 minutos por conexión.
 - **Panel:** pestaña «Legado» (`panel/?legado=1`), con resumen, tabla, impresión, Excel y CSV. Lo que se borra pasa a `legado-papelera.csv` en el servidor.
+
+## Análisis DAFO del encuentro
+
+Cada mesa tiene su QR (`dafo/?mesa=1` … `dafo/?mesa=10`; hay 10 por si cambia la organización). Cada equipo marca entre 1 y 3 opciones cerradas en cada bloque (fortalezas, debilidades, oportunidades y amenazas) y el panel monta la matriz DAFO al momento.
+
+- **Respuestas cerradas:** se editan en `Networking/dafo/opciones.php`. Se guardan los códigos (F1, D3…), así que no conviene cambiar el sentido de una opción cuando ya hay respuestas.
+- **Datos:** `/var/www/networking_data/dafo.csv`, solo con la fecha, la mesa y los códigos. Es anónimo: sin datos personales.
+- **Panel:** pestaña «Análisis DAFO» (`panel/?dafo=1`). Matriz con porcentajes, filtro por mesa, «Lectura para exponer» (cruce de lo más votado: potenciar, mantener, corregir, afrontar), Excel, CSV e impresión. Se actualiza sola cada 10 s sin recargar la página.
+- **Presentar en pantalla:** `panel/?dafo=1&presentar=1`, a pantalla completa y en directo (cada 5 s), pensado para proyectar. Cabe en una pantalla de 1440 × 900 o más.
+- **Vaciar respuestas** (por ejemplo, tras un ensayo): botón al final de la sección. Antes guarda una copia en `copias/`.
+- **QR y carteles:** `cd identidad && node dafo.js`.
 
 ## Escaparate de empresas participantes
 

@@ -666,3 +666,31 @@ body.pagina-legado { background: var(--noche); color: var(--arena); }
 .legado-qr-codigo:hover, .legado-qr-codigo:focus-visible { transform: scale(1.04); box-shadow: 0 0 0 4px var(--mesa-4); }
 .legado-qr-codigo:focus-visible { outline: none; }
 .legado-pasos li, .lg-pasos li { min-height: 64px; }
+
+/* ---------- Análisis DAFO (dafo/?mesa=1…4): respuestas cerradas por mesa ---------- */
+.df-mesa-chip { margin-left: auto; padding: 6px 16px; border: 2px solid var(--c); border-radius: 999px; color: var(--arena); font-weight: 700; white-space: nowrap; }
+.df-hero h1 { font-size: clamp(2.8rem, 9vw, 5.2rem); }
+.df-hero .entradilla { max-width: 36em; }
+.df-hero .entradilla strong { color: var(--mesa-4); font-weight: 600; }
+.df-form { gap: 34px; }
+.df-f { --c: var(--mesa-3); } .df-d { --c: var(--mesa-2); } .df-o { --c: var(--mesa-4); } .df-a { --c: var(--mesa-1); }
+.form .df-bloque legend { width: 100%; }
+.df-bloque legend b { background: var(--c); }
+.df-f legend b, .df-a legend b { color: #fff; }
+.df-cuenta { margin-left: auto; padding: 5px 12px; border-radius: 999px; background: #101a33; color: #c9ccd8; font-family: var(--texto); font-size: .9rem; font-weight: 600; letter-spacing: 0; }
+.df-bloque.completo .df-cuenta { background: var(--c); color: var(--noche); }
+.df-f.completo .df-cuenta, .df-a.completo .df-cuenta { color: #fff; }
+.df-bloque.falta { outline: 2px solid #ff8a6b; outline-offset: 10px; border-radius: 2px; }
+.df-pregunta { margin: -6px 0 0; color: #dfe2ea; font-size: 1.05rem; }
+.df-pregunta span { display: inline-block; margin-left: 6px; font-size: .75rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #8a92aa; }
+.df-opciones, .df-mesas { display: grid; gap: 8px; }
+@media (min-width: 680px) { .df-opciones, .df-mesas { grid-template-columns: 1fr 1fr; } }
+.form .df-op { display: flex; align-items: flex-start; gap: 12px; padding: 13px 14px; border: 1.5px solid #3a4766; border-left: 6px solid var(--c); border-radius: 4px; background: #101a33; color: var(--arena); font-size: 1rem; font-weight: 500; line-height: 1.35; cursor: pointer; transition: background .15s ease, border-color .15s ease, opacity .15s ease; }
+.df-op input { flex: none; width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--c); }
+.df-op:hover { border-color: var(--c); }
+.df-op:has(input:checked) { border-color: var(--c); background: color-mix(in srgb, var(--c) 24%, #101a33); }
+.df-op:has(input:disabled) { opacity: .42; cursor: not-allowed; }
+.df-op:has(input:focus-visible) { outline: 3px solid var(--mesa-4); outline-offset: 2px; }
+.df-mesas { grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)) !important; }
+.df-op-mesa b { display: block; font-family: var(--display); font-size: 1.4rem; font-weight: 400; line-height: 1; color: var(--c); }
+.df-form > fieldset:first-of-type legend { padding-right: 46px; }

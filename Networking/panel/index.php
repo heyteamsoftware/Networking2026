@@ -1,7 +1,8 @@
 <?php
 // Networking 2026 — panel privado de solicitudes «Quiero participar como empresa».
 // Muestra, edita y descarga las solicitudes que guarda participa.php, y en la sección Legado
-// los compromisos «Del encuentro a la acción» que guarda legado/guardar.php. Lo que se borra
+// los compromisos «Del encuentro a la acción» que guarda legado/guardar.php, y en Análisis DAFO
+// la matriz DAFO del encuentro, en directo, con las respuestas de las mesas (dafo/guardar.php). Lo que se borra
 // va a una papelera (papelera.csv) desde la que se puede restaurar. Solo con contraseña:
 // su hash vive en el servidor (panel-clave.txt), nunca en el repositorio.
 
@@ -21,6 +22,8 @@ const CLAVES = ['fecha', 'empresa', 'sector', 'persona', 'cargo', 'correo', 'tel
 const CLAVES_PAPELERA = ['fecha', 'empresa', 'sector', 'persona', 'cargo', 'correo', 'telefono', 'modalidad', 'mesas', 'propuesta', 'logo', 'borrada'];
 define('LEGADO', $datos . '/legado.csv');
 define('LEGADO_PAPELERA', $datos . '/legado-papelera.csv'); // lo borrado del legado se guarda aquí, por si acaso
+define('DAFO', $datos . '/dafo.csv');
+require __DIR__ . '/../dafo/opciones.php'; // mesas y respuestas cerradas del DAFO
 const CABECERA_LEGADO = ['Fecha', 'Empresa', 'Sector', 'Persona de contacto', 'Cargo', 'Correo', 'Teléfono',
   'Necesidad o interés compartido', 'Acción en los próximos 30 días', 'Contacto por la empresa', 'Contacto por la otra parte'];
 const CABECERA_LEGADO_PAPELERA = [...CABECERA_LEGADO, 'Borrada el'];
@@ -47,7 +50,7 @@ header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: no-referrer');
 header('X-Robots-Tag: noindex, nofollow');
 header('Cache-Control: no-store');
-header("Content-Security-Policy: default-src 'none'; style-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'");
+header("Content-Security-Policy: default-src 'none'; style-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'");
 
 $https = ($_SERVER['HTTPS'] ?? '') !== '' && $_SERVER['HTTPS'] !== 'off';
 define('RUTA', rtrim(dirname($_SERVER['SCRIPT_NAME']), '/') . '/'); // /Networking/panel/
@@ -147,6 +150,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
   }
 
   if (in_array($accion, ['guardar', 'borrar', 'restaurar', 'borrar-legado'], true) && $dentro) gestionarSolicitud($accion);
+  if ($accion === 'vaciar-dafo' && $dentro) vaciarDafo();
   volver();
 }
 
@@ -206,6 +210,20 @@ if (isset($_GET['descargar'])) {
   header('Content-Disposition: attachment; filename="solicitudes-networking2026-' . date('Y-m-d') . '.csv"');
   header('Content-Length: ' . filesize(CSV));
   readfile(CSV);
+  exit;
+}
+
+// ---------- Con sesión: sección Análisis DAFO ----------
+if (isset($_GET['dafo'])) {
+  if (isset($_GET['descargar'])) {
+    if (!is_readable(DAFO)) volver('?dafo=1');
+    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Disposition: attachment; filename="dafo-networking2026-' . date('Y-m-d') . '.csv"');
+    header('Content-Length: ' . filesize(DAFO));
+    readfile(DAFO);
+    exit;
+  }
+  pintarDafo();
   exit;
 }
 
@@ -724,13 +742,256 @@ function descargarXlsx(array $filas, string $nombre, array $columnas, string $ho
   exit;
 }
 
-/** Barra superior con las dos secciones del panel y el botón de salir. */
+// ---------- Análisis DAFO ----------
+
+/** Respuestas del DAFO: [fecha, mesa, F, D, O, A] con los códigos separados por espacios. */
+function leerDafo(): array {
+  return parsear(leerTexto(DAFO), 2 + count(DAFO_BLOQUES));
+}
+
+/** Votos de cada opción y número de respuestas, para una mesa (o todas si $mesa es 0). */
+function contarDafo(array $filas, int $mesa): array {
+  $votos = [];
+  foreach (DAFO_BLOQUES as $letra => $b) $votos[$letra] = array_fill_keys(array_keys($b['opciones']), 0);
+  $n = 0;
+  foreach ($filas as $c) {
+    if ($mesa && (int)$c[1] !== $mesa) continue;
+    $n++;
+    foreach (array_keys(DAFO_BLOQUES) as $i => $letra) {
+      foreach (preg_split('/\s+/', trim((string)$c[2 + $i])) ?: [] as $codigo) {
+        if (isset($votos[$letra][$codigo])) $votos[$letra][$codigo]++;
+      }
+    }
+  }
+  // Cada bloque, de más a menos votada (a igualdad, en el orden de la lista)
+  foreach ($votos as $letra => $v) {
+    $orden = array_flip(array_keys($v));
+    uksort($v, fn($a, $b) => [$votos[$letra][$b], $orden[$a]] <=> [$votos[$letra][$a], $orden[$b]]);
+    $votos[$letra] = $v;
+  }
+  return [$votos, $n];
+}
+
+/** La opción más votada de un bloque (o null si nadie ha votado aún). */
+function primeraDafo(array $votos, string $letra): ?string {
+  $codigo = array_key_first($votos[$letra]);
+  return $votos[$letra][$codigo] > 0 ? DAFO_BLOQUES[$letra]['opciones'][$codigo] : null;
+}
+
+/** Matriz 2 × 2: cada opción con su barra y el porcentaje de equipos que la han marcado. */
+function pintarMatrizDafo(array $votos, int $n): void { ?>
+    <div class="dafo-matriz">
+      <?php foreach (DAFO_BLOQUES as $letra => $b): ?>
+        <article class="cuadrante q-<?= strtolower($letra) ?>">
+          <header>
+            <b><?= $letra ?></b>
+            <div><h2><?= e($b['titulo']) ?></h2><span><?= e($b['origen']) ?></span></div>
+          </header>
+          <ol>
+            <?php $puesto = 0; foreach ($votos[$letra] as $codigo => $v): $puesto++; $pct = $n ? (int)round($v * 100 / $n) : 0; ?>
+              <li class="<?= $v > 0 && $puesto <= 3 ? 'destacada' : '' ?>">
+                <span class="op"><?= e($b['opciones'][$codigo]) ?></span>
+                <progress max="100" value="<?= $pct ?>" aria-label="<?= $pct ?> %"></progress>
+                <span class="pct"><?= $pct ?> %<small><?= $v ?></small></span>
+              </li>
+            <?php endforeach; ?>
+          </ol>
+        </article>
+      <?php endforeach; ?>
+    </div>
+<?php }
+
+/** Lectura cruzada lista para exponer: las opciones más votadas, combinadas como en una matriz CAME. */
+function pintarLecturaDafo(array $votos, int $n): void {
+  if (!$n) return;
+  [$f, $d, $o, $a] = [primeraDafo($votos, 'F'), primeraDafo($votos, 'D'), primeraDafo($votos, 'O'), primeraDafo($votos, 'A')];
+  $lineas = [
+    ['Potenciar', 'q-f', "Apoyarnos en «{$f}» para aprovechar «{$o}»."],
+    ['Mantener', 'q-o', "Usar «{$f}» para frenar «{$a}»."],
+    ['Corregir', 'q-d', "Mejorar «{$d}» aprovechando «{$o}»."],
+    ['Afrontar', 'q-a', "Evitar que «{$d}» se sume a «{$a}»."],
+  ];
+  ?>
+    <section class="dafo-lectura" aria-label="Lectura para exponer">
+      <h2>Lectura para exponer</h2>
+      <ul>
+        <?php foreach ($lineas as [$verbo, $clase, $texto]): ?>
+          <li class="<?= $clase ?>"><b><?= $verbo ?></b><?= e($texto) ?></li>
+        <?php endforeach; ?>
+      </ul>
+    </section>
+<?php }
+
+/** Lo que cambia con cada respuesta: recuento, filtro por mesa, matriz y lectura. */
+function pintarVivoDafo(array $filas, int $mesa, bool $presentar): void {
+  [$votos, $n] = contarDafo($filas, $mesa);
+  $porMesa = array_fill_keys(array_keys(DAFO_MESAS), 0);
+  foreach ($filas as $c) if (isset($porMesa[(int)$c[1]])) $porMesa[(int)$c[1]]++;
+  $ambito = $mesa ? 'Mesa ' . $mesa : 'Todas las mesas';
+  $respuestas = $n . ' ' . ($n === 1 ? 'respuesta' : 'respuestas');
+  if ($presentar): ?>
+    <p class="en-directo"><i aria-hidden="true"></i><?= $respuestas ?> · en directo · <?= date('H:i:s') ?></p>
+  <?php else: ?>
+    <p class="solo-imprimir">Networking 2026 · Análisis DAFO del encuentro · <?= e($ambito) ?> · <?= $respuestas ?> · <?= date('d/m/Y H:i') ?></p>
+    <nav class="dafo-mesas" aria-label="Filtrar por mesa">
+      <a href="?dafo=1" <?= !$mesa ? 'aria-current="page"' : '' ?>>Todas <b><?= count($filas) ?></b></a>
+      <?php foreach (array_keys(DAFO_MESAS) as $m): ?>
+        <a class="mesa-<?= dafoColor($m) ?>" href="?dafo=1&amp;mesa=<?= $m ?>" <?= $mesa === $m ? 'aria-current="page"' : '' ?>>Mesa <?= $m ?> <b><?= $porMesa[$m] ?></b></a>
+      <?php endforeach; ?>
+    </nav>
+    <p class="cuenta"><span class="punto-directo" aria-hidden="true"></span><strong><?= $respuestas ?></strong> · en directo, se actualiza sola (última vez a las <?= date('H:i:s') ?>). El porcentaje es la parte de los equipos que ha marcado cada opción.</p>
+  <?php endif;
+  if ($n) {
+    pintarMatrizDafo($votos, $n);
+    pintarLecturaDafo($votos, $n);
+  } else { ?>
+    <p class="vacio"><?= $presentar ? 'Esperando las primeras respuestas de las mesas…' : 'Todavía no hay respuestas' . ($mesa ? ' de esta mesa' : '') . '. Cada mesa tiene su QR: al escanearlo, el equipo marca hasta ' . DAFO_MAX . ' opciones por bloque y la matriz aparece aquí al momento.' ?></p>
+  <?php }
+}
+
+/** Sección Análisis DAFO: matriz en directo, por mesa o de todo el encuentro, y modo presentación. */
+function pintarDafo(): void {
+  $filas = leerDafo();
+  $mesa = (int)($_GET['mesa'] ?? 0);
+  if (!isset(DAFO_MESAS[$mesa])) $mesa = 0;
+  $presentar = isset($_GET['presentar']);
+  $q = fn(array $extra = []) => '?' . http_build_query(['dafo' => 1] + ($mesa ? ['mesa' => $mesa] : []) + $extra);
+
+  if (($_GET['exportar'] ?? '') === 'xlsx') {
+    $columnas = [['Fecha', 'fecha', 20], ['Mesa', 'mesa', 38]];
+    foreach (DAFO_BLOQUES as $letra => $b) $columnas[] = [$b['titulo'], $letra, 70];
+    $hoja = [];
+    foreach (array_reverse($filas) as $c) {
+      if ($mesa && (int)$c[1] !== $mesa) continue;
+      $r = ['fecha' => $c[0], 'mesa' => 'Mesa ' . $c[1]];
+      foreach (array_keys(DAFO_BLOQUES) as $i => $letra) {
+        $r[$letra] = implode(' · ', array_map(fn($cod) => DAFO_BLOQUES[$letra]['opciones'][$cod] ?? $cod, preg_split('/\s+/', trim((string)$c[2 + $i])) ?: []));
+      }
+      $hoja[] = $r;
+    }
+    descargarXlsx($hoja, 'dafo-networking2026' . ($mesa ? '-mesa' . $mesa : '') . '-' . date('Y-m-d') . '.xlsx', $columnas, 'DAFO');
+  }
+
+  // Solo la parte que cambia: la pide panel.js cada pocos segundos, sin recargar la página
+  // (así la pantalla completa no se pierde al actualizar)
+  if (isset($_GET['fragmento'])) {
+    header('X-Dafo-Vivo: 1');
+    pintarVivoDafo($filas, $mesa, $presentar);
+    exit;
+  }
+  $vivo = $q(['fragmento' => 1] + ($presentar ? ['presentar' => 1] : []));
+  $ambito = $mesa ? 'Mesa ' . $mesa : 'Todas las mesas';
+  $flash = $_SESSION['flash'] ?? null;
+  unset($_SESSION['flash']);
+
+  // ----- Modo presentación: pantalla completa, letra grande, se actualiza cada 5 s -----
+  if ($presentar) {
+    pintarCabecera('Análisis DAFO', 'panel presentar');
+    ?>
+  <main class="dafo-pantalla">
+    <header class="dafo-pantalla-cabeza">
+      <div>
+        <p class="etiqueta">Networking 2026 · Análisis DAFO del encuentro</p>
+        <h1><?= e($ambito) ?></h1>
+      </div>
+      <nav class="dafo-pantalla-nav" aria-label="Mesas">
+        <a href="?dafo=1&amp;presentar=1" <?= !$mesa ? 'aria-current="page"' : '' ?>>Todas</a>
+        <?php foreach (array_keys(DAFO_MESAS) as $m): ?>
+          <a href="?dafo=1&amp;mesa=<?= $m ?>&amp;presentar=1" <?= $mesa === $m ? 'aria-current="page"' : '' ?>>Mesa <?= $m ?></a>
+        <?php endforeach; ?>
+        <button type="button" data-pantalla>Pantalla completa</button>
+        <a href="<?= e($q()) ?>">Salir</a>
+      </nav>
+    </header>
+    <div class="dafo-vivo" data-vivo="<?= e($vivo) ?>" data-cada="5"><?php pintarVivoDafo($filas, $mesa, true); ?></div>
+  </main>
+  <script src="panel.js"></script>
+</body></html>
+    <?php
+    return;
+  }
+
+  // ----- Vista normal del panel (la matriz se actualiza sola cada 10 s) -----
+  pintarCabecera('Análisis DAFO', 'panel');
+  pintarBarra('dafo');
+  ?>
+  <main class="wrap">
+    <?php if ($flash): ?>
+      <p class="aviso <?= $flash['tipo'] === 'error' ? 'aviso-error' : '' ?>" role="status"><?= e($flash['texto']) ?></p>
+    <?php endif; ?>
+    <section class="cabeza">
+      <div>
+        <p class="etiqueta">Análisis DAFO del encuentro · <?= e($ambito) ?></p>
+        <h1>Análisis DAFO</h1>
+      </div>
+      <div class="acciones">
+        <a class="btn btn-primario" href="<?= e($q(['presentar' => 1])) ?>">Presentar en pantalla</a>
+        <a class="btn btn-borde" href="../dafo/dafo-qr-mesas.pdf" target="_blank" rel="noopener">QR de las mesas</a>
+        <?php if ($filas): ?>
+          <button type="button" class="btn btn-borde" data-imprimir>Imprimir / PDF</button>
+          <a class="btn btn-borde" href="<?= e($q(['exportar' => 'xlsx'])) ?>" download>Excel</a>
+          <a class="btn btn-borde" href="?dafo=1&amp;descargar=1" download>CSV</a>
+        <?php endif; ?>
+      </div>
+    </section>
+
+    <div class="dafo-vivo" data-vivo="<?= e($vivo) ?>" data-cada="10"><?php pintarVivoDafo($filas, $mesa, false); ?></div>
+
+    <section class="dafo-qr" aria-label="Código QR de cada mesa">
+      <h2>QR de cada mesa</h2>
+      <div class="dafo-qr-lista">
+        <?php foreach (array_keys(DAFO_MESAS) as $m): ?>
+          <a class="dafo-qr-mesa mesa-<?= dafoColor($m) ?>" href="../dafo/?mesa=<?= $m ?>" target="_blank" rel="noopener">
+            <img src="../img/qr-dafo-<?= $m ?>.svg" alt="QR de la mesa <?= $m ?>" width="120" height="120">
+            <span><b>Mesa <?= $m ?></b>Abrir el formulario</span>
+          </a>
+        <?php endforeach; ?>
+      </div>
+    </section>
+
+    <?php if ($filas): ?>
+      <form method="post" action="./" class="dafo-vaciar" data-confirmar="¿Vaciar todas las respuestas del DAFO? Se guarda una copia en el servidor, pero la matriz empezará de cero.">
+        <input type="hidden" name="accion" value="vaciar-dafo">
+        <input type="hidden" name="csrf" value="<?= e($_SESSION['csrf']) ?>">
+        <button class="btn-peligro" type="submit">Vaciar respuestas (por ejemplo, tras un ensayo)</button>
+      </form>
+    <?php endif; ?>
+  </main>
+  <script src="panel.js"></script>
+</body></html>
+  <?php
+}
+
+/** Deja el DAFO a cero. Antes guarda una copia en copias/. Bloquea el archivo igual que dafo/guardar.php. */
+function vaciarDafo(): never {
+  $error = conCerrojo(function () {
+    if (!is_file(DAFO)) return null;
+    $f = fopen(DAFO, 'c+');
+    if (!$f || !flock($f, LOCK_EX)) return 'No se ha podido abrir el archivo del DAFO.';
+    $texto = (string)stream_get_contents($f);
+    if (trim($texto) !== '') {
+      if (!is_dir(COPIAS)) mkdir(COPIAS, 0750, true);
+      $copia = COPIAS . '/dafo-' . date('Ymd-His') . '-' . bin2hex(random_bytes(3)) . '.csv';
+      file_put_contents($copia, $texto);
+      chmod($copia, 0600);
+    }
+    ftruncate($f, 0);
+    flock($f, LOCK_UN);
+    fclose($f);
+    return null;
+  });
+  $_SESSION['flash'] = $error ? ['tipo' => 'error', 'texto' => $error] : ['tipo' => 'ok', 'texto' => 'Respuestas del DAFO vaciadas. Queda una copia en el servidor (carpeta copias).'];
+  volver('?dafo=1');
+}
+
+/** Barra superior con las secciones del panel y el botón de salir. */
 function pintarBarra(string $actual): void { ?>
   <header class="barra">
     <a class="marca" href="./"><img src="../img/isotipo.svg" alt="" width="30" height="30"><span>Networking <b>2026</b></span></a>
     <nav class="barra-nav" aria-label="Secciones del panel">
       <a href="./" <?= $actual === 'solicitudes' ? 'aria-current="page"' : '' ?>>Solicitudes</a>
       <a href="?legado=1" <?= $actual === 'legado' ? 'aria-current="page"' : '' ?>>Legado</a>
+      <a href="?dafo=1" <?= $actual === 'dafo' ? 'aria-current="page"' : '' ?>><span class="largo">Análisis&nbsp;</span>DAFO</a>
     </nav>
     <form method="post" action="./" class="salir">
       <input type="hidden" name="accion" value="salir">
@@ -827,7 +1088,7 @@ function pintarLegado(): void {
 <?php
 }
 
-function pintarCabecera(string $titulo, string $clase): void { ?>
+function pintarCabecera(string $titulo, string $clase, int $recarga = 0): void { ?>
 <!doctype html>
 <html lang="es">
 <head>
@@ -835,9 +1096,10 @@ function pintarCabecera(string $titulo, string $clase): void { ?>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title><?= e($titulo) ?> — Networking 2026</title>
+  <?php if ($recarga > 0): ?><meta http-equiv="refresh" content="<?= $recarga ?>"><?php endif; ?>
   <meta name="theme-color" content="#14213d">
   <link rel="icon" href="../img/isotipo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="panel.css?v=20261105c">
+  <link rel="stylesheet" href="panel.css?v=20261110c">
 </head>
 <body class="<?= e($clase) ?>">
 <?php }

@@ -201,3 +201,150 @@ body.acceso { background: var(--noche); color: var(--arena); }
 .barra-nav a:hover { border-color: var(--mesa-4); background: rgba(255,204,0,.14); color: var(--arena); }
 .barra-nav a[aria-current="page"] { border-color: var(--mesa-4); background: var(--mesa-4); color: var(--noche); box-shadow: 0 4px 14px -4px rgba(255,204,0,.55); }
 @media (max-width: 520px) { .barra-nav { gap: 6px; padding-left: 10px; margin-left: 0; } .barra-nav a { min-height: 40px; padding: 6px 14px; font-size: .95rem; } }
+
+/* ---------- Análisis DAFO ---------- */
+.barra-nav .largo { display: none; }
+@media (min-width: 760px) { .barra-nav .largo { display: inline; } }
+@media (max-width: 520px) { .barra-nav a { padding: 6px 11px; font-size: .9rem; } .barra-nav { gap: 5px; } }
+.q-f { --c: var(--mesa-3); --ct: var(--mesa-3-texto); }
+.q-d { --c: var(--mesa-2); --ct: var(--mesa-2-texto); }
+.q-o { --c: var(--mesa-4); --ct: var(--mesa-4-texto); }
+.q-a { --c: var(--mesa-1); --ct: var(--mesa-1-texto); }
+
+.dafo-mesas { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 0; }
+.dafo-mesas a { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 6px 16px; border: 2px solid var(--c, var(--tinta)); border-left-width: 8px; border-radius: 4px; background: var(--superficie); color: var(--tinta); font-weight: 600; text-decoration: none; }
+.dafo-mesas a b { min-width: 26px; padding: 1px 8px; border-radius: 99px; background: var(--fondo-2); font-size: .85rem; text-align: center; }
+.dafo-mesas a:hover { background: var(--fondo-2); }
+.dafo-mesas a[aria-current="page"] { background: var(--noche); border-color: var(--noche); border-left-color: var(--c, var(--mesa-4)); color: var(--arena); }
+.dafo-mesas a[aria-current="page"] b { background: var(--mesa-4); color: var(--noche); }
+.punto-directo { display: inline-block; width: 9px; height: 9px; margin-right: 8px; border-radius: 50%; background: #2fa84f; animation: directo 1.6s ease-in-out infinite; vertical-align: middle; }
+@keyframes directo { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+
+.dafo-matriz { display: grid; gap: 14px; }
+@media (min-width: 900px) { .dafo-matriz { grid-template-columns: 1fr 1fr; } }
+.cuadrante { min-width: 0; padding: 18px 20px 20px; background: var(--superficie); border: 1px solid var(--linea); border-top: 8px solid var(--c); border-radius: 4px; }
+.cuadrante header { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.cuadrante header > b { display: grid; place-items: center; flex: none; width: 52px; height: 52px; padding-top: 4px; background: var(--c); color: #fff; font-family: var(--display); font-size: 40px; font-weight: 400; line-height: 1; }
+.q-o header > b { color: var(--noche); }
+.cuadrante h2 { margin: 0; font-family: var(--display); font-size: 34px; font-weight: 400; line-height: 1; }
+.cuadrante header span { font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--tinta-suave); }
+.cuadrante ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.cuadrante li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(70px, 150px) 56px; align-items: center; gap: 12px; color: var(--tinta-suave); }
+.cuadrante li.destacada { color: var(--tinta); font-weight: 700; }
+.cuadrante .op { line-height: 1.3; }
+.cuadrante .pct { font-variant-numeric: tabular-nums; text-align: right; font-weight: 700; color: var(--tinta); white-space: nowrap; }
+.cuadrante .pct small { display: block; font-size: 11px; font-weight: 500; color: var(--tinta-suave); }
+.cuadrante .pct small::after { content: " votos"; }
+.cuadrante progress { -webkit-appearance: none; appearance: none; width: 100%; height: 12px; border: 0; border-radius: 99px; background: var(--fondo-2); overflow: hidden; }
+.cuadrante progress::-webkit-progress-bar { background: var(--fondo-2); border-radius: 99px; }
+.cuadrante progress::-webkit-progress-value { background: var(--c); border-radius: 99px; }
+.cuadrante progress::-moz-progress-bar { background: var(--c); border-radius: 99px; }
+.cuadrante li:not(.destacada) progress::-webkit-progress-value { opacity: .45; }
+.cuadrante li:not(.destacada) progress::-moz-progress-bar { opacity: .45; }
+@media (max-width: 560px) {
+  .cuadrante li { grid-template-columns: minmax(0, 1fr) 56px; row-gap: 4px; }
+  .cuadrante .op { grid-column: 1 / -1; }
+}
+
+.dafo-lectura { margin-top: 14px; padding: 20px 22px; background: var(--noche); color: var(--arena); border-radius: 4px; }
+.dafo-lectura h2 { margin: 0 0 12px; font-family: var(--display); font-size: 30px; font-weight: 400; line-height: 1; color: var(--mesa-4); }
+.dafo-lectura ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+@media (min-width: 900px) { .dafo-lectura ul { grid-template-columns: 1fr 1fr; } }
+.dafo-lectura li { padding: 10px 14px; border-left: 6px solid var(--c); background: var(--noche-2); line-height: 1.4; }
+.dafo-lectura li b { display: block; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--c); }
+.dafo-lectura .q-f b { color: #7fb6ee; }
+.dafo-lectura .q-a b { color: #f08b75; }
+
+.dafo-qr { margin-top: 40px; }
+.dafo-qr h2 { margin: 0 0 12px; font-family: var(--display); font-size: 30px; font-weight: 400; line-height: 1; }
+.dafo-qr-lista { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+.dafo-qr-mesa { display: flex; align-items: center; gap: 14px; padding: 12px; background: var(--superficie); border: 1px solid var(--linea); border-left: 8px solid var(--c); border-radius: 4px; color: var(--tinta); text-decoration: none; }
+.dafo-qr-mesa:hover { background: #fffdf8; box-shadow: 0 4px 14px -6px rgba(20,33,61,.3); }
+.dafo-qr-mesa img { flex: none; width: 96px; height: 96px; padding: 6px; background: #fff; }
+.dafo-qr-mesa b { display: block; font-family: var(--display); font-size: 26px; font-weight: 400; line-height: 1; color: var(--ct); }
+.dafo-qr-mesa span { font-size: 14px; line-height: 1.35; }
+.dafo-vaciar { margin-top: 28px; }
+
+/* Modo presentación: para proyectar en la sala */
+body.presentar { min-height: 100vh; background: var(--noche); color: var(--arena); }
+.dafo-pantalla { padding: clamp(16px, 2.2vw, 40px); }
+.dafo-pantalla-cabeza { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px 28px; margin-bottom: clamp(12px, 1.6vw, 28px); }
+.dafo-pantalla-cabeza .etiqueta { color: var(--mesa-4); }
+.dafo-pantalla-cabeza h1 { font-size: clamp(36px, 4.4vw, 80px); color: var(--arena); }
+.dafo-pantalla-nav { display: flex; flex-wrap: wrap; gap: 6px; margin-left: auto; }
+.dafo-pantalla-nav a, .dafo-pantalla-nav button { padding: 6px 14px; border: 1.5px solid rgba(245,239,228,.45); border-radius: 999px; background: transparent; color: #c9ccd8; font: 600 .85rem var(--texto); text-decoration: none; cursor: pointer; }
+.dafo-pantalla-nav a:hover, .dafo-pantalla-nav button:hover { border-color: var(--mesa-4); color: var(--arena); }
+.dafo-pantalla-nav a[aria-current="page"] { background: var(--mesa-4); border-color: var(--mesa-4); color: var(--noche); }
+.presentar :focus-visible { outline-color: var(--mesa-4); }
+.en-directo { margin: 0 0 clamp(10px, 1.2vw, 20px); font-size: clamp(14px, 1.2vw, 20px); font-weight: 600; color: #c9ccd8; }
+.en-directo i { display: inline-block; width: .7em; height: .7em; margin-right: 10px; border-radius: 50%; background: #e5484d; animation: directo 1.6s ease-in-out infinite; }
+.presentar .dafo-matriz { grid-template-columns: 1fr 1fr; gap: clamp(10px, 1.2vw, 20px); }
+.presentar .cuadrante { padding: clamp(14px, 1.4vw, 26px); background: var(--noche-2); border: 0; border-top: 10px solid var(--c); }
+.presentar .cuadrante header > b { width: clamp(44px, 3.6vw, 68px); height: clamp(44px, 3.6vw, 68px); font-size: clamp(34px, 2.8vw, 54px); }
+.presentar .cuadrante h2 { font-size: clamp(30px, 2.8vw, 54px); color: var(--arena); }
+.presentar .cuadrante header span { color: #9aa0b4; font-size: clamp(11px, .8vw, 15px); }
+.presentar .cuadrante ol { gap: clamp(6px, .7vw, 14px); }
+.presentar .cuadrante li { grid-template-columns: minmax(0, 1fr) minmax(80px, 12vw) clamp(56px, 5vw, 90px); font-size: clamp(14px, 1.15vw, 22px); color: #9aa0b4; }
+.presentar .cuadrante li.destacada { color: var(--arena); }
+.presentar .cuadrante .pct { color: var(--arena); font-size: 1.05em; }
+.presentar .cuadrante .pct small { color: #9aa0b4; font-size: .62em; }
+.presentar .cuadrante progress { height: clamp(10px, .9vw, 18px); background: rgba(245,239,228,.1); }
+.presentar .cuadrante progress::-webkit-progress-bar { background: rgba(245,239,228,.1); }
+.presentar .dafo-lectura { margin-top: clamp(10px, 1.2vw, 20px); padding: clamp(14px, 1.4vw, 26px); background: #0f1a33; }
+.presentar .dafo-lectura h2 { font-size: clamp(26px, 2.2vw, 42px); }
+.presentar .dafo-lectura ul { grid-template-columns: 1fr 1fr; }
+.presentar .dafo-lectura li { font-size: clamp(14px, 1.1vw, 21px); }
+.presentar .vacio { background: var(--noche-2); border-color: #34446b; color: #c9ccd8; font-size: clamp(18px, 1.6vw, 28px); }
+@media (max-width: 760px) { .presentar .dafo-matriz, .presentar .dafo-lectura ul { grid-template-columns: 1fr; } }
+
+@media print {
+  .dafo-mesas, .dafo-qr, .dafo-vaciar, .punto-directo, .cuenta, .dafo-pantalla-nav { display: none !important; }
+  .dafo-matriz { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .cuadrante { padding: 10px 12px; break-inside: avoid; }
+  .cuadrante h2 { font-size: 24px; }
+  .cuadrante header > b { width: 36px; height: 36px; font-size: 28px; }
+  .cuadrante li { grid-template-columns: minmax(0, 1fr) 90px 48px; font-size: 10px; gap: 8px; }
+  .dafo-lectura { margin-top: 8px; padding: 10px 12px; break-inside: avoid; }
+  .dafo-lectura ul { grid-template-columns: 1fr 1fr; }
+  .dafo-lectura li { font-size: 10px; }
+}
+
+/* Presentación: todo en una pantalla, medidas según la altura disponible */
+.dafo-pantalla { min-height: 100vh; display: flex; flex-direction: column; padding: 2.2vh 2vw; }
+.dafo-pantalla-cabeza { margin-bottom: 1.2vh; }
+.dafo-pantalla-cabeza .etiqueta { font-size: min(13px, 1.6vh); margin-bottom: .4vh; }
+.dafo-pantalla-cabeza h1 { font-size: min(4.4vw, 6.2vh); }
+.en-directo { margin-bottom: 1.2vh; font-size: min(1.2vw, 2vh); }
+.presentar .dafo-vivo { flex: 1; display: flex; flex-direction: column; }
+.presentar .dafo-matriz { flex: 1; gap: 1.4vh 1.2vw; }
+.presentar .cuadrante { padding: 1.6vh 1.4vw; border-top-width: .9vh; }
+.presentar .cuadrante header { margin-bottom: 1vh; gap: 1vw; }
+.presentar .cuadrante header > b { width: 5.4vh; height: 5.4vh; font-size: 4.4vh; }
+.presentar .cuadrante h2 { font-size: min(2.8vw, 4.6vh); }
+.presentar .cuadrante header span { font-size: min(.8vw, 1.4vh); }
+.presentar .cuadrante ol { gap: .9vh; }
+.presentar .cuadrante li { grid-template-columns: minmax(0, 1fr) 11vw 4.6vw; font-size: min(1.15vw, 2.05vh); line-height: 1.2; }
+.presentar .cuadrante progress { height: 1.3vh; }
+.presentar .cuadrante .pct small { font-size: .6em; }
+.presentar .dafo-lectura { margin-top: 1.4vh; padding: 1.4vh 1.4vw; }
+.presentar .dafo-lectura h2 { margin-bottom: .8vh; font-size: min(2.2vw, 3.4vh); }
+.presentar .dafo-lectura ul { grid-template-columns: repeat(4, 1fr); gap: .8vw; }
+.presentar .dafo-lectura li { padding: .9vh .8vw; font-size: min(.95vw, 1.75vh); }
+@media (max-width: 760px) { .presentar .dafo-lectura ul { grid-template-columns: 1fr; } .presentar .cuadrante li { font-size: 14px; grid-template-columns: minmax(0, 1fr) 70px 54px; } }
+.dafo-pantalla { padding-bottom: 1vh; }
+.presentar .dafo-matriz { flex: none; }
+.presentar .dafo-pantalla-cabeza { flex-wrap: nowrap; align-items: center; margin-bottom: .6vh; }
+.presentar .dafo-pantalla-nav { flex-wrap: wrap; justify-content: flex-end; max-width: 62vw; }
+.presentar .dafo-pantalla-nav a, .presentar .dafo-pantalla-nav button { padding: .4vh .8vw; font-size: min(.8vw, 1.5vh); }
+.presentar .en-directo { margin-bottom: .8vh; }
+.presentar .cuadrante li { gap: .8vw; }
+.presentar .cuadrante .pct small { display: none; }
+.presentar .cuadrante header { margin-bottom: .8vh; }
+.presentar .cuadrante header > b { width: 4.6vh; height: 4.6vh; font-size: 3.8vh; }
+.presentar .cuadrante h2 { font-size: min(2.6vw, 4vh); }
+.presentar .cuadrante ol { gap: .75vh; }
+.presentar .dafo-lectura { margin-top: 1vh; padding: 1vh 1.2vw; }
+.presentar .dafo-lectura h2 { font-size: min(1.8vw, 2.8vh); margin-bottom: .6vh; }
+.presentar .dafo-lectura li { font-size: min(.9vw, 1.6vh); padding: .7vh .7vw; }
+.presentar .dafo-lectura li b { font-size: min(.75vw, 1.3vh); }
+@media (max-width: 760px) { .presentar .dafo-pantalla-cabeza { flex-wrap: wrap; } .presentar .dafo-pantalla-nav { max-width: none; } .presentar .dafo-pantalla-nav a, .presentar .dafo-pantalla-nav button { font-size: 13px; padding: 5px 10px; } .presentar .cuadrante li { font-size: 14px; } .presentar .dafo-lectura li { font-size: 14px; } }
