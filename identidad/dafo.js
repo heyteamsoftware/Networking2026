@@ -1,6 +1,7 @@
 // ANÁLISIS DAFO · un QR por mesa y un cartel A4 por mesa para imprimir.
 // Uso: cd identidad && node dafo.js
-// Salida: ../Networking/img/qr-dafo-1…10.svg (para el panel) y ../Networking/dafo/dafo-qr-mesas.pdf (10 páginas).
+// Salida: ../Networking/img/qr-dafo-1…10.svg (para el panel), un PDF por mesa en ../Networking/dafo/carteles/
+// (dafo-mesa-01.pdf … dafo-mesa-10.pdf) y todos juntos en ../Networking/dafo/dafo-qr-mesas.pdf.
 const fs = require("fs");
 const path = require("path");
 const os = require("os");
@@ -37,7 +38,7 @@ const pagina = ([n, color, sobre]) => `<section class="hoja" style="--c:${color}
   <div class="pie"><img src="${archivo("img/logo-horizontal-negativo.svg")}" alt=""><span>20 de noviembre de 2026 · CIFP Tony Gallardo</span></div>
 </section>`;
 
-const html = `<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Análisis DAFO · QR de las mesas — Networking 2026</title><style>
+const documento = (mesas, titulo) => `<!doctype html><html lang="es"><head><meta charset="utf-8"><title>${titulo} — Networking 2026</title><style>
 @font-face { font-family: "Bebas Neue"; src: url("${archivo("fonts/BebasNeue-Regular.woff2")}") format("woff2"); }
 @font-face { font-family: "Outfit"; font-weight: 100 900; src: url("${archivo("fonts/Outfit-Variable.woff2")}") format("woff2"); }
 @page { size: 210mm 297mm; margin: 0 }
@@ -69,15 +70,15 @@ li b { display: grid; place-items: center; width: 9mm; height: 9mm; padding-top:
 .pie { margin: 0 -16mm; padding: 6mm 16mm 6mm 21mm; background: #0f1a33; display: flex; align-items: center; justify-content: space-between; }
 .pie img { height: 15mm; }
 .pie span { font-size: 3.6mm; color: #b4b8c8; }
-</style></head><body>${MESAS.map(pagina).join("")}</body></html>`;
+</style></head><body>${mesas.map(pagina).join("")}</body></html>`;
 
-(async () => {
-  const tmp = path.join(os.tmpdir(), "dafo-pdf");
-  fs.mkdirSync(tmp, { recursive: true });
-  const htmlPath = path.join(tmp, "dafo-qr-mesas.html"), salida = path.join(WEB, "dafo", "dafo-qr-mesas.pdf");
+// Edge actual solo exporta con «--headless» y un perfil propio, y acaba de escribir el PDF después de cerrarse
+const tmp = path.join(os.tmpdir(), "dafo-pdf");
+async function exportar(html, salida) {
+  fs.mkdirSync(path.dirname(salida), { recursive: true });
+  const htmlPath = path.join(tmp, path.basename(salida, ".pdf") + ".html");
   fs.writeFileSync(htmlPath, html);
   if (fs.existsSync(salida)) fs.unlinkSync(salida);
-  // Edge actual solo exporta con «--headless» y un perfil propio, y acaba de escribir el PDF después de cerrarse
   execFileSync(P.navegador(), ["--headless", "--disable-gpu", "--no-first-run", "--user-data-dir=" + path.join(tmp, "perfil"), "--no-pdf-header-footer",
     "--allow-file-access-from-files", "--print-to-pdf=" + salida, "file:///" + htmlPath.split(path.sep).join("/")], { stdio: "ignore", timeout: 180000 });
   let antes = -1;
@@ -87,6 +88,17 @@ li b { display: grid; place-items: center; width: 9mm; height: 9mm; padding-top:
     if (t > 0 && t === antes) break;
     antes = t;
   }
-  if (!fs.existsSync(salida)) throw new Error("No se ha creado dafo-qr-mesas.pdf");
-  console.log("✓ dafo/dafo-qr-mesas.pdf");
+  if (!fs.existsSync(salida)) throw new Error("No se ha creado " + salida);
+  fs.unlinkSync(htmlPath);
+  console.log("✓", path.relative(WEB, salida).split(path.sep).join("/"));
+}
+
+(async () => {
+  fs.mkdirSync(tmp, { recursive: true });
+  // Un PDF independiente por mesa, cada uno con su propio QR
+  for (const m of MESAS) {
+    await exportar(documento([m], `Análisis DAFO · Mesa ${m[0]}`), path.join(WEB, "dafo", "carteles", `dafo-mesa-${String(m[0]).padStart(2, "0")}.pdf`));
+  }
+  // Y todas las mesas en un solo PDF, para imprimirlas de una vez
+  await exportar(documento(MESAS, "Análisis DAFO · QR de las mesas"), path.join(WEB, "dafo", "dafo-qr-mesas.pdf"));
 })();

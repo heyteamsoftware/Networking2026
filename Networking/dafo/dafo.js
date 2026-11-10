@@ -40,8 +40,6 @@
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     aviso.hidden = true;
-    var mesa = form.querySelector("[name=mesa]:checked, input[type=hidden][name=mesa]");
-    if (!mesa) { error("Elige en qué mesa estáis.", form.querySelector(".df-mesas").closest("fieldset")); return; }
     for (var i = 0; i < bloques.length; i++) {
       if (!bloques[i].querySelector("input:checked")) {
         error("Marca al menos una opción en " + bloques[i].dataset.titulo + ".", bloques[i]);

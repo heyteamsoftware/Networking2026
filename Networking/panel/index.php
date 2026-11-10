@@ -926,7 +926,7 @@ function pintarDafo(): void {
       </div>
       <div class="acciones">
         <a class="btn btn-primario" href="<?= e($q(['presentar' => 1])) ?>">Presentar en pantalla</a>
-        <a class="btn btn-borde" href="../dafo/dafo-qr-mesas.pdf" target="_blank" rel="noopener">QR de las mesas</a>
+        <a class="btn btn-borde" href="../dafo/dafo-qr-mesas.pdf" target="_blank" rel="noopener">Todos los QR (PDF)</a>
         <?php if ($filas): ?>
           <button type="button" class="btn btn-borde" data-imprimir>Imprimir / PDF</button>
           <a class="btn btn-borde" href="<?= e($q(['exportar' => 'xlsx'])) ?>" download>Excel</a>
@@ -941,10 +941,13 @@ function pintarDafo(): void {
       <h2>QR de cada mesa</h2>
       <div class="dafo-qr-lista">
         <?php foreach (array_keys(DAFO_MESAS) as $m): ?>
-          <a class="dafo-qr-mesa mesa-<?= dafoColor($m) ?>" href="../dafo/?mesa=<?= $m ?>" target="_blank" rel="noopener">
+          <div class="dafo-qr-mesa mesa-<?= dafoColor($m) ?>">
             <img src="../img/qr-dafo-<?= $m ?>.svg" alt="QR de la mesa <?= $m ?>" width="120" height="120">
-            <span><b>Mesa <?= $m ?></b>Abrir el formulario</span>
-          </a>
+            <span><b>Mesa <?= $m ?></b>
+              <a href="../dafo/carteles/dafo-mesa-<?= sprintf('%02d', $m) ?>.pdf" target="_blank" rel="noopener">PDF de la mesa</a>
+              <a href="../dafo/?mesa=<?= $m ?>" target="_blank" rel="noopener">Formulario</a>
+            </span>
+          </div>
         <?php endforeach; ?>
       </div>
     </section>
@@ -1099,7 +1102,7 @@ function pintarCabecera(string $titulo, string $clase, int $recarga = 0): void {
   <?php if ($recarga > 0): ?><meta http-equiv="refresh" content="<?= $recarga ?>"><?php endif; ?>
   <meta name="theme-color" content="#14213d">
   <link rel="icon" href="../img/isotipo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="panel.css?v=20261110c">
+  <link rel="stylesheet" href="panel.css?v=20261110d">
 </head>
 <body class="<?= e($clase) ?>">
 <?php }

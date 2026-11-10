@@ -106,7 +106,7 @@ Cada mesa tiene su QR (`dafo/?mesa=1` … `dafo/?mesa=10`; hay 10 por si cambia 
 - **Panel:** pestaña «Análisis DAFO» (`panel/?dafo=1`). Matriz con porcentajes, filtro por mesa, «Lectura para exponer» (cruce de lo más votado: potenciar, mantener, corregir, afrontar), Excel, CSV e impresión. Se actualiza sola cada 10 s sin recargar la página.
 - **Presentar en pantalla:** `panel/?dafo=1&presentar=1`, a pantalla completa y en directo (cada 5 s), pensado para proyectar. Cabe en una pantalla de 1440 × 900 o más.
 - **Vaciar respuestas** (por ejemplo, tras un ensayo): botón al final de la sección. Antes guarda una copia en `copias/`.
-- **QR y carteles:** `cd identidad && node dafo.js`.
+- **QR y carteles:** `cd identidad && node dafo.js`. Genera un PDF independiente por mesa en `Networking/dafo/carteles/` (dafo-mesa-01.pdf … dafo-mesa-10.pdf) y todos juntos en `dafo/dafo-qr-mesas.pdf`. La mesa va dentro del QR: el formulario no deja elegirla y, sin QR, no se puede responder.
 
 ## Escaparate de empresas participantes
 

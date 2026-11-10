@@ -348,3 +348,5 @@ body.presentar { min-height: 100vh; background: var(--noche); color: var(--arena
 .presentar .dafo-lectura li { font-size: min(.9vw, 1.6vh); padding: .7vh .7vw; }
 .presentar .dafo-lectura li b { font-size: min(.75vw, 1.3vh); }
 @media (max-width: 760px) { .presentar .dafo-pantalla-cabeza { flex-wrap: wrap; } .presentar .dafo-pantalla-nav { max-width: none; } .presentar .dafo-pantalla-nav a, .presentar .dafo-pantalla-nav button { font-size: 13px; padding: 5px 10px; } .presentar .cuadrante li { font-size: 14px; } .presentar .dafo-lectura li { font-size: 14px; } }
+.dafo-qr-mesa span a { display: block; margin-top: 4px; font-weight: 600; }
+.dafo-qr-mesa:hover { background: var(--superficie); box-shadow: none; }
