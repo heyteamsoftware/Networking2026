@@ -9,7 +9,7 @@
   <meta property="og:description" content="El talento se encuentra. Las ideas se conectan. El futuro se construye. 20 de noviembre de 2026 · CIFP Tony Gallardo.">
   <meta name="theme-color" content="#14213d">
   <link rel="icon" href="img/isotipo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=20261110a">
+  <link rel="stylesheet" href="styles.css?v=20261111a">
 </head>
 <body>
 
@@ -26,8 +26,11 @@
       <a href="#modalidades">Modalidades</a>
       <a href="#empresas">Empresas</a>
     </nav>
-    <a class="top-cta" href="#participa"><span class="largo">Quiero participar</span><span class="corto">Participa</span></a>
+    <a class="top-cta top-cta-cerrado" href="#participa"><span class="largo">Inscripciones canceladas</span><span class="corto">Aviso</span></a>
   </header>
+
+  <!-- AVISO: inscripciones canceladas -->
+  <a class="aviso-cierre" href="#participa" role="status"><b>Aviso</b><span>Se cancelan las inscripciones por situación sobrevenida.</span></a>
 
   <!-- ESCENA: portada, el tangram se monta, se desmonta en las cuatro mesas y se abre en las ocho islas -->
   <section class="stage-wrap" id="inicio" aria-label="Networking 2026">
@@ -46,7 +49,7 @@
         <p class="lema">Juntos somos FP</p>
         <p class="promesa">El talento se encuentra. Las ideas se conectan.<br>El futuro se construye.</p>
         <div class="hero-cta">
-          <a class="btn btn-primario" href="#participa">Quiero participar como empresa</a>
+          <a class="btn btn-primario" href="#participa">Inscripciones canceladas</a>
           <a class="btn btn-secundario" href="#respuestas">Por qué participar</a>
         </div>
       </div>
@@ -137,7 +140,7 @@
           <span class="resp-n">05</span>
           <h3>¿Cómo reservo mi plaza?</h3>
           <p>Rellena un formulario de dos minutos y te contactamos para concretar tu participación o tu propuesta de colaboración.</p>
-          <a href="#participa">Quiero participar</a>
+          <a href="#participa">Inscripciones canceladas</a>
         </li>
       </ol>
     </div>
@@ -171,7 +174,7 @@
           <div><b id="cdH">--</b><span>horas</span></div>
           <div><b id="cdM">--</b><span>min</span></div>
         </div>
-        <a class="btn btn-primario btn-bloque" href="#participa">Reserva tu plaza</a>
+        <a class="btn btn-primario btn-bloque" href="#participa">Inscripciones canceladas</a>
       </aside>
     </div>
 
@@ -203,7 +206,7 @@
           <p>Prácticas, FP Dual, proyectos conjuntos o mentorías: sal del encuentro con una línea de trabajo concreta.</p>
         </li>
       </ul>
-      <a class="btn btn-primario reveal" href="#participa">Quiero participar como empresa</a>
+      <a class="btn btn-primario reveal" href="#participa">Inscripciones canceladas</a>
     </div>
   </section>
 
@@ -373,21 +376,21 @@
           <h3>Conocer y conectar</h3>
           <p>Participa en las mesas, comparte tu experiencia y conoce al centro y a otras entidades.</p>
           <p class="mod-para">Para empresas que quieren dar el primer paso.</p>
-          <a class="btn btn-mod" href="#participa" data-modalidad="participante">Quiero ser participante</a>
+          <a class="btn btn-mod" href="#participa" data-modalidad="participante">Inscripciones canceladas</a>
         </li>
         <li class="reveal" style="--c:var(--mesa-2)">
           <p class="mod-tag">Empresa colaboradora</p>
           <h3>Aportar y experimentar</h3>
           <p>Presenta una experiencia, participa en una actividad o ayuda a explorar un proyecto conjunto.</p>
           <p class="mod-para">Para empresas que quieren implicarse activamente.</p>
-          <a class="btn btn-mod" href="#participa" data-modalidad="colaboradora">Quiero ser colaboradora</a>
+          <a class="btn btn-mod" href="#participa" data-modalidad="colaboradora">Inscripciones canceladas</a>
         </li>
         <li class="reveal" style="--c:var(--mesa-1)">
           <p class="mod-tag">Empresa impulsora</p>
           <h3>Dejar huella y movilizar</h3>
           <p>Contribuye a dinamizar una mesa o una iniciativa, comparte conocimiento y ayuda a activar una línea de colaboración más amplia.</p>
           <p class="mod-para">Para organizaciones que quieren tener un papel protagonista.</p>
-          <a class="btn btn-mod" href="#participa" data-modalidad="impulsora">Quiero ser impulsora</a>
+          <a class="btn btn-mod" href="#participa" data-modalidad="impulsora">Inscripciones canceladas</a>
         </li>
       </ol>
 
@@ -424,7 +427,7 @@
         <div>
           <p class="emp-vacio-t">Estamos construyendo las conexiones de esta edición. ¿Te sumas?</p>
           <p>Las primeras empresas aparecerán aquí con su logo, su sector y el motivo por el que participan. Falta tu pieza.</p>
-          <a class="btn btn-primario" href="#participa">Quiero participar como empresa</a>
+          <a class="btn btn-primario" href="#participa">Inscripciones canceladas</a>
         </div>
       </div>
     </div>
@@ -451,7 +454,15 @@
 
   <!-- FORMULARIO DE PARTICIPACIÓN -->
   <section class="participa" id="participa">
-    <div class="wrap participa-grid">
+    <div class="wrap">
+      <div class="cartel-cancelado" role="alert">
+        <p class="etiqueta">Aviso importante</p>
+        <h2>Inscripciones canceladas</h2>
+        <p class="cartel-texto">Se cancelan las inscripciones por situación sobrevenida.</p>
+        <p class="cartel-nota">Sentimos las molestias. Para cualquier consulta puedes escribir a <a href="mailto:secretaria-35015887@gobiernodecanarias.org">secretaria-35015887@gobiernodecanarias.org</a>.</p>
+      </div>
+    </div>
+    <div class="wrap participa-grid" hidden>
       <div class="participa-intro reveal">
         <p class="etiqueta">Quiero participar</p>
         <h2>Reserva tu plaza o propón una colaboración</h2>
@@ -553,7 +564,7 @@
   <footer class="footer">
     <div class="wrap footer-grid">
       <img class="f-logo" src="img/logo-horizontal-negativo.svg" alt="Networking 2026 · Juntos somos FP · CIFP Tony Gallardo · 20 NOV 2026" width="345" height="90">
-      <p class="f-nota">20 de noviembre de 2026 · CIFP Tony Gallardo · <a href="#participa">Quiero participar</a> · <a href="privacidad.html">Privacidad y cookies</a></p>
+      <p class="f-nota">20 de noviembre de 2026 · CIFP Tony Gallardo · <a href="#participa">Inscripciones canceladas</a> · <a href="privacidad.html">Privacidad y cookies</a></p>
     </div>
   </footer>
 

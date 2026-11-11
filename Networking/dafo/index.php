@@ -24,7 +24,7 @@ $error = isset($_GET['error']);
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#14213d">
   <link rel="icon" href="../img/isotipo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../styles.css?v=20261110a">
+  <link rel="stylesheet" href="../styles.css?v=20261111a">
 </head>
 <body class="pagina-legado pagina-dafo">
 

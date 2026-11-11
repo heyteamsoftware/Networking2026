@@ -14,6 +14,9 @@ const LOGOS = DATOS . '/logos'; // logos de empresa: privados, fuera de la web
 const LOGO_MAX = 100 * 1024 * 1024; // 100 MB (el navegador ya lo reduce antes de enviarlo)
 const LOGO_W = 600, LOGO_H = 300;     // todos los logos se guardan en un lienzo de este tamaño
 const ESPERA = 30; // segundos mínimos entre dos envíos desde la misma conexión
+// Inscripciones cerradas el 11/11/2026 por una situación sobrevenida. Para reabrirlas, poner true
+// (y volver a mostrar el formulario en index.html).
+const INSCRIPCIONES_ABIERTAS = false;
 
 $quiereJson = str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json');
 
@@ -34,6 +37,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
   header('Location: ./#participa', true, 303);
   exit;
 }
+
+// Inscripciones cerradas: no se guarda nada, llegue como llegue el envío
+if (!INSCRIPCIONES_ABIERTAS) responder(false, 'Se cancelan las inscripciones por situación sobrevenida.', 403);
 
 // Si el envío supera el máximo, PHP descarta todos los campos (llegarían vacíos): avisamos del motivo real
 if (empty($_POST) && (int)($_SERVER['CONTENT_LENGTH'] ?? 0) > 0) {
